@@ -1,0 +1,97 @@
+<resources>
+    <string name="app_name">SPIAA</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="perfil">Perfil</string>
+    <string name="boletim_diario">Boletim Diário</string>
+    <string name="denuncias">Denúncias</string>
+    <string name="sincronizar">Sincronizar</string>
+    <string name="title_activity_perfil">Editar Perfil</string>
+    <string name="title_activity_boletim_diario">Boletim Diário</string>
+    <string name="title_activity_denuncias">Todas denúncias</string>
+    <string name="usuario">Usuário</string>
+    <string name="nome">Nome</string>
+    <string name="senha">Senha</string>
+    <string name="confirmacao_senha">Confirmação da senha</string>
+    <string name="email">E-mail</string>
+    <string name="salvar">Salvar</string>
+    <string name="tratamento_anti_vetorial">BOLETIM DIÁRIO - TRATAMENTO ANTI-VETORIAL</string>
+    <string name="localidade">BAIRRO:</string>
+    <string name="categoria">CATEGORIA:</string>
+    <string name="sede">Sede</string>
+    <string name="outros">Outros</string>
+    <string name="agente_de_saude">AGENTE DE SAÚDE:</string>
+    <string name="numero_do_agente">Nº:</string>
+    <string name="turma">TURMA:</string>
+    <string name="data">DATA:</string>
+    <string name="semana_epidemiológica">SEMANA EPIDEMIOLÓGICA Nº:</string>
+    <string name="adicionar_atividade">NOVA ATIVIDADE</string>
+    <string name="concluir_boletim">CONCLUIR BOLETIM</string>
+    <string name="todas_atividades">TODAS AS ATIVIDADEs</string>
+    <string name="title_activity_atividade">Nova Atividade</string>
+    <string name="atividade_de_campo">ATIVIDADE DE CAMPO</string>
+    <string name="atividade">ATIVIDADE:</string>
+    <string name="tdf">TDF:</string>
+    <string name="numero">Nº:</string>
+    <string name="tipo"> TIPO:</string>
+    <string name="armazem_sigla">ARM.</string>
+    <string name="ponto_estrategico_sigla">P.E.</string>
+    <string name="delimitacao_foco_sigla">D.F.</string>
+    <string name="pesquisa_vetorial_especial_sigla">P.V.E.</string>
+    <string name="numero_do_quarteirao">Nº DO QUARTEIRÃO</string>
+    <string name="endereco_completo">ENDEREÇO COMPLETO</string>
+    <string name="total_inspecionado">TOTAL INSPECIONADO</string>
+    <string name="tipo_de_unidade"> TIPO DE UNIDADE</string>
+    <string name="residencial_sigla">R</string>
+    <string name="comercial_sigla">C</string>
+    <string name="terreno_baldio_sigla">T.B.</string>
+    <string name="consumo_de_inseticida">CONSUMO DE INSETICIDA</string>
+    <string name="larvicida">LARVICIDA Qtde:</string>
+    <string name="adulticida">ADULTICIDA Qtde:</string>
+    <string name="observacoes">OBSERVAÇÕES</string>
+    <string name="recebido">RECEBIDO</string>
+    <string name="fechado">FECHADO</string>
+    <string name="resgatado">RESGATADO</string>
+    <string name="concluir_atividade">CONCLUIR ATIVIDADE</string>
+    <string name="title_activity_todas_atividades">Todas Atividades</string>
+    <string name="title_activity_sincronizar">Sincronizar</string>
+    <string name="receber_bairros">Receber bairros</string>
+    <string name="enviar_boletim_diario">Enviar Boletim Diário</string>
+    <string name="receber_denuncias">Receber denúncias</string>
+    <string name="enviar_denuncias_fechadas">Enviar denúncias</string>
+
+    <string-array name="array_denuncias_fake">
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
+    </string-array>
+    <string name="title_activity_denuncia">Detalhes da denúncia</string>
+    <string name="title_activity_gps">GPSActivity</string>
+    <string name="title_activity_splash">SPIAA</string>
+    <string name="title_activity_login">Login</string>
+    <string name="modulo_agente_de_saude">MÓDULO AGENTE DE SAÚDE</string>
+    <string name="agente_de_saude_titulo">AGENTE DE SAÚDE</string>
+    <string name="entrar">Entrar</string>
+    <string name="irregularidade">IRREGULARIDADE</string>
+    <string name="observacoes_constatacoes">OBSERVAÇÕES/CONSTATAÇÕES NO LOCAL</string>
+    <string name="bairro">Bairro:</string>
+    <string name="fechar_denuncia">FECHAR DENÚNCIA</string>
+    <string name="editar_denuncia">EDITAR DENÚNCIA</string>
+    <string name="endereco">Endereço</string>
+    <string name="action_nova_atividade">Nova atividade</string>
+    <string name="action_todas_atividades">Todas atividades</string>
+    <string name="title_activity_todos_boletins_diarios">Todos Boletins Diários</string>
+    <string name="total_de_atividades">Total de atividades</string>
+    <string name="atividades">ATIVIDADES</string>
+
+</resources>

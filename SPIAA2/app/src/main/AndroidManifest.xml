@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.spiaa" >
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".activity.PerfilEditActivity"
+            android:label="@string/title_activity_perfil" >
+            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.BoletimDiarioActivity"
+            android:label="@string/title_activity_boletim_diario" >
+            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.DenunciasActivity"
+            android:label="@string/title_activity_denuncias" >
+            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AtividadeActivity"
+            android:label="@string/title_activity_atividade" >
+            android:parentActivityName="com.spiaa.activity.BoletimDiarioActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BoletimDiarioActivity" />
+        </activity>
+        <activity
+            android:name=".activity.TodasAtividadesActivity"
+            android:label="@string/title_activity_todas_atividades" >
+            android:parentActivityName="com.spiaa.activity.BoletimDiarioActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BoletimDiarioActivity" />
+        </activity>
+        <activity
+            android:name=".activity.SincronizarActivity"
+            android:label="@string/title_activity_sincronizar" >
+            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.DenunciaActivity"
+            android:parentActivityName=".activity.TodasAtividadesActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.TodasAtividadesActivity" />
+        </activity>
+        <activity
+            android:name=".activity.GPSActivity"
+            android:label="@string/title_activity_gps" >
+        </activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".activity.TodosBoletinsDiariosActivity"
+            android:label="@string/title_activity_todos_boletins_diarios" >
+        </activity>
+    </application>
+
+</manifest>
