@@ -56,11 +56,11 @@ public class DenunciaActivity extends AppCompatActivity {
         //Definir cor do fundo do status e texto do botão da tela
         if (status.getText().equals("EM ABERTO")) {
             //cor red
-            status.setBackgroundColor(Color.parseColor("#cc0000"));
+            status.setTextColor(Color.parseColor("#cc0000"));
             botaoFinalizar.setVisibility(View.VISIBLE);
         } else {
             //cor green
-            status.setBackgroundColor(Color.parseColor("#669900"));
+            status.setTextColor(Color.parseColor("#669900"));
             botaoEditar.setVisibility(View.VISIBLE);
         }
     }

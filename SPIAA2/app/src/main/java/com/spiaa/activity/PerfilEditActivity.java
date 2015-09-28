@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.spiaa.R;
 
@@ -17,6 +18,10 @@ public class PerfilEditActivity extends AppCompatActivity {
         //esconder teclado ao entrar nesta activity
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        //Setar Usuário. Este campo não pode ser alterado pelo usuário
+        EditText usuario = (EditText) findViewById(R.id.perfil_usuario);
+        usuario.setText("Elessandra Estevão");
 
     }
 

@@ -24,11 +24,11 @@
     <string name="agente_de_saude">AGENTE DE SAÚDE:</string>
     <string name="numero_do_agente">Nº:</string>
     <string name="turma">TURMA:</string>
-    <string name="data">DATA:</string>
+    <string name="data">Data</string>
     <string name="semana_epidemiológica">SEMANA EPIDEMIOLÓGICA Nº:</string>
     <string name="adicionar_atividade">NOVA ATIVIDADE</string>
     <string name="concluir_boletim">CONCLUIR BOLETIM</string>
-    <string name="todas_atividades">TODAS AS ATIVIDADEs</string>
+    <string name="todas_atividades">Todas as atividades</string>
     <string name="title_activity_atividade">Nova Atividade</string>
     <string name="atividade_de_campo">ATIVIDADE DE CAMPO</string>
     <string name="atividade">ATIVIDADE:</string>
@@ -39,7 +39,7 @@
     <string name="ponto_estrategico_sigla">P.E.</string>
     <string name="delimitacao_foco_sigla">D.F.</string>
     <string name="pesquisa_vetorial_especial_sigla">P.V.E.</string>
-    <string name="numero_do_quarteirao">Nº DO QUARTEIRÃO</string>
+    <string name="numero_do_quarteirao">Nº do Quarteirão</string>
     <string name="endereco_completo">ENDEREÇO COMPLETO</string>
     <string name="total_inspecionado">TOTAL INSPECIONADO</string>
     <string name="tipo_de_unidade"> TIPO DE UNIDADE</string>
@@ -47,8 +47,8 @@
     <string name="comercial_sigla">C</string>
     <string name="terreno_baldio_sigla">T.B.</string>
     <string name="consumo_de_inseticida">CONSUMO DE INSETICIDA</string>
-    <string name="larvicida">LARVICIDA Qtde:</string>
-    <string name="adulticida">ADULTICIDA Qtde:</string>
+    <string name="larvicida">Quantidade de Larvicida</string>
+    <string name="adulticida">Quantidade de Adulticida</string>
     <string name="observacoes">OBSERVAÇÕES</string>
     <string name="recebido">RECEBIDO</string>
     <string name="fechado">FECHADO</string>
@@ -84,14 +84,18 @@
     <string name="entrar">Entrar</string>
     <string name="irregularidade">IRREGULARIDADE</string>
     <string name="observacoes_constatacoes">OBSERVAÇÕES/CONSTATAÇÕES NO LOCAL</string>
-    <string name="bairro">Bairro:</string>
+    <string name="bairro">Bairro</string>
     <string name="fechar_denuncia">FECHAR DENÚNCIA</string>
     <string name="editar_denuncia">EDITAR DENÚNCIA</string>
     <string name="endereco">Endereço</string>
     <string name="action_nova_atividade">Nova atividade</string>
     <string name="action_todas_atividades">Todas atividades</string>
     <string name="title_activity_todos_boletins_diarios">Todos Boletins Diários</string>
-    <string name="total_de_atividades">Total de atividades</string>
+    <string name="total_de_atividades">Total de atividades:</string>
     <string name="atividades">ATIVIDADES</string>
+    <string name="numero_agente_bd">Nº do Agente</string>
+    <string name="agente_saude_bd">Agente de Saúde</string>
+    <string name="turma_agente_bd">Turma</string>
+    <string name="semana_epidemiologica_bd">Semana Epidemiológica Nº</string>
 
 </resources>

@@ -67,13 +67,20 @@ public class DenunciaListaAdapter extends BaseAdapter {
         //descricaoDenuncia.setText(lista.get(position).getTipo_irregularidades());
         statusDenuncia.setText(lista.get(position).getStatus());
 
-        //Definir cor do fundo do status
+        //Definir cor do status na listagem de todas as denúncias
         if (lista.get(position).getStatus().equals("EM ABERTO")) {
             //cor red
-            statusDenuncia.setBackgroundColor(Color.parseColor("#cc0000"));
+            statusDenuncia.setTextColor(Color.parseColor("#cc0000"));
         } else {
             //cor green
-            statusDenuncia.setBackgroundColor(Color.parseColor("#669900"));
+            statusDenuncia.setTextColor(Color.parseColor("#669900"));
+        }//Definir cor do status na listagem de todas as denúncias
+        if (lista.get(position).getStatus().equals("EM ABERTO")) {
+            //cor red
+            statusDenuncia.setTextColor(Color.parseColor("#cc0000"));
+        } else {
+            //cor green
+            statusDenuncia.setTextColor(Color.parseColor("#669900"));
         }
 
         return viewDenuncia;

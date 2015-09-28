@@ -13,6 +13,15 @@ public class Boletim {
     String numero;
     String turma;
     String data;
+    String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getBairro() {
         return bairro;

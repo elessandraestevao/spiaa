@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -41,136 +41,84 @@
 
         </Spinner>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/message_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/categoria" />
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sede" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/outros" />
-            </RadioGroup>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/agente_de_saude" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/agente_saude_bd"
                 android:inputType="text"
-                android:maxLines="1"
-                android:text="Elessandra Estevão" />
-        </LinearLayout>
+                android:maxLines="1" />
 
-        <LinearLayout
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/message_numero_agente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/numero_do_agente" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/numero"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/numero_agente_bd"
                 android:inputType="text"
-                android:maxLines="1"
-                android:text="SRS1234" />
-        </LinearLayout>
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/message_turma"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/turma" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/turma"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/turma_agente_bd"
                 android:inputType="text"
                 android:maxLines="1"
-                android:nextFocusDown="@+id/semana_epidemiologica"
-                android:text="5960/L" />
-        </LinearLayout>
+                android:nextFocusDown="@+id/semana_epidemiologica" />
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/message_semana_epidemiologica"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/data" />
-
-            <EditText
-                android:id="@+id/data_atual"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:editable="false" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/semana_epidemiológica" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/semana_epidemiologica"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/semana_epidemiologica_bd"
                 android:inputType="text"
-                android:maxLines="1"
-                android:text="13-14/09/2015" />
-        </LinearLayout>
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <Button
             android:id="@+id/atividades"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/atividades"
             android:layout_gravity="bottom"
-            android:visibility="invisible"
-            android:theme="@style/AppTheme.Button.Primary" />
+            android:text="@string/atividades"
+            android:theme="@style/AppTheme.Button.Primary"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/concluir_boletim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/concluir_boletim"
+            android:theme="@style/AppTheme.Button.Primary"
+            android:visibility="invisible" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_criar_boletim"
@@ -182,4 +130,4 @@
             app:backgroundTint="#E5194C" />
 
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

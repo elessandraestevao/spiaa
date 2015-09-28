@@ -2,6 +2,7 @@ package com.spiaa.activity;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -39,32 +40,38 @@ public class BoletimDiarioActivity extends AppCompatActivity  {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, bairros);
         spinner.setAdapter(adapter);
 
-        //Preencher campo data com a data atuala do sistema
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-
-        EditText dataAtual = (EditText) findViewById(R.id.data_atual);
-        dataAtual.setText(dateFormat.format(date));
-
         //Botão de ATIVIDADES fica invisible inicialmente
         final Button botaoAtividades = (Button) findViewById(R.id.atividades);
         botaoAtividades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(BoletimDiarioActivity.this, AtividadeActivity.class);
+                Intent intent1 = new Intent(BoletimDiarioActivity.this, TodasAtividadesActivity.class);
                 startActivity(intent1);
             }
         });
 
+        //Botão de CONCLUIR BOLETIM fica invisible inicialmente
+        final Button botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
+        botaoConcluirBoletim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BoletimDiarioActivity.this, TodosBoletinsDiariosActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Botão CRIAR BOLETIM
         final FloatingActionButton criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         criarBoletim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Snackbar.make(v, "Boletim Diário criado com secesso!", Snackbar.LENGTH_LONG).show();
                 criarBoletim.setVisibility(View.INVISIBLE);
                 botaoAtividades.setVisibility(View.VISIBLE);
+                botaoConcluirBoletim.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     @Override
@@ -73,27 +80,4 @@ public class BoletimDiarioActivity extends AppCompatActivity  {
         getMenuInflater().inflate(R.menu.menu_boletim_diario, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_nova_atividade:
-                Intent intent1 = new Intent(BoletimDiarioActivity.this, AtividadeActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_todas_atividades:
-                Intent intent2 = new Intent(BoletimDiarioActivity.this, TodasAtividadesActivity.class);
-                startActivity(intent2);
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
-
-    }
-
 }

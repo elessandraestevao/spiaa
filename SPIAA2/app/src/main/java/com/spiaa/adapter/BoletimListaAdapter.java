@@ -2,6 +2,7 @@ package com.spiaa.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,11 +58,22 @@ public class BoletimListaAdapter extends BaseAdapter {
         TextView data = (TextView) viewBoletim.findViewById(R.id.data_boletim);
         TextView numeroAtividades = (TextView) viewBoletim.findViewById(R.id.numero_atividades_boletim);
         TextView contagemBoletim = (TextView) viewBoletim.findViewById(R.id.contagem_boletim);
+        TextView statusBoletim = (TextView) viewBoletim.findViewById(R.id.status_boletim);
 
         contagemBoletim.setText("Boletim Diário " + (position + 1));
         bairro.setText(lista.get(position).getBairro());
         data.setText(String.valueOf(lista.get(position).getData()));
         numeroAtividades.setText(Integer.toString(lista.size()));
+        statusBoletim.setText(lista.get(position).getStatus());
+
+        //Definir cor do status na listagem de todas as denúncias
+        if (lista.get(position).getStatus().equals("EM ABERTO")) {
+            //cor red
+            statusBoletim.setTextColor(Color.parseColor("#cc0000"));
+        } else {
+            //cor green
+            statusBoletim.setTextColor(Color.parseColor("#669900"));
+        }
 
         return viewBoletim;
     }

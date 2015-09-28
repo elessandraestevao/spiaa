@@ -25,11 +25,11 @@
         <activity
             android:name=".activity.BoletimDiarioActivity"
             android:label="@string/title_activity_boletim_diario" >
-            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            android:parentActivityName="com.spiaa.activity.TodosBoletinsDiariosActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.TodosBoletinsDiariosActivity" />
         </activity>
         <activity
             android:name=".activity.DenunciasActivity"
@@ -43,11 +43,11 @@
         <activity
             android:name=".activity.AtividadeActivity"
             android:label="@string/title_activity_atividade" >
-            android:parentActivityName="com.spiaa.activity.BoletimDiarioActivity" >
+            android:parentActivityName="com.spiaa.activity.TodasAtividadesActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BoletimDiarioActivity" />
+                android:value=".activity.TodasAtividadesActivity" />
         </activity>
         <activity
             android:name=".activity.TodasAtividadesActivity"
@@ -60,7 +60,8 @@
         </activity>
         <activity
             android:name=".activity.SincronizarActivity"
-            android:label="@string/title_activity_sincronizar" >
+            android:label="@string/title_activity_sincronizar"
+            android:theme="@style/AppTheme.NoActionBar">
             android:parentActivityName="com.spiaa.activity.MainActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -98,6 +99,11 @@
         <activity
             android:name=".activity.TodosBoletinsDiariosActivity"
             android:label="@string/title_activity_todos_boletins_diarios" >
+            android:parentActivityName="com.spiaa.activity.MainActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
     </application>
 
