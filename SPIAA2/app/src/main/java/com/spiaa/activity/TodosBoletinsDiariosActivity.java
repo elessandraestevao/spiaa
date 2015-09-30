@@ -1,6 +1,7 @@
 package com.spiaa.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,19 +15,31 @@ import android.widget.ListView;
 import com.spiaa.R;
 import com.spiaa.adapter.BoletimListaAdapter;
 import com.spiaa.builder.BoletimDiarioBuilder;
+import com.spiaa.modelo.Boletim;
+import com.spiaa.modelo.IsXLargeScreen;
 
 public class TodosBoletinsDiariosActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, com.melnykov.fab.ScrollDirectionListener {
 
     BoletimListaAdapter adapter = new BoletimListaAdapter(this);
     ListView listaBoletins;
+    com.melnykov.fab.FloatingActionButton fabCriar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todos_boletins_diarios);
 
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
         listaBoletins = (ListView) findViewById(R.id.lista_boletins);
-        com.melnykov.fab.FloatingActionButton fabCriar = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.botao_criar_boletim);
+        fabCriar = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         fabCriar.attachToListView(listaBoletins);
 
         adapter.setLista(new BoletimDiarioBuilder().geraBoletins(10));
@@ -52,16 +65,28 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Intent intent = new Intent(TodosBoletinsDiariosActivity.this, BoletimDiarioActivity.class);
+        Bundle dados = new Bundle();
+        Boletim boletim = (Boletim) parent.getItemAtPosition(position);
+        dados.putString("boletim", "Boletim Diário " + (position + 1));
+        dados.putString("bairro", boletim.getBairro());
+        dados.putString("numero_agente", boletim.getNumero());
+        dados.putString("turma_agente", boletim.getTurma());
+        dados.putString("semana_epidemiologica", boletim.getSemanaEpidemiologia());
+        dados.putString("status", boletim.getStatus());
+        intent.putExtras(dados);
+        startActivity(intent);
     }
 
     @Override
     public void onScrollDown() {
-
+        fabCriar.show(true); // Show with an animation
+        fabCriar.hide(true); //Hide with animation
     }
 
     @Override
     public void onScrollUp() {
-
+        fabCriar.show(true); // Show with an animation
+        fabCriar.hide(true); //Hide with animation
     }
 }

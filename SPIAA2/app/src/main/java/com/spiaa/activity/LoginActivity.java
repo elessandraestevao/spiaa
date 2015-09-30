@@ -1,7 +1,10 @@
 package com.spiaa.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.http.HttpResponseCache;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
+import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
 import java.util.ArrayList;
@@ -32,6 +36,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         Button login = (Button) findViewById(R.id.botao_login);
         login.setOnClickListener(this);
@@ -95,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             service.login(usuario, new Callback<Usuario>() {
                 @Override
                 public void success(Usuario usuario, Response response) {
-                    if(usuario != null) {
+                    if (usuario != null) {
                         //Toast.makeText(LoginActivity.this, usuario.getUsuario(), Toast.LENGTH_LONG).show();
 
                         SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
@@ -112,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         //Vai para a página inicial da aplicação
                         Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);
                         startActivity(intent);
-                    }else{
+                    } else {
                         Snackbar.make(v, "Falha no login. Verifique os dados de acesso.", Snackbar.LENGTH_LONG).show();
                     }
 

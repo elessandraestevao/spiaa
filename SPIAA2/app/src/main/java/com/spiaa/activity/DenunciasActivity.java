@@ -1,6 +1,7 @@
 package com.spiaa.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import com.spiaa.R;
 import com.spiaa.adapter.DenunciaListaAdapter;
 import com.spiaa.builder.DenunciaBuilder;
 import com.spiaa.modelo.Denuncia;
+import com.spiaa.modelo.IsXLargeScreen;
 
 public class DenunciasActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
@@ -23,6 +25,15 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_denuncias);
+
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         listaDenuncias = (ListView) findViewById(R.id.lista_denuncias);
         adapter.setLista(new DenunciaBuilder().geraDenuncias(10));

@@ -1,6 +1,7 @@
 package com.spiaa.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.widget.DrawerLayout;
 
 import com.spiaa.R;
+import com.spiaa.modelo.IsXLargeScreen;
 
 public class SincronizarActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -24,8 +26,17 @@ public class SincronizarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sincronizar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
+        //Criar ícone de Menu na Toolbar
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);

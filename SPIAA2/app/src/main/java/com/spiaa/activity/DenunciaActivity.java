@@ -2,6 +2,7 @@ package com.spiaa.activity;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.spiaa.R;
+import com.spiaa.modelo.IsXLargeScreen;
 
 public class DenunciaActivity extends AppCompatActivity {
 
@@ -23,16 +25,25 @@ public class DenunciaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_denuncia);
 
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
         //esconder teclado ao entrar nesta activity
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        //PREENCHER CAMPOS COM DADOS DAS DENÚNCIAS
         Intent intent = getIntent();
         Bundle dados = intent.getExtras();
 
         //Mudar título com nome da Denúncia
         android.support.v7.app.ActionBar ab = getSupportActionBar();
-
         ab.setTitle(dados.get("denuncia").toString());
 
         TextView endereco = (TextView) findViewById(R.id.endereco_denuncia);

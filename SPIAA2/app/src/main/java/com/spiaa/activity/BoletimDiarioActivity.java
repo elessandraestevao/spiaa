@@ -1,6 +1,8 @@
 package com.spiaa.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,21 +16,36 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.spiaa.R;
+import com.spiaa.modelo.IsXLargeScreen;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BoletimDiarioActivity extends AppCompatActivity  {
+public class BoletimDiarioActivity extends AppCompatActivity {
+    FloatingActionButton criarBoletim;
+    Button botaoAtividades;
+    Button botaoConcluirBoletim;
+    android.support.v7.app.ActionBar ab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boletim_diario);
+
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         //esconder teclado ao entrar nesta activity
         getWindow().setSoftInputMode(
@@ -41,7 +58,7 @@ public class BoletimDiarioActivity extends AppCompatActivity  {
         spinner.setAdapter(adapter);
 
         //Botão de ATIVIDADES fica invisible inicialmente
-        final Button botaoAtividades = (Button) findViewById(R.id.atividades);
+        botaoAtividades = (Button) findViewById(R.id.atividades);
         botaoAtividades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +68,7 @@ public class BoletimDiarioActivity extends AppCompatActivity  {
         });
 
         //Botão de CONCLUIR BOLETIM fica invisible inicialmente
-        final Button botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
+        botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
         botaoConcluirBoletim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,17 +78,72 @@ public class BoletimDiarioActivity extends AppCompatActivity  {
             }
         });
 
+        //Preencher dados do Boletim Diário selecionado na listagem de Boletins Diários
+        Intent intent = getIntent();
+        Bundle dados = intent.getExtras();
+        if (dados != null) {
+
+            //Mudar título do Boletim Diário
+            ab = getSupportActionBar();
+            ab.setTitle(dados.get("boletim").toString());
+
+            //Setar Bairro definido
+            for (int position = 0; position < adapter.getCount(); position++) {
+                if (adapter.getItem(position).equals(dados.get("bairro"))) {
+                    spinner.setSelection(position);
+                    break;
+                }
+            }
+
+            //Semana epidemiológica
+            EditText semanaEpidemiologica = (EditText) findViewById(R.id.semana_epidemiologica_bd);
+            semanaEpidemiologica.setText(dados.get("semana_epidemiologica").toString());
+
+            manipulaBotoes();
+        }else{
+            //Mudar título para Novo Boletim Diário
+            ab = getSupportActionBar();
+            ab.setTitle("Novo Boletim Diário");
+        }
+
+        //Dados do Agente de Saúde referentes ao LOGIN
+        //Recuperar nome do usuário logado (Agente)
+        SharedPreferences dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+        EditText agente = (EditText) findViewById(R.id.agente_bd);
+        agente.setText(dadosUsuario.getString("nome", ""));
+        //Apenas visualização, não pode editar esse campo
+        agente.setInputType(0);
+
+        //Número do agente de saúde
+        EditText numeroAgente = (EditText) findViewById(R.id.numero_agente_bd);
+        numeroAgente.setText(dadosUsuario.getString("numero", ""));
+        //Apenas visualização, não pode editar esse campo
+        numeroAgente.setInputType(0);
+
+        //Turma do agente de saúde
+        EditText turmaAgente = (EditText) findViewById(R.id.turma_agente_bd);
+        turmaAgente.setText(dadosUsuario.getString("turma", ""));
+        //Apenas visualização, não pode editar esse campo
+        turmaAgente.setInputType(0);
+
         //Botão CRIAR BOLETIM
-        final FloatingActionButton criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
+        criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         criarBoletim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Snackbar.make(v, "Boletim Diário criado com secesso!", Snackbar.LENGTH_LONG).show();
-                criarBoletim.setVisibility(View.INVISIBLE);
-                botaoAtividades.setVisibility(View.VISIBLE);
-                botaoConcluirBoletim.setVisibility(View.VISIBLE);
+                manipulaBotoes();
             }
         });
+    }
+
+    private void manipulaBotoes(){
+        //Esconde botão de CRIAR BOLETIM
+        criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
+        criarBoletim.setVisibility(View.INVISIBLE);
+        //Mostra botões de ATIVIDADES e CONCLUIR BOLETIM
+        botaoAtividades.setVisibility(View.VISIBLE);
+        botaoConcluirBoletim.setVisibility(View.VISIBLE);
     }
 
     @Override

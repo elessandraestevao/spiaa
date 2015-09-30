@@ -1,5 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="com.spiaa.activity.PerfilEditActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.spiaa.activity.PerfilEditActivity">
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_exit_to_app_white600_24dp"
+        android:title="Logout" />
 
 </menu>

@@ -42,11 +42,12 @@
         </Spinner>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/message_wrapper"
+            android:id="@+id/message_agente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/agente_bd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/agente_saude_bd"
@@ -62,7 +63,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/numero"
+                android:id="@+id/numero_agente_bd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/numero_agente_bd"
@@ -77,7 +78,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/turma"
+                android:id="@+id/turma_agente_bd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/turma_agente_bd"
@@ -93,7 +94,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/semana_epidemiologica"
+                android:id="@+id/semana_epidemiologica_bd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/semana_epidemiologica_bd"

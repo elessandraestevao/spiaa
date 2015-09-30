@@ -1,6 +1,7 @@
 package com.spiaa.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import com.spiaa.R;
 import com.spiaa.adapter.AtividadeListaAdapter;
 import com.spiaa.builder.AtividadeBuilder;
+import com.spiaa.modelo.IsXLargeScreen;
 
 public class TodasAtividadesActivity extends AppCompatActivity {
     AtividadeListaAdapter adapter = new AtividadeListaAdapter(this);
@@ -19,6 +21,15 @@ public class TodasAtividadesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todas_atividades);
+
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         listaAtividades = (ListView) findViewById(R.id.lista_atividades);
 
