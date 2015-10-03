@@ -4,12 +4,13 @@ package com.spiaa.modelo;
  * Created by eless on 18/09/2015.
  */
 public class Denuncia {
+    Long id;
     String endereco;
     int numero;
-    String tipo_irregularidades;
+    String irregularidade;
     String status;
     String observacao;
-    String bairro;
+    Bairro bairro;
 
     public String getEndereco() {
         return endereco;
@@ -27,12 +28,12 @@ public class Denuncia {
         this.numero = numero;
     }
 
-    public String getTipo_irregularidades() {
-        return tipo_irregularidades;
+    public String getIrregularidade() {
+        return irregularidade;
     }
 
-    public void setTipo_irregularidades(String tipo_irregularidades) {
-        this.tipo_irregularidades = tipo_irregularidades;
+    public void setIrregularidade(String irregularidade) {
+        this.irregularidade = irregularidade;
     }
 
     public String getStatus() {
@@ -51,11 +52,19 @@ public class Denuncia {
         this.observacao = observacao;
     }
 
-    public String getBairro() {
+    public Bairro getBairro() {
         return bairro;
     }
 
-    public void setBairro(String bairro) {
+    public void setBairro(Bairro bairro) {
         this.bairro = bairro;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

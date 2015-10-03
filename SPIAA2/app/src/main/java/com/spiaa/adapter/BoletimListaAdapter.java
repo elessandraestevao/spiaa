@@ -1,7 +1,6 @@
 package com.spiaa.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.spiaa.R;
-import com.spiaa.modelo.Boletim;
+import com.spiaa.modelo.TratamentoAntiVetorial;
 
 import java.util.List;
 
@@ -19,9 +18,9 @@ import java.util.List;
  */
 public class BoletimListaAdapter extends BaseAdapter {
     private Context context;
-    private List<Boletim> lista;
+    private List<TratamentoAntiVetorial> lista;
 
-    public BoletimListaAdapter(Context context, List<Boletim> lista) {
+    public BoletimListaAdapter(Context context, List<TratamentoAntiVetorial> lista) {
         this.context = context;
         this.lista = lista;
     }
@@ -30,7 +29,7 @@ public class BoletimListaAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public void setLista(List<Boletim> lista) {
+    public void setLista(List<TratamentoAntiVetorial> lista) {
         this.lista = lista;
     }
 
@@ -61,7 +60,7 @@ public class BoletimListaAdapter extends BaseAdapter {
         TextView statusBoletim = (TextView) viewBoletim.findViewById(R.id.status_boletim);
 
         contagemBoletim.setText("Boletim Diário " + (position + 1));
-        bairro.setText(lista.get(position).getBairro());
+        bairro.setText(lista.get(position).getBairro().getNome());
         data.setText(String.valueOf(lista.get(position).getData()));
         numeroAtividades.setText(Integer.toString(lista.size()));
         statusBoletim.setText(lista.get(position).getStatus());

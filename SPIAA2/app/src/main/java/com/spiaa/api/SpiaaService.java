@@ -1,9 +1,9 @@
 package com.spiaa.api;
 
-import com.google.gson.Gson;
+import com.spiaa.modelo.Bairro;
+import com.spiaa.modelo.TratamentoAntiVetorial;
+import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.Usuario;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -11,13 +11,26 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 
 /**
  * Created by eless on 29/09/2015.
  */
 public interface SpiaaService {
-    @POST("/agente/login")
-    void login(@Body Usuario usuario, Callback<Usuario> callback);
+    @POST("/api/agente/login")
+    void login(@Body Usuario agenteSaude, Callback<Usuario> callback);
+
+    @POST("/api/bairro/agente")
+    void getBairros(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
+
+    @POST("/api/denuncia/agente")
+    void getDenuncias(@Body Usuario agenteSaude, Callback<List<Denuncia>> callback);
+
+    @PUT("/api/denuncia/update")
+    void setDenuncias(@Body List<Denuncia> denunciaList, Callback<String> callback);
+
+    @POST("/api/boletim/create")
+    void setBoletim(@Body List<TratamentoAntiVetorial> tratamentoAntiVetorialList, Callback<String> callback);
 
     @POST("/agente/login/list")
     void loginList(@Body List<Usuario> usuarioList, Callback<String> callback);

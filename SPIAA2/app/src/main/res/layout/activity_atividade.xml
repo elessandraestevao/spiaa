@@ -1,16 +1,16 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.spiaa.activity.AtividadeActivity">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scrollView_atividade"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.spiaa.activity.AtividadeActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
+                    android:id="@+id/endereco_atividade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/endereco"
@@ -58,6 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="@string/tipo_de_unidade" />
 
             <LinearLayout
@@ -66,31 +68,37 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/radio_group_tipo_unidade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/radio_tipo_r"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/residencial_sigla" />
 
                     <RadioButton
+                        android:id="@+id/radio_tipo_c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/comercial_sigla" />
 
                     <RadioButton
+                        android:id="@+id/radio_tipo_tb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/terreno_baldio_sigla" />
 
                     <RadioButton
+                        android:id="@+id/radio_tipo_pe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/ponto_estrategico_sigla" />
 
                     <RadioButton
+                        android:id="@+id/radio_tipo_outros"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/outros" />
@@ -100,6 +108,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="@string/observacoes" />
 
             <LinearLayout
@@ -108,51 +117,131 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/radio_observacoes_atividade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/radio_recebido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recebido" />
 
                     <RadioButton
+                        android:id="@+id/radio_fechado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/fechado" />
 
                     <RadioButton
+                        android:id="@+id/radio_resgatado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/resgatado" />
                 </RadioGroup>
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/criadouros" />
+
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_larvicida"
+                android:id="@+id/message_qtde_a1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/qtde_larvicida"
+                    android:id="@+id/criadouro_a1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/larvicida"
+                    android:hint="@string/criadouro_a1"
                     android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_adulticida"
+                android:id="@+id/message_qtde_a2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/qtde_adulticida"
+                    android:id="@+id/criadouro_a2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/adulticida"
+                    android:hint="@string/criadouro_a2"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_qtde_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/criadouro_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criadouro_b"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_qtde_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/criadouro_c"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criadouro_c"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_qtde_d1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/criadouro_d1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criadouro_d1"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_qtde_d2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/criadouro_d2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criadouro_d2"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_qtde_e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/criadouro_e"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criadouro_e"
                     android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
@@ -162,15 +251,14 @@
                 android:layout_height="fill_parent">
 
                 <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/botao_finalizar"
+                    android:id="@+id/botao_finalizar_atividade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_margin="@dimen/activity_horizontal_margin"
                     android:gravity="end|bottom"
                     android:src="@drawable/ic_done_white_24dp" />
-
             </RelativeLayout>
         </LinearLayout>
-    </FrameLayout>
-</ScrollView>
+    </ScrollView>
+</FrameLayout>

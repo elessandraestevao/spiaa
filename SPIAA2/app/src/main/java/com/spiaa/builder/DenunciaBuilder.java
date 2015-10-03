@@ -16,7 +16,7 @@ public class DenunciaBuilder {
         Random random = new Random();
         for(int i = 1; i <= quantidade; i++){
             Denuncia denuncia = new Denuncia();
-            denuncia.setBairro("Bairro da cidade " + i);
+            denuncia.getBairro().setNome("Bairro da cidade " + i);
             denuncia.setEndereco("Endereço do local onde tem focos " + i);
             denuncia.setNumero(i);
             denuncia.setObservacao(" ");
@@ -28,7 +28,7 @@ public class DenunciaBuilder {
                 denuncia.setStatus("FINALIZADA");
             }
 
-            denuncia.setTipo_irregularidades("Existe foco do mosquito da Dengue no local indicado na denúncia.");
+            denuncia.setIrregularidade("Existe foco do mosquito da Dengue no local indicado na denúncia.");
             denunciaList.add(denuncia);
         }
         return denunciaList;

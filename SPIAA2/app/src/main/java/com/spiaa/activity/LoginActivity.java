@@ -67,20 +67,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(final View v) {
         if (v.getId() == R.id.botao_login) {
-
             //Fazer login
             TextView usuarioLogin = (TextView) findViewById(R.id.usuario_login);
             TextView senha = (TextView) findViewById(R.id.senha_login);
-            Usuario usuario = new Usuario();
-            usuario.setUsuario(usuarioLogin.getText().toString());
-            usuario.setSenha(senha.getText().toString());
+            Usuario agenteSaude = new Usuario();
+            agenteSaude.setUsuario(usuarioLogin.getText().toString());
+            agenteSaude.setSenha(senha.getText().toString());
 
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint("http://spiaa.herokuapp.com/")
+                    .setEndpoint("http://192.168.5.86:8084/Spiaa")
                     .build();
 
             SpiaaService service = restAdapter.create(SpiaaService.class);
 
+            //TESTES Serão retirados ao final da codificação
             /*List<Usuario> usuarioList = new ArrayList<Usuario>();
             Usuario user1 = new Usuario();
             user1.setNome("User1");
@@ -105,21 +105,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             });*/
 
 
-            service.login(usuario, new Callback<Usuario>() {
+            service.login(agenteSaude, new Callback<Usuario>() {
                 @Override
-                public void success(Usuario usuario, Response response) {
-                    if (usuario != null) {
+                public void success(Usuario agente, Response response) {
+                    if (agente != null) {
                         //Toast.makeText(LoginActivity.this, usuario.getUsuario(), Toast.LENGTH_LONG).show();
 
                         SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
-                        dadosUsuario.putString("email", usuario.getEmail());
-                        dadosUsuario.putString("numero", usuario.getNumero());
-                        dadosUsuario.putString("nome", usuario.getNome());
-                        dadosUsuario.putString("senha", usuario.getSenha());
-                        dadosUsuario.putString("tipo", usuario.getTipo());
-                        dadosUsuario.putString("turma", usuario.getTurma());
-                        dadosUsuario.putString("usuario", usuario.getUsuario());
-                        dadosUsuario.putString("id", usuario.getId());
+                        dadosUsuario.putString("email", agente.getEmail());
+                        dadosUsuario.putString("numero", agente.getNumero());
+                        dadosUsuario.putString("nome", agente.getNome());
+                        dadosUsuario.putString("senha", agente.getSenha());
+                        dadosUsuario.putString("tipo", agente.getTipo());
+                        dadosUsuario.putString("turma", agente.getTurma());
+                        dadosUsuario.putString("usuario", agente.getUsuario());
+                        dadosUsuario.putLong("id", agente.getId());
                         dadosUsuario.commit();
 
                         //Vai para a página inicial da aplicação
@@ -134,25 +134,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void failure(RetrofitError error) {
                     Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
+
+                    /*Vai para a página inicial da aplicação
+                    Código temporário, apenas para a apresentação para a pré-banca FAITEC em 01/10/2015
+                    Depois será removido este código
+                    Vou deixar entrar na aplicação mesmo se ocorrer falha no login, para mostrar
+                    a aplicação à banca nete dia
+                     */
+                    Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);
+                    startActivity(intent);
                 }
             });
-
-
-            /*service.login(usuario1, new Callback<String>() {
-
-                @Override
-                public void success(String resposta, Response response) {
-                    Gson gson = new Gson();
-                    Usuario userLogado = gson.fromJson(response.getBody().toString(), Usuario.class);
-
-                    Toast.makeText(LoginActivity.this, userLogado.getNome(), Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void failure(RetrofitError retrofitError) {
-                    Toast.makeText(LoginActivity.this, "Error, cadastro!", Toast.LENGTH_LONG).show();
-                }
-            });*/
 
         }
     }

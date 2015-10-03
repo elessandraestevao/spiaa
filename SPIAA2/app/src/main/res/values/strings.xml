@@ -7,8 +7,8 @@
     <string name="boletim_diario">Boletim Diário</string>
     <string name="denuncias">Denúncias</string>
     <string name="sincronizar">Sincronizar</string>
-    <string name="title_activity_perfil">Editar Perfil</string>
-    <string name="title_activity_boletim_diario">Boletim Diário</string>
+    <string name="title_activity_perfil">Perfil</string>
+    <string name="title_activity_boletim_diario">Novo Boletim Diário</string>
     <string name="title_activity_denuncias">Todas denúncias</string>
     <string name="usuario">Usuário</string>
     <string name="nome">Nome</string>
@@ -47,8 +47,6 @@
     <string name="comercial_sigla">C</string>
     <string name="terreno_baldio_sigla">T.B.</string>
     <string name="consumo_de_inseticida">CONSUMO DE INSETICIDA</string>
-    <string name="larvicida">Quantidade de Larvicida</string>
-    <string name="adulticida">Quantidade de Adulticida</string>
     <string name="observacoes">OBSERVAÇÕES</string>
     <string name="recebido">RECEBIDO</string>
     <string name="fechado">FECHADO</string>
@@ -97,5 +95,14 @@
     <string name="agente_saude_bd">Agente de Saúde</string>
     <string name="turma_agente_bd">Turma</string>
     <string name="semana_epidemiologica_bd">Semana Epidemiológica Nº</string>
+    <string name="criadouros">CRIADOUROS</string>
+    <string name="criadouro_a1">Quantidade de A1</string>
+    <string name="criadouro_a2">Quantidade de A2</string>
+    <string name="criadouro_b">Quantidade de B</string>
+    <string name="criadouro_c">Quantidade de C</string>
+    <string name="criadouro_d1">Quantidade de D1</string>
+    <string name="criadouro_d2">Quantidade de D2</string>
+    <string name="criadouro_e">Quantidade de E</string>
+
 
 </resources>

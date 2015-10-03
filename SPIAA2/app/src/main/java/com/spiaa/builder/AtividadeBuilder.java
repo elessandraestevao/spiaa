@@ -1,6 +1,12 @@
 package com.spiaa.builder;
 
 import com.spiaa.modelo.Atividade;
+import com.spiaa.modelo.AtividadeCriadouro;
+import com.spiaa.modelo.AtividadeInseticida;
+import com.spiaa.modelo.Criadouro;
+import com.spiaa.modelo.Inseticida;
+import com.spiaa.modelo.Quarteirao;
+import com.spiaa.modelo.TipoImoveis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,30 +21,39 @@ public class AtividadeBuilder {
         List<Atividade> atividadeList = new ArrayList<Atividade>();
         Random random = new Random();
 
+        Quarteirao quarteirao = new Quarteirao();
+        quarteirao.setId(1L);
+
+        TipoImoveis tipoImoveis = new TipoImoveis();
+        tipoImoveis.setId(1L);
+
+        Criadouro c = new Criadouro();
+        c.setId(1L);
+
+        AtividadeCriadouro ac = new AtividadeCriadouro();
+        ac.setCriadouro(c);
+        ac.setQuantidadeCriadouro(3);
+        List<AtividadeCriadouro> acList = new ArrayList<AtividadeCriadouro>();
+        acList.add(ac);
+
+        Inseticida inseticida = new Inseticida();
+        inseticida.setId(1L);
+
+        AtividadeInseticida ai = new AtividadeInseticida();
+        ai.setId(1L);
+        ai.setQuantidadeInseticida(23);
+        List<AtividadeInseticida> aiList = new ArrayList<AtividadeInseticida>();
+        aiList.add(ai);
+
+
         for (int i = 1; i <= quantidade; i++) {
             Atividade atividade = new Atividade();
+            atividade.setEndereco("Rua das Araras");
             atividade.setNumero(String.valueOf(i));
-            atividade.setAdulticida("1" + i);
-            atividade.setEndereco("Rua Inatel, número " + i);
-            atividade.setLarvicida("2" + i);
-            atividade.setNumero_quarteirao("F-1" + i);
-            atividade.setTipo("Levantamento de Índice");
-            atividade.setTotal_inspecionado("1" + (i % 2));
-
-            //Muda observações, tdf
-            if (random.nextInt(3) == 0) {
-                atividade.setObservacoes("RECEBIDO");
-                atividade.setTdf("ARM");
-                atividade.setTipo_unidade("R");
-            } else if (random.nextInt(3) == 1) {
-                atividade.setObservacoes("RESGATADO");
-                atividade.setTdf("P.E.");
-                atividade.setTipo_unidade("C");
-            } else {
-                atividade.setObservacoes("FECHADO");
-                atividade.setTdf("P.V.E.");
-                atividade.setTipo_unidade("P.E.");
-            }
+            atividade.setQuarteirao(quarteirao);
+            atividade.setTipoImoveis(tipoImoveis);
+            atividade.setAtividadeCriadouroList(acList);
+            atividade.setAtividadeInseticidasList(aiList);
             atividadeList.add(atividade);
         }
         return atividadeList;

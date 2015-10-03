@@ -2,20 +2,17 @@ package com.spiaa.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.spiaa.R;
 import com.spiaa.adapter.BoletimListaAdapter;
 import com.spiaa.builder.BoletimDiarioBuilder;
-import com.spiaa.modelo.Boletim;
+import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.IsXLargeScreen;
 
 public class TodosBoletinsDiariosActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, com.melnykov.fab.ScrollDirectionListener {
@@ -67,13 +64,13 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(TodosBoletinsDiariosActivity.this, BoletimDiarioActivity.class);
         Bundle dados = new Bundle();
-        Boletim boletim = (Boletim) parent.getItemAtPosition(position);
+        TratamentoAntiVetorial tratamentoAntiVetorial = (TratamentoAntiVetorial) parent.getItemAtPosition(position);
         dados.putString("boletim", "Boletim Diário " + (position + 1));
-        dados.putString("bairro", boletim.getBairro());
-        dados.putString("numero_agente", boletim.getNumero());
-        dados.putString("turma_agente", boletim.getTurma());
-        dados.putString("semana_epidemiologica", boletim.getSemanaEpidemiologia());
-        dados.putString("status", boletim.getStatus());
+        dados.putString("bairro", tratamentoAntiVetorial.getBairro().getNome());
+        dados.putString("numero_agente", tratamentoAntiVetorial.getNumero());
+        dados.putString("turma_agente", tratamentoAntiVetorial.getTurma());
+        dados.putString("semana_epidemiologica", tratamentoAntiVetorial.getSemana());
+        dados.putString("status", tratamentoAntiVetorial.getStatus());
         intent.putExtras(dados);
         startActivity(intent);
     }

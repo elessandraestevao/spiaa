@@ -60,7 +60,7 @@ public class AtividadeListaAdapter extends BaseAdapter{
         TextView statusAtividade = (TextView) viewAtividade.findViewById(R.id.status_atividade);
 
         contagemAtividade.setText("Atividade " + (position + 1));
-        numeroQuarteirao.setText(lista.get(position).getNumero_quarteirao());
+       /* numeroQuarteirao.setText(lista.get(position).getNumero_quarteirao());
         enderecoCompleto.setText(lista.get(position).getEndereco());
         statusAtividade.setText(lista.get(position).getObservacoes());
 
@@ -74,7 +74,7 @@ public class AtividadeListaAdapter extends BaseAdapter{
         }else{
             //cor green para RECEBIDO
             statusAtividade.setTextColor(Color.parseColor("#669900"));
-        }
+        }*/
 
         return viewAtividade;
     }

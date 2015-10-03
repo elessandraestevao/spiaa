@@ -1,10 +1,9 @@
 package com.spiaa.builder;
 
-import android.content.SharedPreferences;
-
-import com.spiaa.modelo.Boletim;
+import com.spiaa.modelo.TratamentoAntiVetorial;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -13,29 +12,29 @@ import java.util.Random;
  */
 public class BoletimDiarioBuilder {
 
-    public List<Boletim> geraBoletins(int quantidade) {
-        List<Boletim> boletimList = new ArrayList<Boletim>();
+    public List<TratamentoAntiVetorial> geraBoletins(int quantidade) {
+        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new ArrayList<TratamentoAntiVetorial>();
         Random random = new Random();
 
         for (int i = 1; i <= quantidade; i++) {
-            Boletim boletim = new Boletim();
-            boletim.setCategoria("Sede");
-            boletim.setData(i + "/" + i + 1 + "/2015");
-            boletim.setNumero("123" + 1);
-            boletim.setSemanaEpidemiologia("L" + i + "Tratamento Vetorial");
-            boletim.setTurma("5960/L");
+            TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
+            tratamentoAntiVetorial.setCategoria("Sede");
+            tratamentoAntiVetorial.setData(new Date());
+            tratamentoAntiVetorial.setNumero("123" + 1);
+            tratamentoAntiVetorial.setSemana("L" + i + "Tratamento Vetorial");
+            tratamentoAntiVetorial.setTurma("5960/L");
 
             //Muda status e bairro
             if(random.nextInt(2) == 1){
-                boletim.setStatus("EM ABERTO");
-                boletim.setBairro("Fernandes");
+                tratamentoAntiVetorial.setStatus("EM ABERTO");
+                //boletim.setBairro("Fernandes");
             }else{
-                boletim.setStatus("CONCLUÍDO");
-                boletim.setBairro("Centro");
+                tratamentoAntiVetorial.setStatus("CONCLUÍDO");
+                //boletim.setBairro("Centro");
             }
 
-            boletimList.add(boletim);
+            tratamentoAntiVetorialList.add(tratamentoAntiVetorial);
         }
-        return boletimList;
+        return tratamentoAntiVetorialList;
     }
 }

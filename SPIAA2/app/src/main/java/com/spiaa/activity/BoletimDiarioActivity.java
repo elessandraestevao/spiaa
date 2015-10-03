@@ -100,10 +100,6 @@ public class BoletimDiarioActivity extends AppCompatActivity {
             semanaEpidemiologica.setText(dados.get("semana_epidemiologica").toString());
 
             manipulaBotoes();
-        }else{
-            //Mudar título para Novo Boletim Diário
-            ab = getSupportActionBar();
-            ab.setTitle("Novo Boletim Diário");
         }
 
         //Dados do Agente de Saúde referentes ao LOGIN

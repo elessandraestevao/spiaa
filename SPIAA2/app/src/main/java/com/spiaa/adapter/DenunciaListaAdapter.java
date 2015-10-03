@@ -63,8 +63,8 @@ public class DenunciaListaAdapter extends BaseAdapter {
         contagemDenuncia.setText("Denúncia " + (position + 1));
         enderecoDenuncia.setText(lista.get(position).getEndereco());
         numeroDenuncia.setText(String.valueOf(lista.get(position).getNumero()));
-        bairroDenuncia.setText(lista.get(position).getBairro());
-        //descricaoDenuncia.setText(lista.get(position).getTipo_irregularidades());
+        bairroDenuncia.setText(lista.get(position).getBairro().getNome());
+
         statusDenuncia.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todas as denúncias

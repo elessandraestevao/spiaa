@@ -4,15 +4,15 @@ package com.spiaa.modelo;
  * Created by eless on 29/09/2015.
  */
 public class Usuario {
-    private String id;
+    private Long id;
     private String nome;
     private String email;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
