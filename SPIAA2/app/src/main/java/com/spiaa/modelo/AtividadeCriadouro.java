@@ -6,6 +6,13 @@ import com.spiaa.base.entity.BaseEntity;
  * Created by eless on 03/10/2015.
  */
 public class AtividadeCriadouro {
+    //Constantes utilizadas para o Banco de dados
+    public static final String TABLE_NAME = "atividade_criadouro";
+    public static final String ATIVIDADE = "atividade_fk";
+    public static final String CRIADOURO = "criadouro_fk";
+    public static final String QUANTIDADE = "quantidade";
+
+    //Atributos
     private Criadouro criadouro;
     private Integer quantidadeCriadouro;
 

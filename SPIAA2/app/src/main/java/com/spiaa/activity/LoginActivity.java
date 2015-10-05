@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
+import com.spiaa.controller.DatabaseController;
+import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
@@ -75,7 +77,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             agenteSaude.setSenha(senha.getText().toString());
 
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint("http://192.168.5.86:8084/Spiaa")
+                    //.setEndpoint("http://192.168.5.86:8084/Spiaa")
+                    .setEndpoint("http://spiaa.herokuapp.com")
                     .build();
 
             SpiaaService service = restAdapter.create(SpiaaService.class);
@@ -109,7 +112,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void success(Usuario agente, Response response) {
                     if (agente != null) {
-                        //Toast.makeText(LoginActivity.this, usuario.getUsuario(), Toast.LENGTH_LONG).show();
+                        //Cria banco de dados da aplicação ao fazer o login pela primeira vez
+                        new DatabaseHelper(LoginActivity.this);
 
                         SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
                         dadosUsuario.putString("email", agente.getEmail());

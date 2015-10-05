@@ -9,14 +9,29 @@ import java.util.List;
  * Created by eless on 22/09/2015.
  */
 public class TratamentoAntiVetorial extends BaseEntity{
+    //Constantes utilizadas para o Banco de dados
+    public static final String TABLE_NAME = "tratamento_antivetorial";
+    public static final String ID = "_id";
+    public static final String DATA = "data_boletim";
+    public static final String NUMERO = "numero";
+    public static final String SEMANA_EPIDEMIOLOGICA = "semana_epidemiologica";
+    public static final String NUMERO_ATIVIDADE = "numero_atividade";
+    public static final String TIPO_ATIVIDADE = "tipo_atividade";
+    public static final String TURMA = "turma";
+    public static final String USUARIO = "usuario_fk";
+    public static final String BAIRRO = "bairro_fk";
+
+    //Atributos
     Bairro bairro;
     String categoria;
     Usuario usuario;
     String numero;
     String turma;
     Date dataBoletim;
+    String tipoAtividade;
     String status;
     String semana;
+    String numeroAtividade;
     List<Atividade> atividadeList;
 
     public String getStatus() {
@@ -89,5 +104,21 @@ public class TratamentoAntiVetorial extends BaseEntity{
 
     public void setAtividades(List<Atividade> atividades) {
         this.atividadeList = atividades;
+    }
+
+    public String getNumeroAtividade() {
+        return numeroAtividade;
+    }
+
+    public void setNumeroAtividade(String numeroAtividade) {
+        this.numeroAtividade = numeroAtividade;
+    }
+
+    public String getTipoAtividade() {
+        return tipoAtividade;
+    }
+
+    public void setTipoAtividade(String tipoAtividade) {
+        this.tipoAtividade = tipoAtividade;
     }
 }

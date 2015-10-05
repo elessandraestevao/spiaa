@@ -7,6 +7,11 @@ public class Usuario {
     private Long id;
     private String nome;
     private String email;
+    private String usuario;
+    private String senha;
+    private String tipo;
+    private String numero;
+    private String turma;
 
     public Long getId() {
         return id;
@@ -15,11 +20,6 @@ public class Usuario {
     public void setId(long id) {
         this.id = id;
     }
-
-    private String usuario;
-    private String senha;
-    private String tipo;
-    private String numero;
 
     public String getNome() {
         return nome;
@@ -77,5 +77,4 @@ public class Usuario {
         this.turma = turma;
     }
 
-    private String turma;
 }

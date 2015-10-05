@@ -6,6 +6,13 @@ import com.spiaa.base.entity.BaseEntity;
  * Created by eless on 03/10/2015.
  */
 public class AtividadeInseticida extends BaseEntity {
+    //Constantes utilizadas para o Banco de dados
+    public static final String TABLE_NAME = "atividade_inseticida";
+    public static final String ATIVIDADE = "atividade_fk";
+    public static final String INSETICIDA = "inseticida_fk";
+    public static final String QUANTIDADE = "quantidade";
+
+    //Atributos
     private Inseticida inseticida;
     private Integer quantidadeInseticida;
 

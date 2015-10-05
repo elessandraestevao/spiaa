@@ -3,10 +3,13 @@ package com.spiaa.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,8 @@ import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.builder.AtividadeBuilder;
 import com.spiaa.builder.BoletimDiarioBuilder;
+import com.spiaa.controller.DatabaseController;
+import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Denuncia;
@@ -41,6 +46,9 @@ public class SincronizarActivity extends AppCompatActivity {
     Usuario agenteSaude;
     SpiaaService service;
     List<Denuncia> denuncias;
+
+    //teste com banco SQLite
+    private DatabaseHelper dh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +120,15 @@ public class SincronizarActivity extends AppCompatActivity {
                 service.getBairros(agenteSaude, new Callback<List<Bairro>>() {
                     @Override
                     public void success(List<Bairro> bairroList, Response response) {
+                        //Inserir bairros no Banco de dados
+                        DatabaseController dc = new DatabaseController(SincronizarActivity.this);
+                        try {
+                            for (Bairro bairro: bairroList){
+                                dc.insertBairro(bairro);
+                            }
+                        }catch (Exception e){
+                            Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
+                        }
                         Toast.makeText(SincronizarActivity.this, bairroList.get(0).getNome(), Toast.LENGTH_LONG).show();
                     }
 
@@ -128,16 +145,28 @@ public class SincronizarActivity extends AppCompatActivity {
         receberDenuncias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               RestAdapter restAdapter = new RestAdapter.Builder()
+               /*RestAdapter restAdapter = new RestAdapter.Builder()
                         .setEndpoint("http://192.168.5.86:8084/Spiaa")
                         .build();
-                SpiaaService service = restAdapter.create(SpiaaService.class);
+                SpiaaService service = restAdapter.create(SpiaaService.class);*/
                 service.getDenuncias(agenteSaude, new Callback<List<Denuncia>>() {
                     @Override
                     public void success(List<Denuncia> denunciaList, Response response) {
                         Toast.makeText(SincronizarActivity.this, denunciaList.get(0).getIrregularidade(), Toast.LENGTH_LONG).show();
-                        denuncias = new ArrayList<Denuncia>();
-                        denuncias.addAll(denunciaList);
+                        //denuncias = new ArrayList<Denuncia>();
+                        //denuncias.addAll(denunciaList);
+
+                        //Inserir denúncias no Banco de dados
+                        DatabaseController dc = new DatabaseController(SincronizarActivity.this);
+                        try{
+                            for (Denuncia denuncia: denunciaList){
+                                dc.insertDenuncia(denuncia);
+                            }
+                        }catch (Exception e){
+                            Log.e("SPIAA", "Erro ao inserir denúncia no banco de dados", e);
+                        }
+
+
                     }
 
                     @Override

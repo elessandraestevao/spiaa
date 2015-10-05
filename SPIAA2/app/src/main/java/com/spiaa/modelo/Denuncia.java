@@ -4,6 +4,18 @@ package com.spiaa.modelo;
  * Created by eless on 18/09/2015.
  */
 public class Denuncia {
+    //Constantes utilizadas para o Banco de dados
+    public static final String TABLE_NAME = "denuncia";
+    public static final String ID = "_id";
+    public static final String ENDERECO = "endereco";
+    public static final String NUMERO = "numero";
+    public static final String IRREGULARIDADE = "irregularidade";
+    public static final String OBSERVACAO = "observacao";
+    public static final String STATUS = "status";
+    public static final String BAIRRO = "bairro_fk";
+    public static final String USUARIO = "usuario_fk";
+
+    //Atributos
     Long id;
     String endereco;
     int numero;
@@ -11,6 +23,7 @@ public class Denuncia {
     String status;
     String observacao;
     Bairro bairro;
+    Usuario usuario;
 
     public String getEndereco() {
         return endereco;
@@ -66,5 +79,13 @@ public class Denuncia {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
