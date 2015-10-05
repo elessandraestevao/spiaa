@@ -1,6 +1,6 @@
 package com.spiaa.modelo;
 
-import com.spiaa.base.entity.BaseEntity;
+import com.spiaa.base.BaseEntity;
 
 import java.util.Date;
 import java.util.List;

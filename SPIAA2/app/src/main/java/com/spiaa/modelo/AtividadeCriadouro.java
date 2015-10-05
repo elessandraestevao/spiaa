@@ -1,7 +1,5 @@
 package com.spiaa.modelo;
 
-import com.spiaa.base.entity.BaseEntity;
-
 /**
  * Created by eless on 03/10/2015.
  */

@@ -1,9 +1,11 @@
 package com.spiaa.modelo;
 
+import com.spiaa.base.BaseEntity;
+
 /**
  * Created by eless on 18/09/2015.
  */
-public class Denuncia {
+public class Denuncia extends BaseEntity{
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "denuncia";
     public static final String ID = "_id";
@@ -16,7 +18,6 @@ public class Denuncia {
     public static final String USUARIO = "usuario_fk";
 
     //Atributos
-    Long id;
     String endereco;
     int numero;
     String irregularidade;
@@ -71,14 +72,6 @@ public class Denuncia {
 
     public void setBairro(Bairro bairro) {
         this.bairro = bairro;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Usuario getUsuario() {

@@ -3,9 +3,8 @@ package com.spiaa.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,15 +21,15 @@ import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.builder.AtividadeBuilder;
 import com.spiaa.builder.BoletimDiarioBuilder;
-import com.spiaa.controller.DatabaseController;
+import com.spiaa.dao.BairroDAO;
 import com.spiaa.dados.DatabaseHelper;
+import com.spiaa.dao.DenunciaDAO;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -80,7 +79,7 @@ public class SincronizarActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_perfil:
                         Intent intent1 = new Intent(SincronizarActivity.this, PerfilEditActivity.class);
                         startActivity(intent1);
@@ -108,7 +107,8 @@ public class SincronizarActivity extends AppCompatActivity {
         agenteSaude = new Usuario();
         agenteSaude.setId(dadosUsuario.getLong("id", 0));
         restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.5.86:8084/Spiaa")
+                //.setEndpoint("http://192.168.5.86:8084/Spiaa")
+                .setEndpoint("http://spiaa.herokuapp.com")
                 .build();
         service = restAdapter.create(SpiaaService.class);
 
@@ -116,25 +116,41 @@ public class SincronizarActivity extends AppCompatActivity {
         RelativeLayout receberBairros = (RelativeLayout) findViewById(R.id.receber_bairros);
         receberBairros.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 service.getBairros(agenteSaude, new Callback<List<Bairro>>() {
                     @Override
                     public void success(List<Bairro> bairroList, Response response) {
-                        //Inserir bairros no Banco de dados
-                        DatabaseController dc = new DatabaseController(SincronizarActivity.this);
-                        try {
-                            for (Bairro bairro: bairroList){
-                                dc.insertBairro(bairro);
+                        if (bairroList != null) {
+                            //Inserir bairros no Banco de dados
+                            try {
+                                BairroDAO dao = new BairroDAO(SincronizarActivity.this);
+                                for (Bairro bairro : bairroList) {
+                                    dao.insert(bairro);
+                                }
+                                Snackbar.make(v, "Bairros recebidos com sucesso!", Snackbar.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
                             }
-                        }catch (Exception e){
-                            Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
+                        }else{
+                            Snackbar.make(v, "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
                         }
-                        Toast.makeText(SincronizarActivity.this, bairroList.get(0).getNome(), Toast.LENGTH_LONG).show();
+                        //Testar select no banco
+                        BairroDAO dao = new BairroDAO(SincronizarActivity.this);
+                        Bairro bairro = new Bairro();
+                        Bairro bairro2 = new Bairro();
+                        bairro.setId(9L);
+                        try {
+                            bairro2 = dao.select(bairro);
+                            Log.d("SPIAA", "Select Bairro ok!");
+                            Snackbar.make(v, bairro2.getNome(), Snackbar.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(SincronizarActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+                        Snackbar.make(v, "Erro ao receber bairros.", Snackbar.LENGTH_LONG).show();
                     }
                 });
             }
@@ -144,34 +160,29 @@ public class SincronizarActivity extends AppCompatActivity {
         RelativeLayout receberDenuncias = (RelativeLayout) findViewById(R.id.receber_denuncias);
         receberDenuncias.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-               /*RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint("http://192.168.5.86:8084/Spiaa")
-                        .build();
-                SpiaaService service = restAdapter.create(SpiaaService.class);*/
+            public void onClick(final View v) {
                 service.getDenuncias(agenteSaude, new Callback<List<Denuncia>>() {
                     @Override
                     public void success(List<Denuncia> denunciaList, Response response) {
-                        Toast.makeText(SincronizarActivity.this, denunciaList.get(0).getIrregularidade(), Toast.LENGTH_LONG).show();
-                        //denuncias = new ArrayList<Denuncia>();
-                        //denuncias.addAll(denunciaList);
-
-                        //Inserir denúncias no Banco de dados
-                        DatabaseController dc = new DatabaseController(SincronizarActivity.this);
-                        try{
-                            for (Denuncia denuncia: denunciaList){
-                                dc.insertDenuncia(denuncia);
+                        if (denunciaList != null) {
+                            //Inserir denúncias no Banco de dados
+                            try {
+                                DenunciaDAO dao = new DenunciaDAO(SincronizarActivity.this);
+                                for (Denuncia denuncia : denunciaList) {
+                                    dao.insert(denuncia);
+                                }
+                                Snackbar.make(v, "Denúncias recebidas com sucesso!", Snackbar.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro ao inserir denúncia no banco de dados", e);
                             }
-                        }catch (Exception e){
-                            Log.e("SPIAA", "Erro ao inserir denúncia no banco de dados", e);
+                        } else {
+                            Snackbar.make(v, "Nenhuma denúncia encontrada.", Snackbar.LENGTH_LONG).show();
                         }
-
-
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(SincronizarActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+                        Snackbar.make(v, "Erro ao receber denúncias.", Snackbar.LENGTH_LONG).show();
                     }
                 });
             }
@@ -186,7 +197,7 @@ public class SincronizarActivity extends AppCompatActivity {
                 bairro.setId(1L);
                 List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new BoletimDiarioBuilder().geraBoletins(5);
                 for (TratamentoAntiVetorial tratamentoAntiVetorial : tratamentoAntiVetorialList
-                     ) {
+                        ) {
                     tratamentoAntiVetorial.setAtividades(new AtividadeBuilder().geraAtividades(3));
                     tratamentoAntiVetorial.setBairro(bairro);
                     tratamentoAntiVetorial.setUsuario(agenteSaude);

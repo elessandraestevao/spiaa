@@ -1,10 +1,24 @@
 package com.spiaa.modelo;
 
+import com.spiaa.base.BaseEntity;
+
 /**
  * Created by eless on 29/09/2015.
  */
-public class Usuario {
-    private Long id;
+public class Usuario extends BaseEntity {
+    //Constantes utilizadas para o Banco de dados
+    public static final String TABLE_NAME = "usuario";
+    public static final String ID = "_id";
+    public static final String NOME = "nome";
+    public static final String USUARIO = "usuario";
+    public static final String SENHA = "senha";
+    public static final String EMAIL = "email";
+    public static final String TIPO = "tipo";
+    public static final String NUMERO = "numero";
+    public static final String TURMA = "turma";
+
+
+    //Atributos
     private String nome;
     private String email;
     private String usuario;
@@ -12,14 +26,6 @@ public class Usuario {
     private String tipo;
     private String numero;
     private String turma;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;

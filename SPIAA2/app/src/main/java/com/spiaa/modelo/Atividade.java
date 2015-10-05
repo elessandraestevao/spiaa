@@ -1,8 +1,7 @@
 package com.spiaa.modelo;
 
-import com.spiaa.base.entity.BaseEntity;
+import com.spiaa.base.BaseEntity;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**

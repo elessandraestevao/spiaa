@@ -1,3 +1,12 @@
+CREATE TABLE usuario(
+_id INTEGER PRIMARY KEY NOT NULL,
+  nome text NOT NULL,
+  usuario text NOT NULL,
+  email text NOT NULL,
+  tipo text,
+  numero text,
+  turma text
+);
 CREATE TABLE bairro
 (
  _id INTEGER PRIMARY KEY NOT NULL,
@@ -13,7 +22,7 @@ CREATE TABLE denuncia
   observacao text,
   status text,
   bairro_fk INTEGER NOT NULL,
-  usuario_fk INTEGER
+  usuario_fk INTEGER NOT NULL
 );
 CREATE TABLE quarteirao
 (

@@ -1,11 +1,11 @@
 package com.spiaa.modelo;
 
-import com.spiaa.base.entity.BaseEntity;
+import com.spiaa.base.BaseEntity;
 
 /**
  * Created by eless on 03/10/2015.
  */
-public class Bairro {
+public class Bairro extends BaseEntity{
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "bairro";
     public static final String ID = " _id";
@@ -14,7 +14,6 @@ public class Bairro {
 
     //Atributos
     private String nome;
-    private Long id;
     private String coordenadas;
 
     public String getNome() {
@@ -23,14 +22,6 @@ public class Bairro {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCoordenadas() {

@@ -1,31 +1,22 @@
 package com.spiaa.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.net.http.HttpResponseCache;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
-import com.spiaa.controller.DatabaseController;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -82,32 +73,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .build();
 
             SpiaaService service = restAdapter.create(SpiaaService.class);
-
-            //TESTES Serão retirados ao final da codificação
-            /*List<Usuario> usuarioList = new ArrayList<Usuario>();
-            Usuario user1 = new Usuario();
-            user1.setNome("User1");
-
-            Usuario user2 = new Usuario();
-            user1.setNome("User2");
-
-            usuarioList.add(user1);
-            usuarioList.add(user2);*/
-
-
-            /*service.loginList(usuarioList, new Callback<String>() {
-                @Override
-                public void success(String s, Response response) {
-                    Toast.makeText(LoginActivity.this, "SUCCESS!", Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Toast.makeText(LoginActivity.this, "ERROR!", Toast.LENGTH_LONG).show();
-                }
-            });*/
-
-
             service.login(agenteSaude, new Callback<Usuario>() {
                 @Override
                 public void success(Usuario agente, Response response) {
