@@ -29,8 +29,9 @@ public interface SpiaaService {
     @PUT("/api/denuncia/update")
     void setDenuncias(@Body List<Denuncia> denunciaList, Callback<String> callback);
 
-    @POST("/api/boletim/create")
-    void setBoletim(@Body List<TratamentoAntiVetorial> tratamentoAntiVetorialList, Callback<String> callback);
+    @PUT("/api/boletim/create")
+    //void setBoletim(@Body List<TratamentoAntiVetorial> tratamentoAntiVetorialList, Callback<String> callback);
+    void setBoletim(@Body TratamentoAntiVetorial tratamentoAntiVetorialList, Callback<String> callback);
 
     @POST("/agente/login/list")
     void loginList(@Body List<Usuario> usuarioList, Callback<String> callback);

@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.spiaa.R;
+import com.spiaa.dao.UsuarioDAO;
 import com.spiaa.modelo.IsXLargeScreen;
+import com.spiaa.modelo.Usuario;
 
 public class PerfilEditActivity extends AppCompatActivity {
     android.support.v7.app.ActionBar ab;
@@ -49,10 +51,24 @@ public class PerfilEditActivity extends AppCompatActivity {
 
         //Recuperar dados do usuário logado
         SharedPreferences dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+
+        /*Testes
+        Usuario teste = new Usuario();
+        Usuario teste1 = new Usuario();
+        teste.setId(dadosUsuario.getLong("id",0));
+
+        try {
+            teste1 = new UsuarioDAO(PerfilEditActivity.this).select(teste);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+
         if (dadosUsuario != null) {
             //Preencher campos com os dados do usuário logado
             EditText usuario = (EditText) findViewById(R.id.perfil_usuario);
             usuario.setText(dadosUsuario.getString("usuario", ""));
+            //usuario.setText(teste1.getUsuario().toString());
 
             nome.setText(dadosUsuario.getString("nome", ""));
 

@@ -3,7 +3,7 @@ package com.spiaa.modelo;
 import com.spiaa.base.BaseEntity;
 
 import java.util.Date;
-import java.util.List;
+
 
 /**
  * Created by eless on 22/09/2015.
@@ -27,20 +27,20 @@ public class TratamentoAntiVetorial extends BaseEntity{
     Usuario usuario;
     String numero;
     String turma;
-    Date dataBoletim;
+    String dataBoletim;
     String tipoAtividade;
-    String status;
+    //String status;
     String semana;
     String numeroAtividade;
-    List<Atividade> atividadeList;
+    //List<Atividade> atividadeList;
 
-    public String getStatus() {
+    /*public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
+    }*/
 
     public Bairro getBairro() {
         return bairro;
@@ -82,11 +82,11 @@ public class TratamentoAntiVetorial extends BaseEntity{
         this.turma = turma;
     }
 
-    public Date getData() {
+    public String getData() {
         return dataBoletim;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.dataBoletim = data;
     }
 
@@ -98,13 +98,13 @@ public class TratamentoAntiVetorial extends BaseEntity{
         this.semana = semana;
     }
 
-    public List<Atividade> getAtividades() {
+   /* public List<Atividade> getAtividades() {
         return atividadeList;
     }
 
     public void setAtividades(List<Atividade> atividades) {
         this.atividadeList = atividades;
-    }
+    }*/
 
     public String getNumeroAtividade() {
         return numeroAtividade;

@@ -70,7 +70,7 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
         dados.putString("numero_agente", tratamentoAntiVetorial.getNumero());
         dados.putString("turma_agente", tratamentoAntiVetorial.getTurma());
         dados.putString("semana_epidemiologica", tratamentoAntiVetorial.getSemana());
-        dados.putString("status", tratamentoAntiVetorial.getStatus());
+        //dados.putString("status", tratamentoAntiVetorial.getStatus());
         intent.putExtras(dados);
         startActivity(intent);
     }

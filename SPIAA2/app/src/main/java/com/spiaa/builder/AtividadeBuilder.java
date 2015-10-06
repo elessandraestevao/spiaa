@@ -21,7 +21,7 @@ public class AtividadeBuilder {
         List<Atividade> atividadeList = new ArrayList<Atividade>();
         Random random = new Random();
 
-        Quarteirao quarteirao = new Quarteirao();
+       /* Quarteirao quarteirao = new Quarteirao();
         quarteirao.setId(1L);
 
         TipoImoveis tipoImoveis = new TipoImoveis();
@@ -43,17 +43,21 @@ public class AtividadeBuilder {
         ai.setId(1L);
         ai.setQuantidadeInseticida(23);
         List<AtividadeInseticida> aiList = new ArrayList<AtividadeInseticida>();
-        aiList.add(ai);
+        aiList.add(ai);*/
 
 
         for (int i = 1; i <= quantidade; i++) {
             Atividade atividade = new Atividade();
             atividade.setEndereco("Rua das Araras");
             atividade.setNumero(String.valueOf(i));
-            atividade.setQuarteirao(quarteirao);
-            atividade.setTipoImoveis(tipoImoveis);
-            atividade.setAtividadeCriadouroList(acList);
-            atividade.setAtividadeInseticidasList(aiList);
+            atividade.setInspecionado(12);
+            atividade.setLatitude("latitude");
+            atividade.setLongitude("longitude");
+            atividade.setObservacao("Observação");
+            //atividade.setQuarteirao(quarteirao);
+            //atividade.setTipoImoveis(tipoImoveis);
+            //atividade.setAtividadeCriadouroList(acList);
+            //atividade.setAtividadeInseticidasList(aiList);
             atividadeList.add(atividade);
         }
         return atividadeList;

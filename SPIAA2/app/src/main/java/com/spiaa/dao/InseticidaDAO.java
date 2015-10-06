@@ -2,6 +2,7 @@ package com.spiaa.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.spiaa.base.BaseDAO;
@@ -30,7 +31,24 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
 
     @Override
     public Inseticida select(Inseticida entity) throws Exception {
-        return null;
+        Inseticida inseticida = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Inseticida.ID + " = ?";
+
+        String[] colunas = new String[]{Inseticida.ID, Inseticida.NOME, Inseticida.UNIDADE};
+        String argumentos[] = new String[]{entity.getId().toString()};
+        cursor = sqlLite.query(Inseticida.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            inseticida = new Inseticida();
+            inseticida.setId(cursor.getLong(0));
+            inseticida.setNome(cursor.getString(1));
+            inseticida.setUnidade(cursor.getString(2));
+            cursor.close();
+        }
+        return inseticida;
     }
 
     @Override

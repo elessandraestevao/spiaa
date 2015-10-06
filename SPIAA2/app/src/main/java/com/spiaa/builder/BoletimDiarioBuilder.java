@@ -19,19 +19,22 @@ public class BoletimDiarioBuilder {
         for (int i = 1; i <= quantidade; i++) {
             TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
             tratamentoAntiVetorial.setCategoria("Sede");
-            tratamentoAntiVetorial.setData(new Date());
+            tratamentoAntiVetorial.setData(new Date().toString());
             tratamentoAntiVetorial.setNumero("123" + 1);
             tratamentoAntiVetorial.setSemana("L" + i + "Tratamento Vetorial");
             tratamentoAntiVetorial.setTurma("5960/L");
+            tratamentoAntiVetorial.setNumeroAtividade("1223");
+            tratamentoAntiVetorial.setTipoAtividade("Atividade Tipo");
+
 
             //Muda status e bairro
-            if(random.nextInt(2) == 1){
+           /* if(random.nextInt(2) == 1){
                 tratamentoAntiVetorial.setStatus("EM ABERTO");
                 //boletim.setBairro("Fernandes");
             }else{
                 tratamentoAntiVetorial.setStatus("CONCLUÍDO");
                 //boletim.setBairro("Centro");
-            }
+            }*/
 
             tratamentoAntiVetorialList.add(tratamentoAntiVetorial);
         }

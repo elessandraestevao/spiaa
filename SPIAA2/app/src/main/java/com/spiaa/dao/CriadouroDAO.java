@@ -2,6 +2,7 @@ package com.spiaa.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.spiaa.base.BaseDAO;
@@ -30,7 +31,24 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
 
     @Override
     public Criadouro select(Criadouro entity) throws Exception {
-        return null;
+        Criadouro criadouro = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Criadouro.ID + " = ?";
+
+        String[] colunas = new String[]{Criadouro.ID, Criadouro.GRUPO, Criadouro.RECIPIENTE};
+        String argumentos[] = new String[]{entity.getId().toString()};
+        cursor = sqlLite.query(Criadouro.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            criadouro = new Criadouro();
+            criadouro.setId(cursor.getLong(0));
+            criadouro.setGrupo(cursor.getString(1));
+            criadouro.setRecipiente(cursor.getString(2));
+            cursor.close();
+        }
+        return criadouro;
     }
 
     @Override

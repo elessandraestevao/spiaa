@@ -2,6 +2,7 @@ package com.spiaa.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.spiaa.base.BaseDAO;
@@ -34,7 +35,29 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
 
     @Override
     public Usuario select(Usuario entity) throws Exception {
-        return null;
+        Usuario usuario = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Usuario.ID + " = ?";
+
+        String[] colunas = new String[]{Usuario.ID, Usuario.NOME, Usuario.USUARIO, Usuario.EMAIL,
+        Usuario.TIPO, Usuario.NUMERO, Usuario.TURMA};
+        String argumentos[] = new String[]{entity.getId().toString()};
+        cursor = sqlLite.query(Usuario.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            usuario = new Usuario();
+            usuario.setId(cursor.getLong(0));
+            usuario.setNome(cursor.getString(1));
+            usuario.setUsuario(cursor.getString(2));
+            usuario.setEmail(cursor.getString(3));
+            usuario.setTipo(cursor.getString(4));
+            usuario.setNumero(cursor.getString(5));
+            usuario.setTurma(cursor.getString(6));
+            cursor.close();
+        }
+        return usuario;
     }
 
     @Override

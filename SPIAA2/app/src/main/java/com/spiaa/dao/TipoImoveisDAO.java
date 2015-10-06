@@ -2,6 +2,7 @@ package com.spiaa.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.spiaa.base.BaseDAO;
@@ -30,7 +31,24 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
 
     @Override
     public TipoImoveis select(TipoImoveis entity) throws Exception {
-        return null;
+        TipoImoveis tipoImoveis = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = TipoImoveis.ID + " = ?";
+
+        String[] colunas = new String[]{TipoImoveis.ID, TipoImoveis.SIGLA, TipoImoveis.DESCRICAO};
+        String argumentos[] = new String[]{entity.getId().toString()};
+        cursor = sqlLite.query(TipoImoveis.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            tipoImoveis = new TipoImoveis();
+            tipoImoveis.setId(cursor.getLong(0));
+            tipoImoveis.setSigla(cursor.getString(1));
+            tipoImoveis.setDescricao(cursor.getString(2));
+            cursor.close();
+        }
+        return tipoImoveis;
     }
 
     @Override

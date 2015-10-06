@@ -24,12 +24,15 @@ import com.spiaa.builder.BoletimDiarioBuilder;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.dao.DenunciaDAO;
+import com.spiaa.modelo.Atividade;
+import com.spiaa.modelo.AtividadeCriadouro;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;
@@ -107,7 +110,7 @@ public class SincronizarActivity extends AppCompatActivity {
         agenteSaude = new Usuario();
         agenteSaude.setId(dadosUsuario.getLong("id", 0));
         restAdapter = new RestAdapter.Builder()
-                //.setEndpoint("http://192.168.5.86:8084/Spiaa")
+                //.setEndpoint("http://192.168.4.97:8084/Spiaa")
                 .setEndpoint("http://spiaa.herokuapp.com")
                 .build();
         service = restAdapter.create(SpiaaService.class);
@@ -195,15 +198,30 @@ public class SincronizarActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bairro bairro = new Bairro();
                 bairro.setId(1L);
-                List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new BoletimDiarioBuilder().geraBoletins(5);
-                for (TratamentoAntiVetorial tratamentoAntiVetorial : tratamentoAntiVetorialList
-                        ) {
-                    tratamentoAntiVetorial.setAtividades(new AtividadeBuilder().geraAtividades(3));
+                TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
+                tratamentoAntiVetorial.setId(1L);
+                tratamentoAntiVetorial.setCategoria("Sede");
+                tratamentoAntiVetorial.setData(new Date().toString());
+                tratamentoAntiVetorial.setNumero("123" + 1);
+                tratamentoAntiVetorial.setSemana("L" + "Tratamento Vetorial");
+                tratamentoAntiVetorial.setTurma("5960/L");
+                tratamentoAntiVetorial.setNumeroAtividade("1223");
+                tratamentoAntiVetorial.setTipoAtividade("Atividade Tipo");
+
+
+                //List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new BoletimDiarioBuilder().geraBoletins(5);
+                //List<Atividade> atividadeList = null;
+                //List<AtividadeCriadouro>
+
+                //for (TratamentoAntiVetorial tratamentoAntiVetorial : tratamentoAntiVetorialList
+                        //) {
+                    //tratamentoAntiVetorial.setAtividades(new AtividadeBuilder().geraAtividades(3));
+                    //tratamentoAntiVetorial.setAtividades(atividadeList);
                     tratamentoAntiVetorial.setBairro(bairro);
                     tratamentoAntiVetorial.setUsuario(agenteSaude);
-                }
+               // }
 
-                service.setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
+                service.setBoletim(tratamentoAntiVetorial, new Callback<String>() {
                     @Override
                     public void success(String resposta, Response response) {
                         Toast.makeText(SincronizarActivity.this, resposta, Toast.LENGTH_LONG).show();

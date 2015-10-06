@@ -2,10 +2,13 @@ package com.spiaa.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
+import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.Quarteirao;
 
 /**
@@ -30,7 +33,32 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
 
     @Override
     public Quarteirao select(Quarteirao entity) throws Exception {
-        return null;
+        Quarteirao quarteirao = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Quarteirao.ID + " = ?";
+
+        String[] colunas = new String[]{Quarteirao.ID, Quarteirao.DESCRICAO, Quarteirao.BAIRRO};
+        String argumentos[] = new String[]{entity.getId().toString()};
+        cursor = sqlLite.query(Quarteirao.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            quarteirao = new Quarteirao();
+            quarteirao.setId(cursor.getLong(0));
+            quarteirao.setDescricao(cursor.getString(1));
+
+            try {
+                //Bairro
+                Bairro bairro = new Bairro();
+                bairro.setId(cursor.getLong(2));
+                quarteirao.setBairro(new BairroDAO(context).select(bairro));
+            } catch (Exception e) {
+                Log.e("SPIAA", "Erro no SELECT de Bairro", e);
+            }
+            cursor.close();
+        }
+        return quarteirao;
     }
 
     @Override

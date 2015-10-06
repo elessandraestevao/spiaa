@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dados.DatabaseHelper;
+import com.spiaa.dao.UsuarioDAO;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
@@ -68,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             agenteSaude.setSenha(senha.getText().toString());
 
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    //.setEndpoint("http://192.168.5.86:8084/Spiaa")
+                    //.setEndpoint("http://192.168.4.97:8084/Spiaa")
                     .setEndpoint("http://spiaa.herokuapp.com")
                     .build();
 
@@ -77,8 +79,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void success(Usuario agente, Response response) {
                     if (agente != null) {
-                        //Cria banco de dados da aplicação ao fazer o login pela primeira vez
-                        new DatabaseHelper(LoginActivity.this);
+
+                        try {
+                            //Cria banco de dados da aplicação ao fazer o login pela primeira vez
+                            new DatabaseHelper(LoginActivity.this);
+                        }catch (Exception e){
+                            Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
+                        }
+
+                        try {
+                            //Guarda usuário no banco de dados
+                            new UsuarioDAO(LoginActivity.this).insert(agente);
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
+                        }
 
                         SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
                         dadosUsuario.putString("email", agente.getEmail());
