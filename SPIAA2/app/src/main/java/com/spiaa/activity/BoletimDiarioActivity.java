@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +22,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.spiaa.R;
+import com.spiaa.dao.BairroDAO;
+import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.IsXLargeScreen;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BoletimDiarioActivity extends AppCompatActivity {
     FloatingActionButton criarBoletim;
@@ -53,8 +58,19 @@ public class BoletimDiarioActivity extends AppCompatActivity {
 
         //Preencher dropdown com bairros destinados ao Agente de Saúde
         Spinner spinner = (Spinner) findViewById(R.id.dropdown_bairros);
-        String[] bairros = new String[]{"Fernandes", "Centro", "Maristela"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, bairros);
+        List<Bairro> bairroList = new ArrayList<>();
+        try {
+            bairroList = new BairroDAO(BoletimDiarioActivity.this).selectAll();
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro ao tentar SELECT ALL Bairros", e);
+        }
+        String[] bairros = new String[bairroList.size()];
+        int i = 0;
+        for (Bairro bairro: bairroList){
+            bairros[i] = bairro.getNome();
+            i++;
+        }
+        ArrayAdapter<String > adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bairros);
         spinner.setAdapter(adapter);
 
         //Botão de ATIVIDADES fica invisible inicialmente

@@ -137,18 +137,6 @@ public class SincronizarActivity extends AppCompatActivity {
                         }else{
                             Snackbar.make(v, "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
                         }
-                        //Testar select no banco
-                        BairroDAO dao = new BairroDAO(SincronizarActivity.this);
-                        Bairro bairro = new Bairro();
-                        Bairro bairro2 = new Bairro();
-                        bairro.setId(9L);
-                        try {
-                            bairro2 = dao.select(bairro);
-                            Log.d("SPIAA", "Select Bairro ok!");
-                            Snackbar.make(v, bairro2.getNome(), Snackbar.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     }
 
                     @Override

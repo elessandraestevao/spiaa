@@ -16,9 +16,13 @@ import android.widget.Toast;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dados.DatabaseHelper;
+import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.UsuarioDAO;
+import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -26,6 +30,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    private RestAdapter restAdapter;
+    private SpiaaService service;
+    private Usuario agenteSaude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +72,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Fazer login
             TextView usuarioLogin = (TextView) findViewById(R.id.usuario_login);
             TextView senha = (TextView) findViewById(R.id.senha_login);
-            Usuario agenteSaude = new Usuario();
+            agenteSaude = new Usuario();
             agenteSaude.setUsuario(usuarioLogin.getText().toString());
             agenteSaude.setSenha(senha.getText().toString());
 
-            RestAdapter restAdapter = new RestAdapter.Builder()
+            restAdapter = new RestAdapter.Builder()
                     //.setEndpoint("http://192.168.4.97:8084/Spiaa")
                     .setEndpoint("http://spiaa.herokuapp.com")
                     .build();
 
-            SpiaaService service = restAdapter.create(SpiaaService.class);
+            service = restAdapter.create(SpiaaService.class);
             service.login(agenteSaude, new Callback<Usuario>() {
                 @Override
                 public void success(Usuario agente, Response response) {
@@ -82,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         try {
                             //Cria banco de dados da aplicação ao fazer o login pela primeira vez
-                            new DatabaseHelper(LoginActivity.this);
+                            DatabaseHelper dh = new DatabaseHelper(LoginActivity.this);
                         }catch (Exception e){
                             Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
                         }

@@ -59,7 +59,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.DenunciaActivity" />
+        <activity android:name=".activity.DenunciaActivity" >
+            android:parentActivityName="com.spiaa.activity.DenunciasActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DenunciasActivity" />
+        </activity>
 
         <activity
             android:name=".activity.GPSActivity"

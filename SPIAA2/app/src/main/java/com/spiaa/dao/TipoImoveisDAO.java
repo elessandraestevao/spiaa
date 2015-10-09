@@ -9,6 +9,9 @@ import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.TipoImoveis;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -20,13 +23,15 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
     }
 
     @Override
-    public void insert(TipoImoveis tipoImoveis) throws Exception {
+    public Long insert(TipoImoveis tipoImoveis) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(TipoImoveis.ID, tipoImoveis.getId());
         content.put(TipoImoveis.DESCRICAO, tipoImoveis.getDescricao());
         content.put(TipoImoveis.SIGLA, tipoImoveis.getSigla());
-        sqlLite.insert(TipoImoveis.TABLE_NAME, null, content);
+
+        return sqlLite.insert(TipoImoveis.TABLE_NAME, null, content);
     }
 
     @Override
@@ -52,12 +57,34 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
     }
 
     @Override
-    public void update(TipoImoveis entity) throws Exception {
+    public List<TipoImoveis> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TipoImoveis.TABLE_NAME, null);
+        List<TipoImoveis> tipoImoveisList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            tipoImoveisList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                TipoImoveis tipoImoveis = new TipoImoveis();
+                tipoImoveis.setId(cursor.getLong(0));
+                tipoImoveis.setSigla(cursor.getString(1));
+                tipoImoveis.setDescricao(cursor.getString(2));
+                tipoImoveisList.add(tipoImoveis);
+            }
+            cursor.close();
+        }
+        return tipoImoveisList;
     }
 
     @Override
-    public void delete(TipoImoveis entity) throws Exception {
+    public int update(TipoImoveis entity) throws Exception {
+        return 0;
+    }
 
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
     }
 }

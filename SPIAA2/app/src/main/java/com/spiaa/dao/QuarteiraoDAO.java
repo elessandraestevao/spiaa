@@ -11,6 +11,9 @@ import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.Quarteirao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -22,13 +25,15 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
     }
 
     @Override
-    public void insert(Quarteirao quarteirao) throws Exception {
+    public Long insert(Quarteirao quarteirao) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Quarteirao.ID, quarteirao.getId());
         content.put(Quarteirao.BAIRRO, quarteirao.getBairro().getId());
         content.put(Quarteirao.DESCRICAO, quarteirao.getDescricao());
-        sqlLite.insert(Quarteirao.TABLE_NAME, null, content);
+
+        return sqlLite.insert(Quarteirao.TABLE_NAME, null, content);
     }
 
     @Override
@@ -62,12 +67,34 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
     }
 
     @Override
-    public void update(Quarteirao entity) throws Exception {
+    public List<Quarteirao> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Quarteirao.TABLE_NAME, null);
+        List<Quarteirao> quarteiraoList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            quarteiraoList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Quarteirao quarteirao = new Quarteirao();
+                quarteirao.setId(cursor.getLong(0));
+                quarteirao.setDescricao(cursor.getString(1));
+                quarteiraoList.add(quarteirao);
+            }
+            cursor.close();
+        }
+
+        return quarteiraoList;
     }
 
     @Override
-    public void delete(Quarteirao entity) throws Exception {
+    public int update(Quarteirao entity) throws Exception {
+        return 0;
+    }
 
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
     }
 }

@@ -10,6 +10,8 @@ import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Criadouro;
 import com.spiaa.modelo.Usuario;
 
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -21,16 +23,18 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
     }
 
     @Override
-    public void insert(Usuario usuario) throws Exception {
+    public Long insert(Usuario usuario) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Usuario.ID, usuario.getId());
         content.put(Usuario.EMAIL, usuario.getEmail());
         content.put(Usuario.NOME, usuario.getNome());
         content.put(Usuario.NUMERO, usuario.getNumero());
         content.put(Usuario.TURMA, usuario.getTurma());
         content.put(Usuario.USUARIO, usuario.getUsuario());
-        sqlLite.insert(Usuario.TABLE_NAME, null, content);
+
+        return sqlLite.insert(Usuario.TABLE_NAME, null, content);
     }
 
     @Override
@@ -61,12 +65,35 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
     }
 
     @Override
-    public void update(Usuario entity) throws Exception {
-
+    public List<Usuario> selectAll() throws Exception {
+        return null;
     }
 
     @Override
-    public void delete(Usuario entity) throws Exception {
+    public int update(Usuario usuario) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        ContentValues content = new ContentValues();
 
+        content.put(Usuario.ID, usuario.getId());
+        content.put(Usuario.EMAIL, usuario.getEmail());
+        content.put(Usuario.NOME, usuario.getNome());
+        content.put(Usuario.NUMERO, usuario.getNumero());
+        content.put(Usuario.TURMA, usuario.getTurma());
+        content.put(Usuario.USUARIO, usuario.getUsuario());
+
+        String where = Usuario.ID + " = ?";
+        String argumentos[] = new String[]{usuario.getId().toString()};
+
+        return sqlLite.update(Usuario.TABLE_NAME, content, where, argumentos);
+    }
+
+    @Override
+    public int delete(Long id) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+
+        String where = Usuario.ID + " = ?";
+        String argumentos[] = new String[] { id.toString() };
+
+        return sqlLite.delete(Usuario.TABLE_NAME, where, argumentos);
     }
 }

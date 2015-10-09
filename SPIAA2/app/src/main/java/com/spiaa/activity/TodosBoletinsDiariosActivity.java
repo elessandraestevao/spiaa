@@ -66,7 +66,7 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
         Bundle dados = new Bundle();
         TratamentoAntiVetorial tratamentoAntiVetorial = (TratamentoAntiVetorial) parent.getItemAtPosition(position);
         dados.putString("boletim", "Boletim Diário " + (position + 1));
-        dados.putString("bairro", tratamentoAntiVetorial.getBairro().getNome());
+        //dados.putString("bairro", tratamentoAntiVetorial.getBairro().getNome());
         dados.putString("numero_agente", tratamentoAntiVetorial.getNumero());
         dados.putString("turma_agente", tratamentoAntiVetorial.getTurma());
         dados.putString("semana_epidemiologica", tratamentoAntiVetorial.getSemana());

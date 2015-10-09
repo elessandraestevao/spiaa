@@ -12,7 +12,8 @@ import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.Usuario;
 
-import javax.crypto.spec.DESedeKeySpec;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by eless on 05/10/2015.
@@ -25,9 +26,10 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
     }
 
     @Override
-    public void insert(Denuncia denuncia) throws Exception {
+    public Long insert(Denuncia denuncia) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Denuncia.ID, denuncia.getId());
         content.put(Denuncia.BAIRRO, denuncia.getBairro().getId());
         content.put(Denuncia.ENDERECO, denuncia.getEndereco());
@@ -35,7 +37,10 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         content.put(Denuncia.NUMERO, denuncia.getNumero());
         content.put(Denuncia.STATUS, denuncia.getStatus());
         content.put(Denuncia.USUARIO, denuncia.getUsuario().getId());
-        sqlLite.insert(Denuncia.TABLE_NAME, null, content);
+
+        Long retorno = sqlLite.insert(Denuncia.TABLE_NAME, null, content);
+        sqlLite.close();
+        return retorno;
     }
 
     @Override
@@ -46,7 +51,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String where = Denuncia.ID + " = ?";
 
         String[] colunas = new String[]{Denuncia.ID, Denuncia.ENDERECO, Denuncia.NUMERO,
-        Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.BAIRRO, Denuncia.USUARIO};
+                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.BAIRRO, Denuncia.USUARIO};
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
@@ -79,16 +84,141 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
             }
             cursor.close();
         }
+        sqlLite.close();
         return denuncia;
     }
 
     @Override
-    public void update(Denuncia entity) throws Exception {
+    public List<Denuncia> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Denuncia.TABLE_NAME, null);
+        List<Denuncia> denunciaList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            denunciaList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Denuncia denuncia = new Denuncia();
+                denuncia.setId(cursor.getLong(0));
+                denuncia.setEndereco(cursor.getString(1));
+                denuncia.setNumero(cursor.getInt(2));
+                denuncia.setIrregularidade(cursor.getString(3));
+                denuncia.setObservacao(cursor.getString(4));
+                denuncia.setStatus(cursor.getString(5));
+
+                try {
+                    //Bairro
+                    Bairro bairro = new Bairro();
+                    bairro.setId(cursor.getLong(6));
+                    denuncia.setBairro(new BairroDAO(context).select(bairro));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Bairro", e);
+                }
+
+                try {
+                    //Usuário
+                    Usuario usuario = new Usuario();
+                    usuario.setId(cursor.getLong(7));
+                    denuncia.setUsuario(new UsuarioDAO(context).select(usuario));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Usuário", e);
+                }
+                denunciaList.add(denuncia);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+        return denunciaList;
+    }
+
+    public List<Denuncia> selectFinalizadas() throws Exception {
+        List<Denuncia> denunciaList = null;
+        Cursor cursor = null;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Denuncia.STATUS + " = ?" ;
+
+        String[] colunas = new String[]{Denuncia.ID, Denuncia.ENDERECO, Denuncia.NUMERO,
+                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.BAIRRO, Denuncia.USUARIO};
+        String argumentos[] = new String[]{"Finalizada"};
+        cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            denunciaList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Denuncia denuncia = new Denuncia();
+                denuncia.setId(cursor.getLong(0));
+                denuncia.setEndereco(cursor.getString(1));
+                denuncia.setNumero(cursor.getInt(2));
+                denuncia.setIrregularidade(cursor.getString(3));
+                denuncia.setObservacao(cursor.getString(4));
+                denuncia.setStatus(cursor.getString(5));
+
+                try {
+                    //Bairro
+                    Bairro bairro = new Bairro();
+                    bairro.setId(cursor.getLong(6));
+                    denuncia.setBairro(new BairroDAO(context).select(bairro));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Bairro", e);
+                }
+
+                try {
+                    //Usuário
+                    Usuario usuario = new Usuario();
+                    usuario.setId(cursor.getLong(7));
+                    denuncia.setUsuario(new UsuarioDAO(context).select(usuario));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Usuário", e);
+                }
+                denunciaList.add(denuncia);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+        return denunciaList;
     }
 
     @Override
-    public void delete(Denuncia entity) throws Exception {
+    public int update(Denuncia denuncia) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        ContentValues content = new ContentValues();
 
+        content.put(Denuncia.ID, denuncia.getId());
+        content.put(Denuncia.BAIRRO, denuncia.getBairro().getId());
+        content.put(Denuncia.ENDERECO, denuncia.getEndereco());
+        content.put(Denuncia.IRREGULARIDADE, denuncia.getIrregularidade());
+        content.put(Denuncia.OBSERVACAO, denuncia.getObservacao());
+        content.put(Denuncia.NUMERO, denuncia.getNumero());
+        content.put(Denuncia.STATUS, denuncia.getStatus());
+        content.put(Denuncia.USUARIO, denuncia.getUsuario().getId());
+
+        String where = Denuncia.ID + " = ?";
+        String argumentos[] = new String[]{denuncia.getId().toString()};
+
+        int retorno = sqlLite.update(Denuncia.TABLE_NAME, content, where, argumentos);
+        sqlLite.close();
+        return retorno;
+    }
+
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
+    }
+
+    public boolean deleteFinalizadas(List<Denuncia> denunciaList) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        boolean retorno = false;
+        String where = Denuncia.ID + " = ?";
+        for (Denuncia denuncia : denunciaList) {
+            String argumentos[] = new String[]{denuncia.getId().toString()};
+            sqlLite.delete(Denuncia.TABLE_NAME, where, argumentos);
+            retorno = true;
+        }
+        return retorno;
     }
 }

@@ -9,13 +9,13 @@ _id INTEGER NOT NULL,
 );
 CREATE TABLE bairro
 (
- _id INTEGER NOT NULL,
+ _id INTEGER UNIQUE NOT NULL,
  nome text,
  coordenadas text
 );
 CREATE TABLE denuncia
 (
-  _id INTEGER NOT NULL,
+  _id INTEGER UNIQUE NOT NULL,
   endereco text,
   numero text,
   irregularidade text,
@@ -70,12 +70,12 @@ CREATE TABLE atividade(
  quarteirao_fk INTEGER NOT NULL
 );
 CREATE TABLE atividade_criadouro(
-atividade_fk INTEGER NOT NULL,
+atividade_fk INTEGER PRIMARY KEY NOT NULL,
 criadouro_fk INTEGER NOT NULL,
 quantidade INTEGER
 );
 CREATE TABLE atividade_inseticida(
-atividade_fk INTEGER NOT NULL,
+atividade_fk INTEGER PRIMARY KEY NOT NULL,
 inseticida_fk INTEGER NOT NULL,
 quantidade INTEGER
 );

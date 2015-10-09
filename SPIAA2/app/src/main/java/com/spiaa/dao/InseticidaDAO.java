@@ -9,6 +9,9 @@ import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Inseticida;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -20,13 +23,15 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
     }
 
     @Override
-    public void insert(Inseticida inseticida) throws Exception {
+    public Long insert(Inseticida inseticida) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Inseticida.ID, inseticida.getId());
         content.put(Inseticida.NOME, inseticida.getNome());
         content.put(Inseticida.UNIDADE, inseticida.getUnidade());
-        sqlLite.insert(Inseticida.TABLE_NAME, null, content);
+
+        return sqlLite.insert(Inseticida.TABLE_NAME, null, content);
     }
 
     @Override
@@ -52,12 +57,34 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
     }
 
     @Override
-    public void update(Inseticida entity) throws Exception {
+    public List<Inseticida> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Inseticida.TABLE_NAME, null);
+        List<Inseticida> inseticidaList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            inseticidaList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Inseticida inseticida = new Inseticida();
+                inseticida.setId(cursor.getLong(0));
+                inseticida.setNome(cursor.getString(1));
+                inseticida.setUnidade(cursor.getString(2));
+                inseticidaList.add(inseticida);
+            }
+            cursor.close();
+        }
+        return inseticidaList;
     }
 
     @Override
-    public void delete(Inseticida entity) throws Exception {
+    public int update(Inseticida entity) throws Exception {
+        return 0;
+    }
 
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
     }
 }

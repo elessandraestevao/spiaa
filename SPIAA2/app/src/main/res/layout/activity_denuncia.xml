@@ -10,6 +10,7 @@
     tools:context="com.spiaa.activity.DenunciaActivity">
 
     <LinearLayout
+        android:id="@+id/linear_denuncia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -93,6 +94,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/observacoes_denuncia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
@@ -122,5 +124,12 @@
                 android:src="@drawable/ic_edit_white_24dp"
                 android:visibility="invisible" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/id_denuncia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+
     </LinearLayout>
 </ScrollView>

@@ -10,7 +10,7 @@ import java.util.Random;
  * Created by eless on 18/09/2015.
  */
 public class DenunciaBuilder {
-
+/*
     public List<Denuncia> geraDenuncias(int quantidade){
         List<Denuncia> denunciaList = new ArrayList<Denuncia>();
         Random random = new Random();
@@ -32,5 +32,5 @@ public class DenunciaBuilder {
             denunciaList.add(denuncia);
         }
         return denunciaList;
-    }
+    }*/
 }

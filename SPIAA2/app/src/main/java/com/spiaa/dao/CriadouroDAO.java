@@ -9,6 +9,9 @@ import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Criadouro;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -20,13 +23,15 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
     }
 
     @Override
-    public void insert(Criadouro criadouro) throws Exception {
+    public Long insert(Criadouro criadouro) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Criadouro.ID, criadouro.getId());
         content.put(Criadouro.GRUPO, criadouro.getGrupo());
         content.put(Criadouro.RECIPIENTE, criadouro.getRecipiente());
-        sqlLite.insert(Criadouro.TABLE_NAME, null, content);
+
+        return sqlLite.insert(Criadouro.TABLE_NAME, null, content);
     }
 
     @Override
@@ -52,12 +57,35 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
     }
 
     @Override
-    public void update(Criadouro entity) throws Exception {
+    public List<Criadouro> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Criadouro.TABLE_NAME, null);
+        List<Criadouro> criadouroList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            criadouroList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Criadouro criadouro = new Criadouro();
+                criadouro.setId(cursor.getLong(0));
+                criadouro.setGrupo(cursor.getString(1));
+                criadouro.setRecipiente(cursor.getString(2));
+                criadouroList.add(criadouro);
+            }
+            cursor.close();
+        }
+
+        return criadouroList;
     }
 
     @Override
-    public void delete(Criadouro entity) throws Exception {
+    public int update(Criadouro criadouro) throws Exception {
+        return 0;
+    }
 
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
     }
 }

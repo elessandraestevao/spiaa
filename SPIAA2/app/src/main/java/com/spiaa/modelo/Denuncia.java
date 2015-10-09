@@ -1,11 +1,16 @@
 package com.spiaa.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.spiaa.base.BaseEntity;
+
+import java.io.Serializable;
 
 /**
  * Created by eless on 18/09/2015.
  */
-public class Denuncia extends BaseEntity{
+public class Denuncia extends BaseEntity implements Serializable{
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "denuncia";
     public static final String ID = "_id";
@@ -25,6 +30,7 @@ public class Denuncia extends BaseEntity{
     String observacao;
     Bairro bairro;
     Usuario usuario;
+    String titulo;
 
     public String getEndereco() {
         return endereco;
@@ -80,5 +86,13 @@ public class Denuncia extends BaseEntity{
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

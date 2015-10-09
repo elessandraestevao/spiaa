@@ -2,10 +2,12 @@ package com.spiaa.modelo;
 
 import com.spiaa.base.BaseEntity;
 
+import java.io.Serializable;
+
 /**
  * Created by eless on 03/10/2015.
  */
-public class Bairro extends BaseEntity{
+public class Bairro extends BaseEntity implements Serializable{
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "bairro";
     public static final String ID = " _id";

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -16,19 +17,29 @@ import java.io.InputStreamReader;
  * Created by eless on 03/10/2015.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private static DatabaseHelper instance = null;
+
     private static final String DATABASE_NAME = "spiaa.db";
     private static final int DATABASE_VERSION = 1;
     private static final String FILE_SCRIPT_DATABASE = "create.sql";
     private Context context;
+    public boolean bancoCriado;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
+
+    public DatabaseHelper getConnection(){
+        DatabaseHelper conexao = new DatabaseHelper(context);
+        return conexao;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
             createTables(db);
+            this.bancoCriado = true;
         } catch (IOException e) {
             Log.e("SPIAA", "Erro no create do Banco", e);
         }
@@ -78,5 +89,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 throw e;
             }
         }
+    }
+
+    public boolean getBancoCriado() {
+        return this.bancoCriado;
+    }
+
+    public void setBancoCriado(boolean bancoCriado) {
+        this.bancoCriado = bancoCriado;
     }
 }

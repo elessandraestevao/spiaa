@@ -9,6 +9,9 @@ import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Bairro;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by eless on 05/10/2015.
  */
@@ -21,27 +24,31 @@ public class BairroDAO implements BaseDAO<Bairro> {
 
 
     @Override
-    public void insert(Bairro bairro) throws Exception {
-        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+    public Long insert(Bairro bairro) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getConnection().getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put(Bairro.ID, bairro.getId());
         content.put(Bairro.NOME, bairro.getNome());
         content.put(Bairro.COORDENADAS, bairro.getCoordenadas());
-        sqlLite.insert(Bairro.TABLE_NAME, null, content);
+
+        Long retorno = sqlLite.insert(Bairro.TABLE_NAME, null, content);
+        sqlLite.close();
+        return retorno;
     }
 
     @Override
     public Bairro select(Bairro entity) throws Exception {
         Bairro bairro = null;
         Cursor cursor = null;
-        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getConnection().getReadableDatabase();
         String where = Bairro.ID + " = ?";
 
         String[] colunas = new String[]{Bairro.ID, Bairro.NOME, Bairro.COORDENADAS};
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Bairro.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             bairro = new Bairro();
             bairro.setId(cursor.getLong(0));
@@ -49,16 +56,41 @@ public class BairroDAO implements BaseDAO<Bairro> {
             bairro.setCoordenadas(cursor.getString(2));
             cursor.close();
         }
+        sqlLite.close();
         return bairro;
     }
 
     @Override
-    public void update(Bairro entity) throws Exception {
+    public List<Bairro> selectAll() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getConnection().getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Bairro.TABLE_NAME, null);
+        List<Bairro> bairroList = null;
 
+        if (cursor != null) {
+            cursor.moveToFirst();
+            bairroList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Bairro bairro = new Bairro();
+                bairro.setId(cursor.getLong(0));
+                bairro.setNome(cursor.getString(1));
+                bairro.setCoordenadas(cursor.getString(2));
+                bairroList.add(bairro);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+        return bairroList;
     }
 
     @Override
-    public void delete(Bairro entity) throws Exception {
+    public int update(Bairro bairro) throws Exception {
+        return 0;
+    }
 
+    @Override
+    public int delete(Long id) throws Exception {
+        return 0;
     }
 }

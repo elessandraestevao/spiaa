@@ -13,11 +13,13 @@ import java.util.Map;
  */
 public interface BaseDAO<E extends BaseEntity> {
 
-    void insert(E entity) throws Exception;
+    Long insert(E entity) throws Exception;
 
     E select(E entity) throws Exception;
 
-    void update(E entity) throws Exception;
+    List<E> selectAll() throws Exception;
 
-    void delete(E entity) throws Exception;
+    int update(E entity) throws Exception;
+
+    int delete(Long id) throws Exception;
 }

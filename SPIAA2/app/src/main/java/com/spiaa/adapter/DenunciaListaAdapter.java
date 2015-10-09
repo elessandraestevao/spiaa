@@ -2,6 +2,7 @@ package com.spiaa.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.spiaa.R;
 import com.spiaa.modelo.Denuncia;
 
 import java.util.List;
+import java.util.Objects;
 
 import static android.support.v4.content.ContextCompat.getColor;
 
@@ -55,11 +57,12 @@ public class DenunciaListaAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         View viewDenuncia = inflater.inflate(R.layout.denuncia_item_list, null);
         TextView enderecoDenuncia = (TextView) viewDenuncia.findViewById(R.id.endereco_denuncia);
-       // TextView descricaoDenuncia = (TextView) viewDenuncia.findViewById(R.id.descricao_denuncia);
+        // TextView descricaoDenuncia = (TextView) viewDenuncia.findViewById(R.id.descricao_denuncia);
         TextView numeroDenuncia = (TextView) viewDenuncia.findViewById(R.id.numero_denuncia);
         TextView bairroDenuncia = (TextView) viewDenuncia.findViewById(R.id.bairro_denuncia);
         TextView statusDenuncia = (TextView) viewDenuncia.findViewById(R.id.status_denuncia);
         TextView contagemDenuncia = (TextView) viewDenuncia.findViewById(R.id.contagem_denuncia);
+
         contagemDenuncia.setText("Denúncia " + (position + 1));
         enderecoDenuncia.setText(lista.get(position).getEndereco());
         numeroDenuncia.setText(String.valueOf(lista.get(position).getNumero()));
@@ -68,14 +71,7 @@ public class DenunciaListaAdapter extends BaseAdapter {
         statusDenuncia.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todas as denúncias
-        if (lista.get(position).getStatus().equals("EM ABERTO")) {
-            //cor red
-            statusDenuncia.setTextColor(Color.parseColor("#cc0000"));
-        } else {
-            //cor green
-            statusDenuncia.setTextColor(Color.parseColor("#669900"));
-        }//Definir cor do status na listagem de todas as denúncias
-        if (lista.get(position).getStatus().equals("EM ABERTO")) {
+        if (lista.get(position).getStatus().equals("Encaminhada")) {
             //cor red
             statusDenuncia.setTextColor(Color.parseColor("#cc0000"));
         } else {
