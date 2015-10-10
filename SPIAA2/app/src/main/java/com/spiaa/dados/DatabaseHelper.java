@@ -23,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String FILE_SCRIPT_DATABASE = "create.sql";
     private Context context;
-    public boolean bancoCriado;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,7 +38,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             createTables(db);
-            this.bancoCriado = true;
         } catch (IOException e) {
             Log.e("SPIAA", "Erro no create do Banco", e);
         }
@@ -91,11 +89,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean getBancoCriado() {
-        return this.bancoCriado;
-    }
-
-    public void setBancoCriado(boolean bancoCriado) {
-        this.bancoCriado = bancoCriado;
-    }
 }

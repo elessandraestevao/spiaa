@@ -2,13 +2,14 @@ package com.spiaa.modelo;
 
 import com.spiaa.base.BaseEntity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 /**
  * Created by eless on 22/09/2015.
  */
-public class TratamentoAntiVetorial extends BaseEntity{
+public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "tratamento_antivetorial";
     public static final String ID = "_id";
@@ -22,7 +23,10 @@ public class TratamentoAntiVetorial extends BaseEntity{
     public static final String BAIRRO = "bairro_fk";
 
     //Atributos
+    String titulo;
     Bairro bairro;
+
+    //Excluir categoria, não tem no banco
     String categoria;
     Usuario usuario;
     String numero;
@@ -120,5 +124,13 @@ public class TratamentoAntiVetorial extends BaseEntity{
 
     public void setTipoAtividade(String tipoAtividade) {
         this.tipoAtividade = tipoAtividade;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

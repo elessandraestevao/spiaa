@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import com.spiaa.R;
 import com.spiaa.adapter.BoletimListaAdapter;
 import com.spiaa.builder.BoletimDiarioBuilder;
+import com.spiaa.dao.TratamentoAntiVetorialDAO;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.IsXLargeScreen;
 
@@ -20,6 +22,7 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
     BoletimListaAdapter adapter = new BoletimListaAdapter(this);
     ListView listaBoletins;
     com.melnykov.fab.FloatingActionButton fabCriar;
+    public static boolean NOVO_BOLETIM = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +42,18 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
         fabCriar = (com.melnykov.fab.FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         fabCriar.attachToListView(listaBoletins);
 
-        adapter.setLista(new BoletimDiarioBuilder().geraBoletins(10));
+        try {
+            adapter.setLista(new TratamentoAntiVetorialDAO(TodosBoletinsDiariosActivity.this).selectAll());
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro ao tentar SELECT ALL Tratamento anti-vetorial", e);
+        }
         listaBoletins.setAdapter(adapter);
         listaBoletins.setOnItemClickListener(this);
 
         fabCriar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NOVO_BOLETIM = true;
                 Intent intent = new Intent(TodosBoletinsDiariosActivity.this, BoletimDiarioActivity.class);
                 startActivity(intent);
             }
@@ -63,15 +71,9 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(TodosBoletinsDiariosActivity.this, BoletimDiarioActivity.class);
-        Bundle dados = new Bundle();
         TratamentoAntiVetorial tratamentoAntiVetorial = (TratamentoAntiVetorial) parent.getItemAtPosition(position);
-        dados.putString("boletim", "Boletim Diário " + (position + 1));
-        //dados.putString("bairro", tratamentoAntiVetorial.getBairro().getNome());
-        dados.putString("numero_agente", tratamentoAntiVetorial.getNumero());
-        dados.putString("turma_agente", tratamentoAntiVetorial.getTurma());
-        dados.putString("semana_epidemiologica", tratamentoAntiVetorial.getSemana());
-        //dados.putString("status", tratamentoAntiVetorial.getStatus());
-        intent.putExtras(dados);
+        tratamentoAntiVetorial.setTitulo("Boletim Diário " + (position + 1));
+        intent.putExtra("Boletim", tratamentoAntiVetorial);
         startActivity(intent);
     }
 

@@ -29,6 +29,7 @@
             tools:context="com.spiaa.activity.SincronizarActivity">
 
             <LinearLayout
+                android:id="@+id/linear_sincronizar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

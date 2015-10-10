@@ -5,19 +5,30 @@ import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 
 import com.melnykov.fab.ObservableScrollView;
 import com.spiaa.R;
+import com.spiaa.dao.BairroDAO;
+import com.spiaa.dao.QuarteiraoDAO;
+import com.spiaa.modelo.Atividade;
+import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.IsXLargeScreen;
+import com.spiaa.modelo.Quarteirao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AtividadeActivity extends AppCompatActivity {
     android.support.v7.app.ActionBar ab;
@@ -44,19 +55,37 @@ public class AtividadeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle dados = intent.getExtras();
 
+        //Preencher dropdown com quarteirões relacionados ao bairro
+        Spinner spinnerQuarteiroes = (Spinner) findViewById(R.id.dropdown_quarteiroes);
+        List<Quarteirao> quarteiraoList = new ArrayList<>();
+        try {
+            quarteiraoList = new QuarteiraoDAO(AtividadeActivity.this).selectAllDoBairro(BoletimDiarioActivity.BAIRRO_ID);
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro ao tentar SELECT ALL Quarteirões", e);
+        }
+        String[] quarteiroes = new String[quarteiraoList.size()];
+        int i = 0;
+        for (Quarteirao quarteirao: quarteiraoList){
+            quarteiroes[i] = quarteirao.getId().toString();
+            i++;
+        }
+        ArrayAdapter<String > adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarteiroes);
+        spinnerQuarteiroes.setAdapter(adapter);
+
         if(dados != null){
             //Mudar título da Atividade selecionada na listagem de atividades
             ab = getSupportActionBar();
             ab.setTitle(dados.get("atividade").toString());
 
-            EditText numeroQuarteirao = (EditText) findViewById(R.id.numero_quarteirao_atividade);
-            numeroQuarteirao.setText(dados.get("numero_quarteirao").toString());
+            //EditText numeroQuarteirao = (EditText) findViewById(R.id.numero_quarteirao_atividade);
+            //numeroQuarteirao.setText(dados.get("numero_quarteirao").toString());
 
             EditText endereco = (EditText) findViewById(R.id.endereco_atividade);
             endereco.setText(dados.get("endereco").toString());
 
+
             //Verifica qual tipo de unidade foi selecionado
-            RadioButton tipoR = (RadioButton) findViewById(R.id.radio_tipo_r);
+            /*RadioButton tipoR = (RadioButton) findViewById(R.id.radio_tipo_r);
             RadioButton tipoC = (RadioButton) findViewById(R.id.radio_tipo_c);
             RadioButton tipoTB = (RadioButton) findViewById(R.id.radio_tipo_tb);
             RadioButton tipoPE = (RadioButton) findViewById(R.id.radio_tipo_pe);
@@ -105,10 +134,9 @@ public class AtividadeActivity extends AppCompatActivity {
             criadouroD2.setText(dados.get("criadouro_d2").toString());
 
             EditText criadouroE = (EditText) findViewById(R.id.criadouro_e);
-            criadouroE.setText(dados.get("criadouro_e").toString());
+            criadouroE.setText(dados.get("criadouro_e").toString());*/
 
         }
-
 
     }
 

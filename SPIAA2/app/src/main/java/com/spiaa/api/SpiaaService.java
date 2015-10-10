@@ -23,6 +23,9 @@ public interface SpiaaService {
     @POST("/api/bairro/agente")
     void getBairros(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
 
+    @POST("/api/bairroquarteirao/agente")
+    void getBairrosQuarteiroes(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
+
     @POST("/api/denuncia/agente")
     void getDenuncias(@Body Usuario agenteSaude, Callback<List<Denuncia>> callback);
 

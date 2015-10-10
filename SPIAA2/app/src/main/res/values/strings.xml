@@ -39,8 +39,8 @@
     <string name="ponto_estrategico_sigla">P.E.</string>
     <string name="delimitacao_foco_sigla">D.F.</string>
     <string name="pesquisa_vetorial_especial_sigla">P.V.E.</string>
-    <string name="numero_do_quarteirao">Nº do Quarteirão</string>
-    <string name="endereco_completo">ENDEREÇO COMPLETO</string>
+    <string name="quarteirao">QUARTEIRÃO</string>
+    <string name="endereco_completo">Endereço completo</string>
     <string name="total_inspecionado">TOTAL INSPECIONADO</string>
     <string name="tipo_de_unidade"> TIPO DE UNIDADE</string>
     <string name="residencial_sigla">R</string>
@@ -58,21 +58,6 @@
     <string name="enviar_boletim_diario">Enviar Boletim Diário</string>
     <string name="receber_denuncias">Receber denúncias</string>
     <string name="enviar_denuncias_fechadas">Enviar denúncias</string>
-
-    <string-array name="array_denuncias_fake">
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-        <item>Rua Vergueiro, 1540, Centro, Santa Rita do Sapucaí, MG, 37540-000</item>
-    </string-array>
     <string name="title_activity_denuncia">Detalhes da denúncia</string>
     <string name="title_activity_gps">GPSActivity</string>
     <string name="title_activity_splash">SPIAA</string>
@@ -95,7 +80,7 @@
     <string name="agente_saude_bd">Agente de Saúde</string>
     <string name="turma_agente_bd">Turma</string>
     <string name="semana_epidemiologica_bd">Semana Epidemiológica Nº</string>
-    <string name="criadouros">CRIADOUROS</string>
+    <string name="criadouros">CRIADOUROS ENCONTRADOS</string>
     <string name="criadouro_a1">Quantidade de A1</string>
     <string name="criadouro_a2">Quantidade de A2</string>
     <string name="criadouro_b">Quantidade de B</string>

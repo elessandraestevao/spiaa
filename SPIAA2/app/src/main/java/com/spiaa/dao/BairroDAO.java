@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Bairro;
+import com.spiaa.modelo.Quarteirao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,12 @@ public class BairroDAO implements BaseDAO<Bairro> {
         content.put(Bairro.COORDENADAS, bairro.getCoordenadas());
 
         Long retorno = sqlLite.insert(Bairro.TABLE_NAME, null, content);
+        if (retorno != -1) {
+            QuarteiraoDAO dao = new QuarteiraoDAO(context);
+            for (Quarteirao q : bairro.getQuarteiraoList()) {
+                dao.insert(q);
+            }
+        }
         sqlLite.close();
         return retorno;
     }
@@ -91,6 +98,17 @@ public class BairroDAO implements BaseDAO<Bairro> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = Bairro.ID + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(Bairro.TABLE_NAME, where, argumentos);
+        if(retorno == 1){
+            //exclui também os quarteirões deste bairro
+            new QuarteiraoDAO(context).delete(id);
+        }
+        return retorno;
+
     }
+
 }

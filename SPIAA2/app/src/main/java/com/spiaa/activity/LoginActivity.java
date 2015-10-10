@@ -86,11 +86,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void success(Usuario agente, Response response) {
                     if (agente != null) {
-
                         try {
                             //Cria banco de dados da aplicação ao fazer o login pela primeira vez
                             DatabaseHelper dh = new DatabaseHelper(LoginActivity.this);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
                         }
 
@@ -101,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
                         }
 
+                        //Coloca informações do usuário no SharedPreferences
                         SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
                         dadosUsuario.putString("email", agente.getEmail());
                         dadosUsuario.putString("numero", agente.getNumero());
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         dadosUsuario.putString("turma", agente.getTurma());
                         dadosUsuario.putString("usuario", agente.getUsuario());
                         dadosUsuario.putLong("id", agente.getId());
-                        dadosUsuario.commit();
+                        dadosUsuario.apply();
 
                         //Vai para a página inicial da aplicação
                         Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);

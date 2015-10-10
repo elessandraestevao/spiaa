@@ -3,6 +3,7 @@ package com.spiaa.modelo;
 import com.spiaa.base.BaseEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by eless on 03/10/2015.
@@ -17,6 +18,7 @@ public class Bairro extends BaseEntity implements Serializable{
     //Atributos
     private String nome;
     private String coordenadas;
+    private List<Quarteirao> quarteiraoList;
 
     public String getNome() {
         return nome;
@@ -32,5 +34,13 @@ public class Bairro extends BaseEntity implements Serializable{
 
     public void setCoordenadas(String coordenadas) {
         this.coordenadas = coordenadas;
+    }
+
+    public List<Quarteirao> getQuarteiraoList() {
+        return quarteiraoList;
+    }
+
+    public void setQuarteiraoList(List<Quarteirao> quarteiraoList) {
+        this.quarteiraoList = quarteiraoList;
     }
 }

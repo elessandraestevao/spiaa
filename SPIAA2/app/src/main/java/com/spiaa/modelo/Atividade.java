@@ -2,12 +2,13 @@ package com.spiaa.modelo;
 
 import com.spiaa.base.BaseEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by eless on 26/09/2015.
  */
-public class Atividade extends BaseEntity {
+public class Atividade extends BaseEntity implements Serializable{
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "atividade";
     public static final String ID = "_id";

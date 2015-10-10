@@ -1,5 +1,6 @@
 package com.spiaa.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -48,6 +49,7 @@ public class SincronizarActivity extends AppCompatActivity {
     Usuario agenteSaude;
     SpiaaService service;
     List<Denuncia> denuncias;
+    private ProgressDialog dialog;
 
     //teste com banco SQLite
     private DatabaseHelper dh;
@@ -117,7 +119,7 @@ public class SincronizarActivity extends AppCompatActivity {
 
         //Função de sincronização RECEBER BAIRROS
         RelativeLayout receberBairros = (RelativeLayout) findViewById(R.id.receber_bairros);
-        receberBairros.setOnClickListener(new View.OnClickListener() {
+        /*receberBairros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 service.getBairros(agenteSaude, new Callback<List<Bairro>>() {
@@ -134,7 +136,7 @@ public class SincronizarActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
                             }
-                        }else{
+                        } else {
                             Snackbar.make(v, "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
                         }
                     }
@@ -145,14 +147,14 @@ public class SincronizarActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        });*/
 
         //Função de sincronização RECEBER DENÚNCIAS
         RelativeLayout receberDenuncias = (RelativeLayout) findViewById(R.id.receber_denuncias);
-        receberDenuncias.setOnClickListener(new View.OnClickListener() {
+        /*receberDenuncias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                service.getDenuncias(agenteSaude, new Callback<List<Denuncia>>() {
+                /*service.getDenuncias(agenteSaude, new Callback<List<Denuncia>>() {
                     @Override
                     public void success(List<Denuncia> denunciaList, Response response) {
                         if (denunciaList != null) {
@@ -177,11 +179,11 @@ public class SincronizarActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        });*/
 
         //Função de sincronização ENVIAR BOLETIM DIÁRIO
         RelativeLayout enviarBoletimDiario = (RelativeLayout) findViewById(R.id.enviar_boletim_diario);
-        enviarBoletimDiario.setOnClickListener(new View.OnClickListener() {
+        /*enviarBoletimDiario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bairro bairro = new Bairro();
@@ -202,12 +204,12 @@ public class SincronizarActivity extends AppCompatActivity {
                 //List<AtividadeCriadouro>
 
                 //for (TratamentoAntiVetorial tratamentoAntiVetorial : tratamentoAntiVetorialList
-                        //) {
-                    //tratamentoAntiVetorial.setAtividades(new AtividadeBuilder().geraAtividades(3));
-                    //tratamentoAntiVetorial.setAtividades(atividadeList);
-                    tratamentoAntiVetorial.setBairro(bairro);
-                    tratamentoAntiVetorial.setUsuario(agenteSaude);
-               // }
+                //) {
+                //tratamentoAntiVetorial.setAtividades(new AtividadeBuilder().geraAtividades(3));
+                //tratamentoAntiVetorial.setAtividades(atividadeList);
+                tratamentoAntiVetorial.setBairro(bairro);
+                tratamentoAntiVetorial.setUsuario(agenteSaude);
+                // }
 
                 service.setBoletim(tratamentoAntiVetorial, new Callback<String>() {
                     @Override
@@ -221,11 +223,11 @@ public class SincronizarActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        });*/
 
         //Função de sincronização ENVIAR DENÚNCIAS
         RelativeLayout enviarDenuncias = (RelativeLayout) findViewById(R.id.enviar_denuncias);
-        enviarDenuncias.setOnClickListener(new View.OnClickListener() {
+        /*enviarDenuncias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 denuncias.get(0).setObservacao("UPDATE OBS");
@@ -242,7 +244,54 @@ public class SincronizarActivity extends AppCompatActivity {
                     }
                 });
             }
+        });*/
+
+        //Fazer sincronização dos dados ao logar, automaticamente
+        //Mostrar progresso do sincronismo pro usuário
+        showDialogAguarde();
+
+        service.getBairrosQuarteiroes(agenteSaude, new Callback<List<Bairro>>() {
+            @Override
+            public void success(List<Bairro> bairroList, Response response) {
+                if (bairroList != null) {
+                    //Inserir bairros no Banco de dados
+                    try {
+                        BairroDAO dao = new BairroDAO(SincronizarActivity.this);
+                        for (Bairro bairro : bairroList) {
+                            if(dao.delete(bairro.getId()) == 1) {
+                                dao.insert(bairro);
+                            }
+                        }
+                        //Retirar da tela o progresso do sincronismo
+                        dialog.dismiss();
+                        Snackbar.make(findViewById(R.id.linear_sincronizar), "Bairros recebidos com sucesso!", Snackbar.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
+                    }
+                } else {
+                    //Retirar da tela o progresso do sincronismo
+                    dialog.dismiss();
+                    Snackbar.make(findViewById(R.id.linear_sincronizar), "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                //Retirar da tela o progresso do sincronismo
+                dialog.dismiss();
+                Snackbar.make(findViewById(R.id.linear_sincronizar), "Erro ao receber bairros.", Snackbar.LENGTH_LONG).show();
+            }
         });
+
+
+    }
+
+    private void showDialogAguarde() {
+        dialog = new ProgressDialog(SincronizarActivity.this);
+        dialog.setMessage("Aguarde...");
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     @Override

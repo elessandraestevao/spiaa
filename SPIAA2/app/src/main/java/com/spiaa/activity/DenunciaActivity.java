@@ -117,7 +117,6 @@ public class DenunciaActivity extends AppCompatActivity {
                 } else {
                     Snackbar.make(findViewById(R.id.linear_denuncia), "Preencha o campo Observações/Constatações", Snackbar.LENGTH_LONG).show();
                 }
-                onPause();
             }
         });
 
@@ -159,9 +158,21 @@ public class DenunciaActivity extends AppCompatActivity {
         return true;
     }
 
+    private void aoVoltar(){
+        Intent intent = new Intent(this, DenunciasActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        aoVoltar();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
+        aoVoltar();
     }
 }

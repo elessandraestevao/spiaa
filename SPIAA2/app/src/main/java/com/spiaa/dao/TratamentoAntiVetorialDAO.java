@@ -128,6 +128,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
                     Log.e("SPIAA", "Erro no SELECT de Bairro", e);
                 }
                 tratamentoAntiVetorialList.add(tratamentoAntiVetorial);
+                cursor.moveToNext();
             }
             cursor.close();
         }

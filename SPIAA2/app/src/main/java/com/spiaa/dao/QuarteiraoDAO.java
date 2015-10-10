@@ -80,13 +80,49 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
                 Quarteirao quarteirao = new Quarteirao();
                 quarteirao.setId(cursor.getLong(0));
                 quarteirao.setDescricao(cursor.getString(1));
+                //Busca Bairro
+                Bairro bairro = new Bairro();
+                bairro.setId((long) cursor.getInt(2));
+                bairro = new BairroDAO(context).select(bairro);
+                quarteirao.setBairro(bairro);
+
                 quarteiraoList.add(quarteirao);
+                cursor.moveToNext();
             }
             cursor.close();
         }
-
+        sqlLite.close();
         return quarteiraoList;
     }
+
+    public List<Quarteirao> selectAllDoBairro(Long id) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Quarteirao.TABLE_NAME + " WHERE " + Quarteirao.BAIRRO + " = " + id, null);
+        List<Quarteirao> quarteiraoList = null;
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            quarteiraoList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                Quarteirao quarteirao = new Quarteirao();
+                quarteirao.setId(cursor.getLong(0));
+                quarteirao.setDescricao(cursor.getString(1));
+                //Busca Bairro
+                Bairro bairro = new Bairro();
+                bairro.setId((long) cursor.getInt(2));
+                bairro = new BairroDAO(context).select(bairro);
+                quarteirao.setBairro(bairro);
+
+                quarteiraoList.add(quarteirao);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+        return quarteiraoList;
+    }
+
 
     @Override
     public int update(Quarteirao entity) throws Exception {
@@ -95,6 +131,11 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = Quarteirao.BAIRRO + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        //Excluir todos os quarteirões com o bairro igual ao ID passado como parâmetro
+        return sqlLite.delete(Quarteirao.TABLE_NAME, where, argumentos);
     }
 }

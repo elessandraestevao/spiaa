@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/numero_do_quarteirao" />
+            android:text="@string/quarteirao" />
 
         <TextView
             android:id="@+id/numero_quarteirao"

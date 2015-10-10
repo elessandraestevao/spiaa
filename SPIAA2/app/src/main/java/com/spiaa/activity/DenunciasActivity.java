@@ -221,5 +221,8 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         denuncia.setTitulo("Denúncia " + (position + 1));
         intent.putExtra("Denuncia", denuncia);
         startActivity(intent);
+
+        finish();
     }
+
 }

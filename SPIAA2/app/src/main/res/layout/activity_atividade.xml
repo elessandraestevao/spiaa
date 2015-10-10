@@ -30,18 +30,19 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_numero_quarteirao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/quarteirao" />
 
-                <EditText
-                    android:id="@+id/numero_quarteirao_atividade"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/numero_do_quarteirao"
-                    android:inputType="text" />
-            </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/dropdown_quarteiroes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown">
+
+            </Spinner>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/message_endereco_atividade"
@@ -52,58 +53,23 @@
                     android:id="@+id/endereco_atividade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/endereco"
+                    android:hint="@string/endereco_completo"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/tipo_de_unidade" />
 
-            <LinearLayout
+            <Spinner
+                android:id="@+id/dropdown_tipos_de_unidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:spinnerMode="dropdown">
 
-                <RadioGroup
-                    android:id="@+id/radio_group_tipo_unidade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radio_tipo_r"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/residencial_sigla" />
-
-                    <RadioButton
-                        android:id="@+id/radio_tipo_c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/comercial_sigla" />
-
-                    <RadioButton
-                        android:id="@+id/radio_tipo_tb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/terreno_baldio_sigla" />
-
-                    <RadioButton
-                        android:id="@+id/radio_tipo_pe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ponto_estrategico_sigla" />
-
-                    <RadioButton
-                        android:id="@+id/radio_tipo_outros"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/outros" />
-                </RadioGroup>
-            </LinearLayout>
+            </Spinner>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,36 +77,14 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/observacoes" />
 
-            <LinearLayout
+            <Spinner
+                android:id="@+id/dropdown_observacoes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:spinnerMode="dropdown">
 
-                <RadioGroup
-                    android:id="@+id/radio_observacoes_atividade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            </Spinner>
 
-                    <RadioButton
-                        android:id="@+id/radio_recebido"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recebido" />
-
-                    <RadioButton
-                        android:id="@+id/radio_fechado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fechado" />
-
-                    <RadioButton
-                        android:id="@+id/radio_resgatado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/resgatado" />
-                </RadioGroup>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -148,103 +92,25 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/criadouros" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_a1"
+            <ListView
+                android:id="@+id/lista_criadouros"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:scrollbars="none" />
 
-                <EditText
-                    android:id="@+id/criadouro_a1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_a1"
-                    android:inputType="text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/consumo_de_inseticida" />
 
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_a2"
+            <ListView
+                android:id="@+id/lista_inseticidas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_a2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_a2"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_b"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_b"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_c"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_c"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_c"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_d1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_d1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_d1"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_d2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_d2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_d2"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/message_qtde_e"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/criadouro_e"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/criadouro_e"
-                    android:inputType="text" />
-
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:scrollbars="none" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
