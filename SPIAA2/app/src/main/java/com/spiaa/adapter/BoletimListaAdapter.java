@@ -60,19 +60,19 @@ public class BoletimListaAdapter extends BaseAdapter {
         TextView statusBoletim = (TextView) viewBoletim.findViewById(R.id.status_boletim);
 
         contagemBoletim.setText("Boletim Diário " + (position + 1));
-        //bairro.setText(lista.get(position).getBairro().getNome());
+        bairro.setText(lista.get(position).getBairro().getNome());
         data.setText(String.valueOf(lista.get(position).getData()));
         numeroAtividades.setText(Integer.toString(lista.size()));
-        //statusBoletim.setText(lista.get(position).getStatus());
+        statusBoletim.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todos os boletins
-        /*if (lista.get(position).getStatus().equals("EM ABERTO")) {
+        if (lista.get(position).getStatus().equals("Em aberto")) {
             //cor red
             statusBoletim.setTextColor(Color.parseColor("#cc0000"));
         } else {
             //cor green
             statusBoletim.setTextColor(Color.parseColor("#669900"));
-        }*/
+        }
 
         return viewBoletim;
     }

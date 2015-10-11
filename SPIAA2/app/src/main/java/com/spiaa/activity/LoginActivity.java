@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         dadosUsuario.putString("turma", agente.getTurma());
                         dadosUsuario.putString("usuario", agente.getUsuario());
                         dadosUsuario.putLong("id", agente.getId());
-                        dadosUsuario.apply();
+                        dadosUsuario.commit();
 
                         //Vai para a página inicial da aplicação
                         Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);

@@ -57,6 +57,16 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
+        listaDenuncias = (ListView) findViewById(R.id.lista_denuncias);
+        //TextView para mensagem de Nenuma denúncia encontrada
+        nenhumaDenuncia = (TextView) findViewById(R.id.nenhuma_denuncia);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         //Recuperar denúncias do banco de dados local
         List<Denuncia> denunciaList = null;
         try {
@@ -64,13 +74,9 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         } catch (Exception e) {
             Log.e("SPIAA", "Erro ao tentar SELECT ALL Denúncias", e);
         }
-        listaDenuncias = (ListView) findViewById(R.id.lista_denuncias);
         adapter.setLista(denunciaList);
         listaDenuncias.setAdapter(adapter);
         listaDenuncias.setOnItemClickListener(this);
-
-        //TextView para mensagem de Nenuma denúncia encontrada
-        nenhumaDenuncia = (TextView) findViewById(R.id.nenhuma_denuncia);
 
         //Ao carregar a tela, sem utilizar a sincronização
         if (denunciaList.isEmpty()) {
@@ -221,8 +227,5 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         denuncia.setTitulo("Denúncia " + (position + 1));
         intent.putExtra("Denuncia", denuncia);
         startActivity(intent);
-
-        finish();
     }
-
 }

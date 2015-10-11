@@ -66,7 +66,7 @@ public class AtividadeActivity extends AppCompatActivity {
         String[] quarteiroes = new String[quarteiraoList.size()];
         int i = 0;
         for (Quarteirao quarteirao: quarteiraoList){
-            quarteiroes[i] = quarteirao.getId().toString();
+            quarteiroes[i] = quarteirao.getDescricao();
             i++;
         }
         ArrayAdapter<String > adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarteiroes);

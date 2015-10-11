@@ -44,6 +44,7 @@ semana_epidemiologica text,
 numero_atividade text,
 tipo_atividade text,
 turma text,
+status text,
 usuario_fk INTEGER NOT NULL,
 bairro_fk INTEGER NOT NULL
 );

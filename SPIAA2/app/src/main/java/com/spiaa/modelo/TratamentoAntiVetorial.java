@@ -19,6 +19,7 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
     public static final String NUMERO_ATIVIDADE = "numero_atividade";
     public static final String TIPO_ATIVIDADE = "tipo_atividade";
     public static final String TURMA = "turma";
+    public static final String STATUS = "status";
     public static final String USUARIO = "usuario_fk";
     public static final String BAIRRO = "bairro_fk";
 
@@ -33,18 +34,18 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
     String turma;
     String dataBoletim;
     String tipoAtividade;
-    //String status;
+    String status;
     String semana;
     String numeroAtividade;
     //List<Atividade> atividadeList;
 
-    /*public String getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }*/
+    }
 
     public Bairro getBairro() {
         return bairro;

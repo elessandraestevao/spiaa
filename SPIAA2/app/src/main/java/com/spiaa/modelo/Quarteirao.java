@@ -13,15 +13,15 @@ public class Quarteirao extends BaseEntity {
     public static final String BAIRRO = "bairro_fk";
 
     //Atributos
-    private String Descricao;
+    private String descricao;
     private Bairro bairro;
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
-        Descricao = descricao;
+        descricao = descricao;
     }
 
     public Bairro getBairro() {

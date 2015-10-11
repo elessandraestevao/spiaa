@@ -254,17 +254,24 @@ public class SincronizarActivity extends AppCompatActivity {
             @Override
             public void success(List<Bairro> bairroList, Response response) {
                 if (bairroList != null) {
+                    boolean insercaoOk = false;
                     //Inserir bairros no Banco de dados
                     try {
                         BairroDAO dao = new BairroDAO(SincronizarActivity.this);
                         for (Bairro bairro : bairroList) {
-                            if(dao.delete(bairro.getId()) == 1) {
+                            if((dao.delete(bairro.getId()) == 1) || dao.select(bairro) == null) {
                                 dao.insert(bairro);
+                                insercaoOk = true;
                             }
                         }
-                        //Retirar da tela o progresso do sincronismo
-                        dialog.dismiss();
-                        Snackbar.make(findViewById(R.id.linear_sincronizar), "Bairros recebidos com sucesso!", Snackbar.LENGTH_LONG).show();
+                        if(insercaoOk){
+                            //Retirar da tela o progresso do sincronismo
+                            dialog.dismiss();
+                            Snackbar.make(findViewById(R.id.linear_sincronizar), "Bairros recebidos com sucesso!", Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(findViewById(R.id.linear_sincronizar), "Erro no recebimento dos Bairros", Snackbar.LENGTH_LONG).show();
+                        }
+
                     } catch (Exception e) {
                         Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
                     }

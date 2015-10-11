@@ -56,6 +56,8 @@ public class TodosBoletinsDiariosActivity extends AppCompatActivity implements A
                 NOVO_BOLETIM = true;
                 Intent intent = new Intent(TodosBoletinsDiariosActivity.this, BoletimDiarioActivity.class);
                 startActivity(intent);
+                //Finalizar esta Activity para resetar CONSTANTE NOVO_BOLETIM para False
+                finish();
             }
         });
 

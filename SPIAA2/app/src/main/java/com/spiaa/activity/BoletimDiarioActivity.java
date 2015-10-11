@@ -1,5 +1,6 @@
 package com.spiaa.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -29,7 +30,7 @@ import com.spiaa.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoletimDiarioActivity extends AppCompatActivity {
+public class BoletimDiarioActivity extends AppCompatActivity implements View.OnClickListener {
     FloatingActionButton criarBoletim;
     Button botaoAtividades;
     Button botaoConcluirBoletim;
@@ -39,6 +40,11 @@ public class BoletimDiarioActivity extends AppCompatActivity {
     private Spinner spinnerBairros;
     private SharedPreferences dadosUsuario;
     private TratamentoAntiVetorial tratamentoAntiVetorial;
+    private ArrayAdapter<String> adapter;
+    private EditText agente;
+    private EditText numeroAgente;
+    private EditText turmaAgente;
+    private EditText semanaEpidemiologica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +64,36 @@ public class BoletimDiarioActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        //Preencher dropdown com bairros destinados ao Agente de Saúde
         spinnerBairros = (Spinner) findViewById(R.id.dropdown_bairros);
+
+        //Botão de ATIVIDADES fica invisible inicialmente
+        botaoAtividades = (Button) findViewById(R.id.atividades);
+        botaoAtividades.setOnClickListener(this);
+
+        //Botão de CONCLUIR BOLETIM fica invisible inicialmente
+        botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
+        botaoConcluirBoletim.setOnClickListener(this);
+
+        //Campos referentes ao Agente de Saúde
+        agente = (EditText) findViewById(R.id.agente_bd);
+        numeroAgente = (EditText) findViewById(R.id.numero_agente_bd);
+        turmaAgente = (EditText) findViewById(R.id.turma_agente_bd);
+
+        //Semana epidemiológica
+        semanaEpidemiologica = (EditText) findViewById(R.id.semana_epidemiologica_bd);
+
+        //Usuário Logado
+        dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+
+        //Botão CRIAR BOLETIM
+        criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
+        criarBoletim.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Preencher dropdown com bairros destinados ao Agente de Saúde
         bairroList = new ArrayList<>();
         try {
             bairroList = new BairroDAO(BoletimDiarioActivity.this).selectAll();
@@ -72,42 +106,13 @@ public class BoletimDiarioActivity extends AppCompatActivity {
             bairros[i] = bairro.getNome();
             i++;
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bairros);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bairros);
         spinnerBairros.setAdapter(adapter);
 
-        //Obter ID do Bairro selecionado no Dropdown
-        obterIdBairroSelecionado();
-
-        //Botão de ATIVIDADES fica invisible inicialmente
-        botaoAtividades = (Button) findViewById(R.id.atividades);
-        botaoAtividades.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(BoletimDiarioActivity.this, TodasAtividadesActivity.class);
-                startActivity(intent1);
-            }
-        });
-
-        //Botão de CONCLUIR BOLETIM fica invisible inicialmente
-        botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
-        botaoConcluirBoletim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(BoletimDiarioActivity.this, TodosBoletinsDiariosActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //Campos referentes ao Agente de Saúde
-        EditText agente = (EditText) findViewById(R.id.agente_bd);
-        final EditText numeroAgente = (EditText) findViewById(R.id.numero_agente_bd);
-        final EditText turmaAgente = (EditText) findViewById(R.id.turma_agente_bd);
-
-        //Usuário Logado
-        dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
-
         if (!TodosBoletinsDiariosActivity.NOVO_BOLETIM) {
+            //Obter ID do Bairro selecionado no Dropdown
+            obterIdBairroSelecionado();
+
             //Preencher dados do Boletim Diário selecionado na listagem de Boletins Diários
             Bundle dados = getIntent().getExtras();
             tratamentoAntiVetorial = (TratamentoAntiVetorial) dados.getSerializable("Boletim");
@@ -127,9 +132,7 @@ public class BoletimDiarioActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
                 //Semana epidemiológica
-                EditText semanaEpidemiologica = (EditText) findViewById(R.id.semana_epidemiologica_bd);
                 semanaEpidemiologica.setText(tratamentoAntiVetorial.getSemana());
 
                 manipulaBotoes();
@@ -168,46 +171,6 @@ public class BoletimDiarioActivity extends AppCompatActivity {
             //Apenas visualização, não pode editar esse campo
             turmaAgente.setInputType(0);
         }
-
-        //Botão CRIAR BOLETIM
-        criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
-        criarBoletim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Criar um objeto TAV e preencher com os dados da tela
-                TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
-
-                tratamentoAntiVetorial.setTurma(turmaAgente.getText().toString());
-                tratamentoAntiVetorial.setTipoAtividade("Tratamento");
-                tratamentoAntiVetorial.setNumero(numeroAgente.getText().toString());
-
-                //Converter data para String
-                java.util.Date data = new java.util.Date();
-                tratamentoAntiVetorial.setData(String.valueOf(data));
-
-                //Obter bairro selecionado
-                tratamentoAntiVetorial.setBairro(obterBairroSelecionado());
-
-                //Obter agente de saúde
-                Usuario usuario = new Usuario();
-                usuario.setId(dadosUsuario.getLong("id", 0));
-                Usuario agente = new Usuario();
-                try {
-                    agente = new UsuarioDAO(BoletimDiarioActivity.this).select(usuario);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                tratamentoAntiVetorial.setUsuario(agente);
-
-                try {
-                    new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
-                    Snackbar.make(v, "Boletim Diário criado com secesso!", Snackbar.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
-                }
-                manipulaBotoes();
-            }
-        });
     }
 
     private void obterIdBairroSelecionado() {
@@ -243,5 +206,72 @@ public class BoletimDiarioActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_boletim_diario, menu);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.atividades:
+                Intent intent1 = new Intent(BoletimDiarioActivity.this, TodasAtividadesActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.concluir_boletim:
+                //definir Status como Concluído
+                tratamentoAntiVetorial.setStatus("Em aberto");
+
+                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso!", Toast.LENGTH_LONG).show();
+                vaiParaListaDeTodosBoletins();
+                break;
+            case R.id.fab_criar_boletim:
+                //Criar um objeto TAV e preencher com os dados da tela
+                TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
+
+                tratamentoAntiVetorial.setTurma(turmaAgente.getText().toString());
+                tratamentoAntiVetorial.setTipoAtividade("Tratamento");
+                tratamentoAntiVetorial.setNumero(numeroAgente.getText().toString());
+                tratamentoAntiVetorial.setSemana(semanaEpidemiologica.getText().toString());
+
+                //definir Status como Em aberto
+                tratamentoAntiVetorial.setStatus("Em aberto");
+
+                //Converter data para String
+                java.util.Date data = new java.util.Date();
+                tratamentoAntiVetorial.setData(String.valueOf(data));
+
+                //Obter bairro selecionado
+                tratamentoAntiVetorial.setBairro(obterBairroSelecionado());
+
+                //Obter agente de saúde
+                dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+                Usuario usuario = new Usuario();
+                usuario.setId(dadosUsuario.getLong("id", 0));
+                Usuario agente = new Usuario();
+                try {
+                    agente = new UsuarioDAO(BoletimDiarioActivity.this).select(usuario);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                tratamentoAntiVetorial.setUsuario(agente);
+
+                try {
+                    Long retorno = new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
+                    Snackbar.make(v, "Boletim Diário criado com secesso!", Snackbar.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
+                }
+                TodosBoletinsDiariosActivity.NOVO_BOLETIM = false;
+                manipulaBotoes();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        TodosBoletinsDiariosActivity.NOVO_BOLETIM = false;
+    }
+
+    private void vaiParaListaDeTodosBoletins(){
+        Intent intent = new Intent(BoletimDiarioActivity.this, TodosBoletinsDiariosActivity.class);
+        startActivity(intent);
     }
 }

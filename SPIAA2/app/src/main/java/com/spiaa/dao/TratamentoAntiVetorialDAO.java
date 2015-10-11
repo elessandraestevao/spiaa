@@ -39,6 +39,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         content.put(TratamentoAntiVetorial.USUARIO, tratamentoAntiVetorial.getUsuario().getId());
         content.put(TratamentoAntiVetorial.TIPO_ATIVIDADE, tratamentoAntiVetorial.getTipoAtividade());
         content.put(TratamentoAntiVetorial.TURMA, tratamentoAntiVetorial.getTurma());
+        content.put(TratamentoAntiVetorial.STATUS, tratamentoAntiVetorial.getStatus());
 
         return sqlLite.insert(TratamentoAntiVetorial.TABLE_NAME, null, content);
     }

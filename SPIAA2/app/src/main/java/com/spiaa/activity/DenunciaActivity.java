@@ -164,15 +164,4 @@ public class DenunciaActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        aoVoltar();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        aoVoltar();
-    }
 }
