@@ -21,6 +21,8 @@ CREATE TABLE denuncia
   irregularidade text,
   observacao text,
   status text,
+  data_abertura text,
+  data_finalizacao text,
   bairro_fk INTEGER NOT NULL,
   usuario_fk INTEGER NOT NULL
 );

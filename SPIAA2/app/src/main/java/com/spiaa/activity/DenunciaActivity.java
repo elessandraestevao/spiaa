@@ -26,11 +26,19 @@ import com.spiaa.dao.DenunciaDAO;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.IsXLargeScreen;
 
-public class DenunciaActivity extends AppCompatActivity {
+import java.util.Date;
+
+public class DenunciaActivity extends AppCompatActivity implements View.OnClickListener {
     private Denuncia denuncia;
     private FloatingActionButton botaoFinalizar;
     private FloatingActionButton botaoEditar;
     private EditText observacoes;
+    private android.support.v7.app.ActionBar ab;
+    private TextView endereco;
+    private TextView numero;
+    private TextView bairro;
+    private TextView irregularidade;
+    private TextView status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,58 +58,65 @@ public class DenunciaActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        //PREENCHER CAMPOS COM DADOS DAS DENÚNCIAS
-        Bundle dados = getIntent().getExtras();
-        denuncia = (Denuncia) dados.getSerializable("Denuncia");
-
-        //Mudar título com nome da Denúncia
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
-        // ab.setTitle(dados.get("denuncia").toString());
-        ab.setTitle(denuncia.getTitulo());
-
-        TextView endereco = (TextView) findViewById(R.id.endereco_denuncia);
-        //endereco.setText(dados.get("endereco").toString());
-        endereco.setText(denuncia.getEndereco());
-
-
-        TextView numero = (TextView) findViewById(R.id.numero_denuncia);
-        numero.setText(String.valueOf(denuncia.getNumero()));
-
-        TextView bairro = (TextView) findViewById(R.id.bairro_denuncia);
-        bairro.setText(" " + denuncia.getBairro().getNome());
-
-        TextView irregularidade = (TextView) findViewById(R.id.irregularidade_denuncia);
-        irregularidade.setText(denuncia.getIrregularidade());
-
-        TextView status = (TextView) findViewById(R.id.status_denuncia);
-        //status.setText(dados.get("status").toString());
-        status.setText(denuncia.getStatus());
-
+        ab = getSupportActionBar();
+        endereco = (TextView) findViewById(R.id.endereco_denuncia);
+        numero = (TextView) findViewById(R.id.numero_denuncia);
+        bairro = (TextView) findViewById(R.id.bairro_denuncia);
+        irregularidade = (TextView) findViewById(R.id.irregularidade_denuncia);
+        status = (TextView) findViewById(R.id.status_denuncia);
         observacoes = (EditText) findViewById(R.id.observacoes_denuncia);
-        //Verificando se a denúncia encontra-se finalizada
-        if (denuncia.getObservacao() != null && !denuncia.getObservacao().isEmpty()) {
-            observacoes.setText(denuncia.getObservacao());
-            observacoes.setInputType(0);
-        }
 
         botaoFinalizar = (FloatingActionButton) findViewById(R.id.botao_finalizar);
         botaoEditar = (FloatingActionButton) findViewById(R.id.botao_editar);
 
-        //Definir cor do fundo do status e texto do botão da tela
-        if (status.getText().equals("Encaminhada")) {
-            //cor red
-            status.setTextColor(Color.parseColor("#cc0000"));
-            habilitaBotaoFinalizar();
-        } else {
-            //cor green
-            status.setTextColor(Color.parseColor("#669900"));
-            habilitaBotaoEditar();
-        }
+        botaoFinalizar.setOnClickListener(this);
+        botaoEditar.setOnClickListener(this);
+    }
 
-        botaoFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //PREENCHER CAMPOS COM DADOS DAS DENÚNCIAS
+        Bundle dados = getIntent().getExtras();
+        denuncia = (Denuncia) dados.getSerializable("Denuncia");
+
+        if (denuncia != null) {
+            //Mudar título com nome da Denúncia
+            ab.setTitle(denuncia.getTitulo());
+
+            //Preencher campos com os dados da denúncia
+            endereco.setText(denuncia.getEndereco());
+            numero.setText(String.valueOf(denuncia.getNumero()));
+            bairro.setText(" " + denuncia.getBairro().getNome());
+            irregularidade.setText(denuncia.getIrregularidade());
+            status.setText(denuncia.getStatus());
+
+            //Verificando se a denúncia encontra-se finalizada
+            if (denuncia.getObservacao() != null && !denuncia.getObservacao().isEmpty()) {
+                observacoes.setText(denuncia.getObservacao());
+                observacoes.setInputType(0);
+            }
+
+            //Definir cor do fundo do status e texto do botão da tela
+            if (status.getText().equals("Encaminhada")) {
+                //cor red
+                status.setTextColor(Color.parseColor("#cc0000"));
+                habilitaBotaoFinalizar();
+            } else {
+                //cor green
+                status.setTextColor(Color.parseColor("#669900"));
+                habilitaBotaoEditar();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.botao_finalizar:
                 if (!observacoes.getText().toString().isEmpty()) {
+                    denuncia.setDataFinalizacao(new Date());
                     denuncia.setObservacao(observacoes.getText().toString());
                     denuncia.setStatus("Finalizada");
                     try {
@@ -117,21 +132,15 @@ public class DenunciaActivity extends AppCompatActivity {
                 } else {
                     Snackbar.make(findViewById(R.id.linear_denuncia), "Preencha o campo Observações/Constatações", Snackbar.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        botaoEditar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Habilitar campo observações para edição
-                observacoes.setInputType(1);
-                observacoes.requestFocus();
+                break;
+            case R.id.botao_editar:
+                habilitaCampoObservacoesParaEdicao();
                 habilitaBotaoFinalizar();
                 desabilitaBotaoEditar();
                 habilitaTecladoNaTela();
+                break;
 
-            }
-        });
+        }
     }
 
     private void habilitaBotaoEditar() {
@@ -151,17 +160,8 @@ public class DenunciaActivity extends AppCompatActivity {
         imm.showSoftInput(observacoes, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_denuncia, menu);
-        return true;
+    private void habilitaCampoObservacoesParaEdicao(){
+        observacoes.setInputType(1);
+        observacoes.requestFocus();
     }
-
-    private void aoVoltar(){
-        Intent intent = new Intent(this, DenunciasActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
 }

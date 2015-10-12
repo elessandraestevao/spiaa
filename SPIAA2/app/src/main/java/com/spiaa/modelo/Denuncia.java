@@ -1,11 +1,10 @@
 package com.spiaa.modelo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.spiaa.base.BaseEntity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by eless on 18/09/2015.
@@ -19,6 +18,8 @@ public class Denuncia extends BaseEntity implements Serializable{
     public static final String IRREGULARIDADE = "irregularidade";
     public static final String OBSERVACAO = "observacao";
     public static final String STATUS = "status";
+    public static final String DATA_ABERTURA = "data_abertura";
+    public static final String DATA_FINALIZACAO = "data_finalizacao";
     public static final String BAIRRO = "bairro_fk";
     public static final String USUARIO = "usuario_fk";
 
@@ -30,6 +31,8 @@ public class Denuncia extends BaseEntity implements Serializable{
     String observacao;
     Bairro bairro;
     Usuario usuario;
+    Date dataAbertura;
+    Date dataFinalizacao;
     String titulo;
 
     public String getEndereco() {
@@ -94,5 +97,21 @@ public class Denuncia extends BaseEntity implements Serializable{
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public Date getDataAbertura() {
+        return dataAbertura;
+    }
+
+    public void setDataAbertura(Date dataAbertura) {
+        this.dataAbertura = dataAbertura;
+    }
+
+    public Date getDataFinalizacao() {
+        return dataFinalizacao;
+    }
+
+    public void setDataFinalizacao(Date dataFinalizacao) {
+        this.dataFinalizacao = dataFinalizacao;
     }
 }

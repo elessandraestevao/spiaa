@@ -32,7 +32,7 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
     Usuario usuario;
     String numero;
     String turma;
-    String dataBoletim;
+    Date dataBoletim;
     String tipoAtividade;
     String status;
     String semana;
@@ -87,11 +87,11 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
         this.turma = turma;
     }
 
-    public String getData() {
+    public Date getData() {
         return dataBoletim;
     }
 
-    public void setData(String data) {
+    public void setData(Date data) {
         this.dataBoletim = data;
     }
 

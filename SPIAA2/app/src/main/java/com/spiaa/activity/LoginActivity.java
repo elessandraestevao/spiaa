@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private RestAdapter restAdapter;
     private SpiaaService service;
     private Usuario agenteSaude;
+    private TextView usuarioLogin;
+    TextView senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Tablets como Landscape
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+
+        usuarioLogin = (TextView) findViewById(R.id.usuario_login);
+        senha = (TextView) findViewById(R.id.senha_login);
 
         Button login = (Button) findViewById(R.id.botao_login);
         login.setOnClickListener(this);
@@ -69,20 +74,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(final View v) {
         if (v.getId() == R.id.botao_login) {
-            //Fazer login
-            TextView usuarioLogin = (TextView) findViewById(R.id.usuario_login);
-            TextView senha = (TextView) findViewById(R.id.senha_login);
-            agenteSaude = new Usuario();
-            agenteSaude.setUsuario(usuarioLogin.getText().toString());
-            agenteSaude.setSenha(senha.getText().toString());
-
-            restAdapter = new RestAdapter.Builder()
-                    //.setEndpoint("http://192.168.4.97:8084/Spiaa")
-                    .setEndpoint("http://spiaa.herokuapp.com")
-                    .build();
-
-            service = restAdapter.create(SpiaaService.class);
-            service.login(agenteSaude, new Callback<Usuario>() {
+            //Fazer LOGIN
+            getService().login(getDadosUsuario(), new Callback<Usuario>() {
                 @Override
                 public void success(Usuario agente, Response response) {
                     if (agente != null) {
@@ -92,33 +85,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } catch (Exception e) {
                             Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
                         }
-
                         try {
                             //Guarda usuário no banco de dados
                             new UsuarioDAO(LoginActivity.this).insert(agente);
                         } catch (Exception e) {
                             Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
                         }
-
-                        //Coloca informações do usuário no SharedPreferences
-                        SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
-                        dadosUsuario.putString("email", agente.getEmail());
-                        dadosUsuario.putString("numero", agente.getNumero());
-                        dadosUsuario.putString("nome", agente.getNome());
-                        dadosUsuario.putString("senha", agente.getSenha());
-                        dadosUsuario.putString("tipo", agente.getTipo());
-                        dadosUsuario.putString("turma", agente.getTurma());
-                        dadosUsuario.putString("usuario", agente.getUsuario());
-                        dadosUsuario.putLong("id", agente.getId());
-                        dadosUsuario.commit();
-
-                        //Vai para a página inicial da aplicação
-                        Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);
-                        startActivity(intent);
+                        salvarDadosDoUsuarioLogadoEmArquivoLocal(agente);
+                        vaiParaPaginaInicial();
                     } else {
                         Snackbar.make(v, "Falha no login. Verifique os dados de acesso.", Snackbar.LENGTH_LONG).show();
                     }
-
                 }
 
                 @Override
@@ -131,11 +108,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Vou deixar entrar na aplicação mesmo se ocorrer falha no login, para mostrar
                     a aplicação à banca nete dia
                      */
-                    Intent intent = new Intent(LoginActivity.this, SincronizarActivity.class);
-                    startActivity(intent);
+                    vaiParaPaginaInicial();
                 }
             });
 
         }
+    }
+
+    private SpiaaService getService(){
+        //Configura RestAdapeter com dados do servidor e cria service
+        restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://spiaa.herokuapp.com")
+                .build();
+        service = restAdapter.create(SpiaaService.class);
+        return service;
+    }
+
+    private Usuario getDadosUsuario(){
+        //Recupera dados inseridos na tela de Login
+        agenteSaude = new Usuario();
+        agenteSaude.setUsuario(usuarioLogin.getText().toString());
+        agenteSaude.setSenha(senha.getText().toString());
+        return agenteSaude;
+    }
+
+    private void salvarDadosDoUsuarioLogadoEmArquivoLocal(Usuario agente){
+        //Coloca informações do usuário no SharedPreferences
+        SharedPreferences.Editor dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE).edit();
+        dadosUsuario.putString("email", agente.getEmail());
+        dadosUsuario.putString("numero", agente.getNumero());
+        dadosUsuario.putString("nome", agente.getNome());
+        dadosUsuario.putString("senha", agente.getSenha());
+        dadosUsuario.putString("tipo", agente.getTipo());
+        dadosUsuario.putString("turma", agente.getTurma());
+        dadosUsuario.putString("usuario", agente.getUsuario());
+        dadosUsuario.putLong("id", agente.getId());
+        dadosUsuario.commit();
+    }
+
+    private void vaiParaPaginaInicial(){
+        //Vai para a página inicial da aplicação
+        Intent intent = new Intent(LoginActivity.this, TodosBoletinsDiariosActivity.class);
+        startActivity(intent);
     }
 }

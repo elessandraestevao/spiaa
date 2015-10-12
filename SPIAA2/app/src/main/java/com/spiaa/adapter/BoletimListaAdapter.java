@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.spiaa.R;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -61,7 +63,10 @@ public class BoletimListaAdapter extends BaseAdapter {
 
         contagemBoletim.setText("Boletim Diário " + (position + 1));
         bairro.setText(lista.get(position).getBairro().getNome());
-        data.setText(String.valueOf(lista.get(position).getData()));
+
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        data.setText(String.valueOf(format.format(lista.get(position).getData())));
+
         numeroAtividades.setText(Integer.toString(lista.size()));
         statusBoletim.setText(lista.get(position).getStatus());
 

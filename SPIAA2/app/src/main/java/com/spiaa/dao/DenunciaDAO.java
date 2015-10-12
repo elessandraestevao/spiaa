@@ -12,8 +12,12 @@ import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.Usuario;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by eless on 05/10/2015.
@@ -36,6 +40,12 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         content.put(Denuncia.IRREGULARIDADE, denuncia.getIrregularidade());
         content.put(Denuncia.NUMERO, denuncia.getNumero());
         content.put(Denuncia.STATUS, denuncia.getStatus());
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        content.put(Denuncia.DATA_ABERTURA, format.format(denuncia.getDataAbertura()));
+        if (denuncia.getDataFinalizacao() != null) {
+            content.put(Denuncia.DATA_FINALIZACAO, format.format(denuncia.getDataFinalizacao()));
+        }
         content.put(Denuncia.USUARIO, denuncia.getUsuario().getId());
 
         Long retorno = sqlLite.insert(Denuncia.TABLE_NAME, null, content);
@@ -51,7 +61,8 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String where = Denuncia.ID + " = ?";
 
         String[] colunas = new String[]{Denuncia.ID, Denuncia.ENDERECO, Denuncia.NUMERO,
-                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.BAIRRO, Denuncia.USUARIO};
+                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.DATA_ABERTURA,
+                Denuncia.DATA_FINALIZACAO, Denuncia.BAIRRO, Denuncia.USUARIO};
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
@@ -107,10 +118,13 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
                 denuncia.setObservacao(cursor.getString(4));
                 denuncia.setStatus(cursor.getString(5));
 
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                denuncia.setDataAbertura(formatter.parse(cursor.getString(6)));
+
                 try {
                     //Bairro
                     Bairro bairro = new Bairro();
-                    bairro.setId(cursor.getLong(6));
+                    bairro.setId(cursor.getLong(8));
                     denuncia.setBairro(new BairroDAO(context).select(bairro));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Bairro", e);
@@ -119,7 +133,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
                 try {
                     //Usuário
                     Usuario usuario = new Usuario();
-                    usuario.setId(cursor.getLong(7));
+                    usuario.setId(cursor.getLong(9));
                     denuncia.setUsuario(new UsuarioDAO(context).select(usuario));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Usuário", e);
@@ -137,10 +151,11 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         List<Denuncia> denunciaList = null;
         Cursor cursor = null;
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
-        String where = Denuncia.STATUS + " = ?" ;
+        String where = Denuncia.STATUS + " = ?";
 
         String[] colunas = new String[]{Denuncia.ID, Denuncia.ENDERECO, Denuncia.NUMERO,
-                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.BAIRRO, Denuncia.USUARIO};
+                Denuncia.IRREGULARIDADE, Denuncia.OBSERVACAO, Denuncia.STATUS, Denuncia.DATA_ABERTURA,
+                Denuncia.DATA_FINALIZACAO, Denuncia.BAIRRO, Denuncia.USUARIO};
         String argumentos[] = new String[]{"Finalizada"};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
@@ -157,10 +172,14 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
                 denuncia.setObservacao(cursor.getString(4));
                 denuncia.setStatus(cursor.getString(5));
 
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                denuncia.setDataAbertura(formatter.parse(cursor.getString(6)));
+                denuncia.setDataFinalizacao(formatter.parse(cursor.getString(7)));
+
                 try {
                     //Bairro
                     Bairro bairro = new Bairro();
-                    bairro.setId(cursor.getLong(6));
+                    bairro.setId(cursor.getLong(8));
                     denuncia.setBairro(new BairroDAO(context).select(bairro));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Bairro", e);
@@ -169,7 +188,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
                 try {
                     //Usuário
                     Usuario usuario = new Usuario();
-                    usuario.setId(cursor.getLong(7));
+                    usuario.setId(cursor.getLong(9));
                     denuncia.setUsuario(new UsuarioDAO(context).select(usuario));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Usuário", e);
@@ -195,6 +214,11 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         content.put(Denuncia.OBSERVACAO, denuncia.getObservacao());
         content.put(Denuncia.NUMERO, denuncia.getNumero());
         content.put(Denuncia.STATUS, denuncia.getStatus());
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        content.put(Denuncia.DATA_ABERTURA, format.format(denuncia.getDataAbertura()));
+        content.put(Denuncia.DATA_FINALIZACAO, format.format(denuncia.getDataFinalizacao()));
+
         content.put(Denuncia.USUARIO, denuncia.getUsuario().getId());
 
         String where = Denuncia.ID + " = ?";

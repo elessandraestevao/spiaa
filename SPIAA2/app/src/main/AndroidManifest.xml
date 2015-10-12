@@ -87,12 +87,9 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".activity.TodosBoletinsDiariosActivity"
-            android:label="@string/title_activity_todos_boletins_diarios">
-            android:parentActivityName="com.spiaa.activity.MainActivity" >
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+            android:label="@string/title_activity_todos_boletins_diarios"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
     </application>
 

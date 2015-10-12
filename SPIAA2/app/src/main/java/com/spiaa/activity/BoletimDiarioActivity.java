@@ -27,7 +27,10 @@ import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Usuario;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BoletimDiarioActivity extends AppCompatActivity implements View.OnClickListener {
@@ -234,9 +237,8 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 //definir Status como Em aberto
                 tratamentoAntiVetorial.setStatus("Em aberto");
 
-                //Converter data para String
-                java.util.Date data = new java.util.Date();
-                tratamentoAntiVetorial.setData(String.valueOf(data));
+                //Data de criação do Boletim
+                tratamentoAntiVetorial.setData(new Date());
 
                 //Obter bairro selecionado
                 tratamentoAntiVetorial.setBairro(obterBairroSelecionado());

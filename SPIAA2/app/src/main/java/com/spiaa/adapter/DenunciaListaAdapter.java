@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.spiaa.R;
 import com.spiaa.modelo.Denuncia;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,18 +60,21 @@ public class DenunciaListaAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         View viewDenuncia = inflater.inflate(R.layout.denuncia_item_list, null);
         TextView enderecoDenuncia = (TextView) viewDenuncia.findViewById(R.id.endereco_denuncia);
-        // TextView descricaoDenuncia = (TextView) viewDenuncia.findViewById(R.id.descricao_denuncia);
         TextView numeroDenuncia = (TextView) viewDenuncia.findViewById(R.id.numero_denuncia);
         TextView bairroDenuncia = (TextView) viewDenuncia.findViewById(R.id.bairro_denuncia);
         TextView statusDenuncia = (TextView) viewDenuncia.findViewById(R.id.status_denuncia);
         TextView contagemDenuncia = (TextView) viewDenuncia.findViewById(R.id.contagem_denuncia);
+        TextView aberturaDenuncia = (TextView) viewDenuncia.findViewById(R.id.data_abertura_denuncia);
 
         contagemDenuncia.setText("Denúncia " + (position + 1));
         enderecoDenuncia.setText(lista.get(position).getEndereco());
         numeroDenuncia.setText(String.valueOf(lista.get(position).getNumero()));
-        bairroDenuncia.setText(lista.get(position).getBairro().getNome());
-
+        bairroDenuncia.setText(" " + lista.get(position).getBairro().getNome());
         statusDenuncia.setText(lista.get(position).getStatus());
+
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String date = formatter.format(lista.get(position).getDataAbertura());
+        aberturaDenuncia.setText(" " + date);
 
         //Definir cor do status na listagem de todas as denúncias
         if (lista.get(position).getStatus().equals("Encaminhada")) {
@@ -78,7 +84,6 @@ public class DenunciaListaAdapter extends BaseAdapter {
             //cor green
             statusDenuncia.setTextColor(Color.parseColor("#669900"));
         }
-
         return viewDenuncia;
     }
 }

@@ -12,6 +12,8 @@ import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Usuario;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,10 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         ContentValues content = new ContentValues();
 
         content.put(TratamentoAntiVetorial.BAIRRO, tratamentoAntiVetorial.getBairro().getId());
-        content.put(TratamentoAntiVetorial.DATA, tratamentoAntiVetorial.getData());
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        content.put(TratamentoAntiVetorial.DATA, format.format(tratamentoAntiVetorial.getData()));
+
         content.put(TratamentoAntiVetorial.NUMERO_ATIVIDADE, tratamentoAntiVetorial.getNumeroAtividade());
         content.put(TratamentoAntiVetorial.NUMERO, tratamentoAntiVetorial.getNumero());
         content.put(TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA, tratamentoAntiVetorial.getSemana());
@@ -62,7 +67,10 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
             cursor.moveToFirst();
             tratamentoAntiVetorial = new TratamentoAntiVetorial();
             tratamentoAntiVetorial.setId(cursor.getLong(0));
-            tratamentoAntiVetorial.setData(cursor.getString(1));
+
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            tratamentoAntiVetorial.setData(formatter.parse(cursor.getString(1)));
+
             tratamentoAntiVetorial.setNumero(cursor.getString(2));
             tratamentoAntiVetorial.setSemana(cursor.getString(3));
             tratamentoAntiVetorial.setNumeroAtividade(cursor.getString(4));
@@ -72,7 +80,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
             try {
                 //Usuário
                 Usuario usuario = new Usuario();
-                usuario.setId(cursor.getLong(7));
+                usuario.setId((long) cursor.getInt(7));
                 tratamentoAntiVetorial.setUsuario(new UsuarioDAO(context).select(usuario));
             } catch (Exception e) {
                 Log.e("SPIAA", "Erro no SELECT de Usuário", e);
@@ -104,17 +112,20 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
             while (!cursor.isAfterLast()) {
                 TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
                 tratamentoAntiVetorial.setId(cursor.getLong(0));
-                tratamentoAntiVetorial.setData(cursor.getString(1));
+
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                tratamentoAntiVetorial.setData(formatter.parse(cursor.getString(1)));
                 tratamentoAntiVetorial.setNumero(cursor.getString(2));
                 tratamentoAntiVetorial.setSemana(cursor.getString(3));
                 tratamentoAntiVetorial.setNumeroAtividade(cursor.getString(4));
                 tratamentoAntiVetorial.setTipoAtividade(cursor.getString(5));
                 tratamentoAntiVetorial.setTurma(cursor.getString(6));
+                tratamentoAntiVetorial.setStatus(cursor.getString(7));
 
                 try {
                     //Usuário
                     Usuario usuario = new Usuario();
-                    usuario.setId(cursor.getLong(7));
+                    usuario.setId(cursor.getLong(8));
                     tratamentoAntiVetorial.setUsuario(new UsuarioDAO(context).select(usuario));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Usuário", e);
@@ -123,7 +134,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
                 try {
                     //Bairro
                     Bairro bairro = new Bairro();
-                    bairro.setId(cursor.getLong(8));
+                    bairro.setId(cursor.getLong(9));
                     tratamentoAntiVetorial.setBairro(new BairroDAO(context).select(bairro));
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Bairro", e);

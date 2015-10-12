@@ -19,7 +19,7 @@ public class BoletimDiarioBuilder {
         for (int i = 1; i <= quantidade; i++) {
             TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
             tratamentoAntiVetorial.setCategoria("Sede");
-            tratamentoAntiVetorial.setData(new Date().toString());
+            tratamentoAntiVetorial.setData(new Date());
             tratamentoAntiVetorial.setNumero("123" + 1);
             tratamentoAntiVetorial.setSemana("L" + i + "Tratamento Vetorial");
             tratamentoAntiVetorial.setTurma("5960/L");

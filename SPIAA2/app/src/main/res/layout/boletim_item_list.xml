@@ -30,12 +30,12 @@
         <TextView
             android:id="@+id/bairro_boletim"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="@string/data" />
 
         <TextView
@@ -51,12 +51,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="@string/total_de_atividades" />
 
             <TextView
                 android:id="@+id/numero_atividades_boletim"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
 
         </LinearLayout>
 

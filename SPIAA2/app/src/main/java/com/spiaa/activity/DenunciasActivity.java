@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.spiaa.R;
 import com.spiaa.adapter.DenunciaListaAdapter;
 import com.spiaa.api.SpiaaService;
@@ -25,23 +26,20 @@ import com.spiaa.modelo.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 public class DenunciasActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    DenunciaListaAdapter adapter = new DenunciaListaAdapter(this);
-    ListView listaDenuncias;
-    RestAdapter restAdapter;
-    Usuario agenteSaude;
-    SpiaaService service;
+    private DenunciaListaAdapter adapter = new DenunciaListaAdapter(this);
+    private ListView listaDenuncias;
     private List<Denuncia> denunciasFinalizadas = new ArrayList<>();
-    private boolean atualizado = false;
     private TextView nenhumaDenuncia;
     private ProgressDialog dialog;
-    private boolean sincronizado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +77,10 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         listaDenuncias.setOnItemClickListener(this);
 
         //Ao carregar a tela, sem utilizar a sincronização
-        if (denunciaList.isEmpty()) {
-            nenhumaDenuncia.setText("Nenhuma denúncia encontrada");
+        if (denunciaList != null) {
+            if (denunciaList.isEmpty()) {
+                nenhumaDenuncia.setText("Nenhuma denúncia encontrada");
+            }
         }
     }
 
@@ -91,7 +91,7 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         return true;
     }
 
-    private void showDialogAguarde() {
+    private void showProgressDialog() {
         dialog = new ProgressDialog(DenunciasActivity.this);
         dialog.setMessage("Aguarde...");
         dialog.setIndeterminate(true);
@@ -99,25 +99,37 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         dialog.show();
     }
 
+    private void hideProgressDialog() {
+        dialog.dismiss();
+    }
+
+    private Usuario obterUsuarioLogado() {
+        //Obtendo ID do usuário logado
+        SharedPreferences dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+        Usuario agenteSaude = new Usuario();
+        agenteSaude.setId(dadosUsuario.getLong("id", 0));
+        return agenteSaude;
+    }
+
+    private SpiaaService getService() {
+        //Configura RestAdapeter com dados do servidor e cria service
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://spiaa.herokuapp.com")
+                .setConverter(new GsonConverter(new GsonBuilder().setDateFormat("yyyy-MM-dd")
+                .create()))
+                .build();
+        SpiaaService service = restAdapter.create(SpiaaService.class);
+        return service;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ///Fazer o sincronismo das denúncias com o web service
         switch (item.getItemId()) {
             case R.id.action_sync_denuncias:
-                //SINCRONIZAÇÃO
-                //Mostrar progresso do sincronismo pro usuário
-                showDialogAguarde();
-
-                //Obtendo ID do usuário logado
-                SharedPreferences dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
-                agenteSaude = new Usuario();
-                agenteSaude.setId(dadosUsuario.getLong("id", 0));
-
-                //Configurando Web Service
-                restAdapter = new RestAdapter.Builder()
-                        .setEndpoint("http://spiaa.herokuapp.com")
-                        .build();
-                service = restAdapter.create(SpiaaService.class);
+                /*Processo de SINCRONIZAÇÃO */
+                /*Mostrar progresso do sincronismo pro usuário*/
+                showProgressDialog();
 
                 //enviar denúncias finalizadas e atualizar listagem
                 enviarDenuncias();
@@ -132,12 +144,12 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void receberDenuncias() {
-        service.getDenuncias(agenteSaude, new Callback<List<Denuncia>>() {
+        getService().getDenuncias(obterUsuarioLogado(), new Callback<List<Denuncia>>() {
             @Override
             public void success(List<Denuncia> denunciaList, Response response) {
                 if (denunciaList != null) {
-                    //Inserir denúncias recebidas do servidor no Banco de dados local
                     try {
+                        /*Inserir denúncias recebidas do servidor no Banco de dados local*/
                         DenunciaDAO dao = new DenunciaDAO(DenunciasActivity.this);
                         for (Denuncia denuncia : denunciaList) {
                             dao.insert(denuncia);
@@ -147,17 +159,14 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
                     }
                 }
                 atualizaListaDeDenuncias();
-                //Retirar da tela o progresso do sincronismo
-                dialog.dismiss();
-                //Mostra mensagem de sincronismo realizado ao usuário
-                mostraMensagemSincronismo();
+                hideProgressDialog();
+                showMessageSuccessSync();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                //Retirar da tela o progresso do sincronismo
-                dialog.dismiss();
-                Snackbar.make(findViewById(R.id.lista_denuncias), "Erro ao receber denúncias", Snackbar.LENGTH_LONG).show();
+                hideProgressDialog();
+                showMessageErrorSyncReceive();
             }
         });
     }
@@ -166,24 +175,20 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
         List<Denuncia> denunciaList = null;
         try {
             denunciaList = new DenunciaDAO(DenunciasActivity.this).selectAll();
-            //atualizado = true;
         } catch (Exception e) {
             Log.e("SPIAA", "Erro ao tentar SELECT ALL Denúncias", e);
         }
-        //Atualiza a lista de denúncias
         adapter.setLista(denunciaList);
         adapter.notifyDataSetChanged();
 
-        if (denunciaList.isEmpty()) {
-            nenhumaDenuncia.setText("Nenhuma denúncia encontrada");
-        } else {
-            nenhumaDenuncia.setText("");
+        if (denunciaList != null) {
+            if (denunciaList.isEmpty()) {
+                nenhumaDenuncia.setText("Nenhuma denúncia encontrada");
+            } else {
+                nenhumaDenuncia.setText("");
+            }
         }
 
-    }
-
-    private void mostraMensagemSincronismo() {
-        Snackbar.make(findViewById(R.id.lista_denuncias), "Denúncias atualizadas com sucesso", Snackbar.LENGTH_LONG).show();
     }
 
     private void enviarDenuncias() {
@@ -194,7 +199,7 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
             Log.e("SPIAA", "Erro no SELECT de Denúncias Finalizadas", e);
         }
         if (!denunciasFinalizadas.isEmpty()) {
-            service.setDenuncias(denunciasFinalizadas, new Callback<String>() {
+            getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
                 @Override
                 public void success(String resposta, Response response) {
                     try {
@@ -212,7 +217,7 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Snackbar.make(findViewById(R.id.lista_denuncias), "Erro ao enviar denúncias", Snackbar.LENGTH_LONG).show();
+                    showMessageErrorSyncSend();
                 }
             });
         } else {
@@ -222,10 +227,23 @@ public class DenunciasActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //Envia denúncia selecionada na listagem para a activity DenunciaActivity
         Intent intent = new Intent(DenunciasActivity.this, DenunciaActivity.class);
         Denuncia denuncia = (Denuncia) parent.getItemAtPosition(position);
         denuncia.setTitulo("Denúncia " + (position + 1));
         intent.putExtra("Denuncia", denuncia);
         startActivity(intent);
+    }
+
+    private void showMessageSuccessSync() {
+        Snackbar.make(findViewById(R.id.lista_denuncias), "Denúncias atualizadas com sucesso", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showMessageErrorSyncReceive() {
+        Snackbar.make(findViewById(R.id.lista_denuncias), "Erro ao receber denúncias", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showMessageErrorSyncSend() {
+        Snackbar.make(findViewById(R.id.lista_denuncias), "Erro ao enviar denúncias", Snackbar.LENGTH_LONG).show();
     }
 }
