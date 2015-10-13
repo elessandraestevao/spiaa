@@ -31,7 +31,9 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
         content.put(Criadouro.GRUPO, criadouro.getGrupo());
         content.put(Criadouro.RECIPIENTE, criadouro.getRecipiente());
 
-        return sqlLite.insert(Criadouro.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(Criadouro.TABLE_NAME, null, content);
+        sqlLite.close();
+        return retorno;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Criadouro.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             criadouro = new Criadouro();
             criadouro.setId(cursor.getLong(0));
@@ -53,6 +55,7 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
             criadouro.setRecipiente(cursor.getString(2));
             cursor.close();
         }
+        sqlLite.close();
         return criadouro;
     }
 
@@ -75,7 +78,7 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
             }
             cursor.close();
         }
-
+        sqlLite.close();
         return criadouroList;
     }
 
@@ -86,6 +89,12 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = Criadouro.ID + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(Criadouro.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+        return retorno;
     }
 }

@@ -34,6 +34,7 @@ public class Atividade extends BaseEntity implements Serializable{
     TratamentoAntiVetorial boletimDiario;
     String latitude;
     String longitude;
+    String titulo;
 
     public String getEndereco() {
         return endereco;
@@ -121,5 +122,13 @@ public class Atividade extends BaseEntity implements Serializable{
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

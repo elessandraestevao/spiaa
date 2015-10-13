@@ -1,22 +1,17 @@
 package com.spiaa.activity;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,8 +118,7 @@ public class DenunciaActivity extends AppCompatActivity implements View.OnClickL
                         int retorno = new DenunciaDAO(DenunciaActivity.this).update(denuncia);
                         if (retorno > 0) {
                             Toast.makeText(DenunciaActivity.this, "Denúncia finalizada com sucesso", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(DenunciaActivity.this, DenunciasActivity.class);
-                            startActivity(intent);
+                            onBackPressed();
                         }
                     } catch (Exception e) {
                         Log.e("SPIAA", "Erro no UPDATE de denúncia finalizada", e);

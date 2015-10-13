@@ -31,7 +31,9 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
         content.put(Inseticida.NOME, inseticida.getNome());
         content.put(Inseticida.UNIDADE, inseticida.getUnidade());
 
-        return sqlLite.insert(Inseticida.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(Inseticida.TABLE_NAME, null, content);
+        sqlLite.close();
+        return retorno;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Inseticida.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             inseticida = new Inseticida();
             inseticida.setId(cursor.getLong(0));
@@ -53,6 +55,7 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
             inseticida.setUnidade(cursor.getString(2));
             cursor.close();
         }
+        sqlLite.close();
         return inseticida;
     }
 
@@ -75,6 +78,7 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
             }
             cursor.close();
         }
+        sqlLite.close();
         return inseticidaList;
     }
 
@@ -85,6 +89,13 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = Inseticida.ID + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(Inseticida.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+        return retorno;
+
     }
 }

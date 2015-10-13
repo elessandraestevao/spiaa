@@ -1,6 +1,9 @@
 package com.spiaa.api;
 
 import com.spiaa.modelo.Bairro;
+import com.spiaa.modelo.Criadouro;
+import com.spiaa.modelo.Inseticida;
+import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.Usuario;
@@ -25,6 +28,15 @@ public interface SpiaaService {
 
     @POST("/api/bairroquarteirao/agente")
     void getBairrosQuarteiroes(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
+
+    @POST("/api/tipoImovel")
+    void getTiposImoveis(@Body Usuario agenteSaude, Callback<List<TipoImoveis>> callback);
+
+    @POST("/api/inseticida")
+    void getInseticidas(@Body Usuario agenteSaude, Callback<List<Inseticida>> callback);
+
+    @POST("/api/criadouro")
+    void getCriadouros(@Body Usuario agenteSaude, Callback<List<Criadouro>> callback);
 
     @POST("/api/denuncia/agente")
     void getDenuncias(@Body Usuario agenteSaude, Callback<List<Denuncia>> callback);

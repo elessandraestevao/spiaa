@@ -16,13 +16,9 @@ import android.widget.Toast;
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dados.DatabaseHelper;
-import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.UsuarioDAO;
-import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
-
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -148,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void vaiParaPaginaInicial(){
         //Vai para a página inicial da aplicação
-        Intent intent = new Intent(LoginActivity.this, TodosBoletinsDiariosActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }

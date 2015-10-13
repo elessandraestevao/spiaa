@@ -16,24 +16,16 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.spiaa.R;
 import com.spiaa.api.SpiaaService;
-import com.spiaa.builder.AtividadeBuilder;
-import com.spiaa.builder.BoletimDiarioBuilder;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dados.DatabaseHelper;
-import com.spiaa.dao.DenunciaDAO;
-import com.spiaa.modelo.Atividade;
-import com.spiaa.modelo.AtividadeCriadouro;
 import com.spiaa.modelo.Bairro;
-import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Usuario;
 
-import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;
@@ -86,20 +78,16 @@ public class SincronizarActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_perfil:
-                        Intent intent1 = new Intent(SincronizarActivity.this, PerfilEditActivity.class);
+                        Intent intent1 = new Intent(SincronizarActivity.this, PerfilFragment.class);
                         startActivity(intent1);
                         break;
                     case R.id.nav_boletim:
-                        Intent intent2 = new Intent(SincronizarActivity.this, TodosBoletinsDiariosActivity.class);
+                        Intent intent2 = new Intent(SincronizarActivity.this, TodosBoletinsDiariosFragment.class);
                         startActivity(intent2);
                         break;
                     case R.id.nav_denuncias:
-                        Intent intent3 = new Intent(SincronizarActivity.this, DenunciasActivity.class);
+                        Intent intent3 = new Intent(SincronizarActivity.this, TodasDenunciasFragment.class);
                         startActivity(intent3);
-                        break;
-                    case R.id.nav_sincronizar:
-                        Intent intent4 = new Intent(SincronizarActivity.this, SincronizarActivity.class);
-                        startActivity(intent4);
                         break;
 
                 }

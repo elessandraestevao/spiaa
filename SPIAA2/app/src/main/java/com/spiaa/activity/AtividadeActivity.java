@@ -26,37 +26,59 @@ import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Quarteirao;
+import com.spiaa.modelo.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AtividadeActivity extends AppCompatActivity {
-    android.support.v7.app.ActionBar ab;
+    private Atividade atividade = null;
+    private Spinner spinnerQuarteiroes;
+    private EditText endereco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atividade);
 
-        //definição da orientação das telas da aplicação
-        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
-            //set phones to portrait;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            //Tablets como Landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setOrientationOfScreen();
+        hideKeyboard();
+
+        endereco = (EditText) findViewById(R.id.endereco_atividade);
+        spinnerQuarteiroes = (Spinner) findViewById(R.id.dropdown_quarteiroes);
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (recuperarAtividadeSelecionada() != null) {
+            alterarTitulo();
+
+            //EditText numeroQuarteirao = (EditText) findViewById(R.id.numero_quarteirao_atividade);
+            //numeroQuarteirao.setText(dados.get("numero_quarteirao").toString());
+
+
+            endereco.setText(atividade.getEndereco());
         }
 
-        //esconder teclado ao entrar nesta activity
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        preencherListaDeQuarteiroes();
+    }
 
-        //Preencher dados da Atividade selecionada na listagem de Atividades
-        Intent intent = getIntent();
-        Bundle dados = intent.getExtras();
+    private void alterarTitulo(){
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(atividade.getTitulo());
+        }
+    }
 
+
+    private void preencherListaDeQuarteiroes() {
         //Preencher dropdown com quarteirões relacionados ao bairro
-        Spinner spinnerQuarteiroes = (Spinner) findViewById(R.id.dropdown_quarteiroes);
         List<Quarteirao> quarteiraoList = new ArrayList<>();
         try {
             quarteiraoList = new QuarteiraoDAO(AtividadeActivity.this).selectAllDoBairro(BoletimDiarioActivity.BAIRRO_ID);
@@ -65,79 +87,35 @@ public class AtividadeActivity extends AppCompatActivity {
         }
         String[] quarteiroes = new String[quarteiraoList.size()];
         int i = 0;
-        for (Quarteirao quarteirao: quarteiraoList){
+        for (Quarteirao quarteirao : quarteiraoList) {
             quarteiroes[i] = quarteirao.getDescricao();
             i++;
         }
-        ArrayAdapter<String > adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarteiroes);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, quarteiroes);
         spinnerQuarteiroes.setAdapter(adapter);
+    }
 
+    private Atividade recuperarAtividadeSelecionada() {
+        Bundle dados = getIntent().getExtras();
         if(dados != null){
-            //Mudar título da Atividade selecionada na listagem de atividades
-            ab = getSupportActionBar();
-            ab.setTitle(dados.get("atividade").toString());
-
-            //EditText numeroQuarteirao = (EditText) findViewById(R.id.numero_quarteirao_atividade);
-            //numeroQuarteirao.setText(dados.get("numero_quarteirao").toString());
-
-            EditText endereco = (EditText) findViewById(R.id.endereco_atividade);
-            endereco.setText(dados.get("endereco").toString());
-
-
-            //Verifica qual tipo de unidade foi selecionado
-            /*RadioButton tipoR = (RadioButton) findViewById(R.id.radio_tipo_r);
-            RadioButton tipoC = (RadioButton) findViewById(R.id.radio_tipo_c);
-            RadioButton tipoTB = (RadioButton) findViewById(R.id.radio_tipo_tb);
-            RadioButton tipoPE = (RadioButton) findViewById(R.id.radio_tipo_pe);
-            RadioButton tipoOutros = (RadioButton) findViewById(R.id.radio_tipo_outros);
-            if (dados.get("tipo_unidade").toString().equals(tipoR.getText())){
-                tipoR.setChecked(true);
-            }else if(dados.get("tipo_unidade").toString().equals(tipoC.getText())){
-                tipoC.setChecked(true);
-            }else if(dados.get("tipo_unidade").toString().equals(tipoTB.getText())){
-                tipoTB.setChecked(true);
-            }else if(dados.get("tipo_unidade").toString().equals(tipoPE.getText())){
-                tipoPE.setChecked(true);
-            }else if(dados.get("tipo_unidade").toString().equals(tipoOutros.getText())){
-                tipoOutros.setChecked(true);
-            }
-
-            //Verifica qual Obsercação foi selecionada
-            RadioButton recebido = (RadioButton) findViewById(R.id.radio_recebido);
-            RadioButton fechado = (RadioButton) findViewById(R.id.radio_fechado);
-            RadioButton resgatado = (RadioButton) findViewById(R.id.radio_resgatado);
-            if (dados.get("observacoes").toString().equals(recebido.getText())){
-                recebido.setChecked(true);
-            }else if(dados.get("observacoes").toString().equals(fechado.getText())){
-                fechado.setChecked(true);
-            }else if(dados.get("observacoes").toString().equals(resgatado.getText())){
-                resgatado.setChecked(true);
-            }
-
-            //Seta valores dos criadouros
-            EditText criadouroA1 = (EditText) findViewById(R.id.criadouro_a1);
-            criadouroA1.setText(dados.get("criadouro_a1").toString());
-
-            EditText criadouroA2 = (EditText) findViewById(R.id.criadouro_a2);
-            criadouroA2.setText(dados.get("criadouro_a2").toString());
-
-            EditText criadouroB = (EditText) findViewById(R.id.criadouro_b);
-            criadouroB.setText(dados.get("criadouro_b").toString());
-
-            EditText criadouroC = (EditText) findViewById(R.id.criadouro_c);
-            criadouroC.setText(dados.get("criadouro_c").toString());
-
-            EditText criadouroD1 = (EditText) findViewById(R.id.criadouro_d1);
-            criadouroD1.setText(dados.get("criadouro_d1").toString());
-
-            EditText criadouroD2 = (EditText) findViewById(R.id.criadouro_d2);
-            criadouroD2.setText(dados.get("criadouro_d2").toString());
-
-            EditText criadouroE = (EditText) findViewById(R.id.criadouro_e);
-            criadouroE.setText(dados.get("criadouro_e").toString());*/
-
+            atividade = (Atividade) dados.getSerializable("Atividade");
         }
+        return atividade;
+    }
 
+    private void setOrientationOfScreen() {
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    private void hideKeyboard() {
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

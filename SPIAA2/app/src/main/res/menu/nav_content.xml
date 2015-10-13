@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/perfil"
-            android:title="Perfil" />
-        <item
             android:id="@+id/nav_boletim"
             android:icon="@drawable/boletim_diario"
             android:title="Boletim Diário" />
@@ -15,9 +11,9 @@
             android:icon="@drawable/denuncias"
             android:title="Denúncias" />
         <item
-            android:id="@+id/nav_sincronizar"
-            android:icon="@drawable/sincronizar"
-            android:title="Sincronizar" />
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/perfil"
+            android:title="Perfil" />
     </group>
 
 </menu>

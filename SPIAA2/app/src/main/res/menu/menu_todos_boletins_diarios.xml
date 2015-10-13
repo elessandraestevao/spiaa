@@ -1,5 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.spiaa.activity.TodosBoletinsDiariosActivity">
+    tools:context="com.spiaa.activity.TodosBoletinsDiariosFragment">
+
+    <item
+        android:id="@+id/action_sync_boletins"
+        android:icon="@drawable/ic_sync_white_24dp"
+        android:orderInCategory="300"
+        android:title="Sync_Denuncias"
+        app:showAsAction="ifRoom" />
+
 </menu>

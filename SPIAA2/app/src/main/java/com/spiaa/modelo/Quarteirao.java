@@ -21,7 +21,8 @@ public class Quarteirao extends BaseEntity {
     }
 
     public void setDescricao(String descricao) {
-        descricao = descricao;
+
+        this.descricao = descricao;
     }
 
     public Bairro getBairro() {

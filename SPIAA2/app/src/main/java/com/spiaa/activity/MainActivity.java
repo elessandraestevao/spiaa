@@ -1,61 +1,86 @@
 package com.spiaa.activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.spiaa.R;
+import com.spiaa.modelo.IsXLargeScreen;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity {
+
+    private DrawerLayout mDrawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RelativeLayout perfil = (RelativeLayout) findViewById(R.id.perfil);
-        perfil.setOnClickListener(this);
-
-        RelativeLayout boletimDiario = (RelativeLayout) findViewById(R.id.boletim_diario);
-        boletimDiario.setOnClickListener(this);
-
-        RelativeLayout denuncias = (RelativeLayout) findViewById(R.id.denuncias);
-        denuncias.setOnClickListener(this);
-
-        RelativeLayout sincronizar = (RelativeLayout) findViewById(R.id.sincronizar);
-        sincronizar.setOnClickListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.perfil:
-                Intent intent1 = new Intent(MainActivity.this, PerfilEditActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.boletim_diario:
-                Intent intent2 = new Intent(MainActivity.this, TodosBoletinsDiariosActivity.class);
-                startActivity(intent2);
-                break;
-            case R.id.denuncias:
-                Intent intent3 = new Intent(MainActivity.this, DenunciasActivity.class);
-                startActivity(intent3);
-                break;
-            case R.id.sincronizar:
-                Intent intent4 = new Intent(MainActivity.this, SincronizarActivity.class);
-                startActivity(intent4);
-                break;
+        //definição da orientação das telas da aplicação
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
+        //Criar ícone de Menu na Toolbar
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        //Fragment Inicial
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_main, new TodosBoletinsDiariosFragment()).commit();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_perfil:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_main, new PerfilFragment()).commit();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        mudarTituloDaActionBar(R.string.title_activity_perfil);
+                        break;
+                    case R.id.nav_boletim:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_main, new TodosBoletinsDiariosFragment()).commit();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        mudarTituloDaActionBar(R.string.title_activity_todos_boletins_diarios);
+                        break;
+                    case R.id.nav_denuncias:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_main, new TodasDenunciasFragment()).commit();
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        mudarTituloDaActionBar(R.string.title_activity_denuncias);
+                        break;
+                }
+                return true;
+            }
+        });
     }
+
+    private void mudarTituloDaActionBar(int title) {
+        android.support.v7.app.ActionBar ab = this.getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(title);
+        }
+    }
+
 }
