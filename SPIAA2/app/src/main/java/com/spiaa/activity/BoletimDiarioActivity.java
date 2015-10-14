@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spiaa.R;
+import com.spiaa.adapter.BoletimListaAdapter;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.TratamentoAntiVetorialDAO;
 import com.spiaa.dao.UsuarioDAO;
@@ -134,7 +135,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         semanaEpidemiologica.setText(tratamentoAntiVetorial.getSemana());
     }
 
-    private void setFieldOnlyVisualization(TextView campo){
+    private void setFieldOnlyVisualization(TextView campo) {
         campo.setInputType(0);
     }
 
@@ -149,7 +150,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         setFieldOnlyVisualization(turmaAgente);
     }
 
-    private void setDadosUsuarioLogado(){
+    private void setDadosUsuarioLogado() {
         dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
         agente.setText(dadosUsuario.getString("nome", ""));
         setFieldOnlyVisualization(agente);
@@ -167,12 +168,13 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         preencherListaDeBairros();
         if (!TodosBoletinsDiariosFragment.NOVO_BOLETIM) {
-            obterIdBairroSelecionado();
+
 
             //Preencher dados do Boletim Diário selecionado na listagem de Boletins Diários
             if (recuperarBoletimDiarioSelecionado() != null) {
                 alterarTitulo();
                 setBairroSelecionado();
+                obterIdBairroSelecionado();
                 setSemanaEpidemiologica();
                 manipulaBotoes();
             }
@@ -185,8 +187,11 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
     private void obterIdBairroSelecionado() {
         for (Bairro bairro : bairroList) {
+            String selecionado = spinnerBairros.getSelectedItem().toString();
+            String bairroLista = bairro.getNome();
             if (spinnerBairros.getSelectedItem().toString().equals(bairro.getNome())) {
                 BAIRRO_ID = bairro.getId();
+                break;
             }
         }
         Toast.makeText(BoletimDiarioActivity.this, BAIRRO_ID.toString(), Toast.LENGTH_SHORT).show();
@@ -195,6 +200,8 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     private Bairro obterBairroSelecionado() {
         Bairro b = null;
         for (Bairro bairro : bairroList) {
+            String selecionado = spinnerBairros.getSelectedItem().toString();
+            String bairroLista = bairro.getNome();
             if (spinnerBairros.getSelectedItem().toString().equals(bairro.getNome())) {
                 return bairro;
             }
@@ -229,7 +236,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 //definir Status como Concluído
                 tratamentoAntiVetorial.setStatus("Em aberto");
 
-                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso!", Toast.LENGTH_LONG).show();
+                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso", Toast.LENGTH_LONG).show();
                 vaiParaListaDeTodosBoletins();
                 break;
             case R.id.fab_criar_boletim:
@@ -264,7 +271,8 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
                 try {
                     Long retorno = new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
-                    Snackbar.make(v, "Boletim Diário criado com secesso!", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário criado com sucesso", Toast.LENGTH_SHORT ).show();
+                    onBackPressed();
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
                 }
@@ -283,4 +291,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         Intent intent = new Intent(BoletimDiarioActivity.this, TodosBoletinsDiariosFragment.class);
         startActivity(intent);
     }
+
+
 }

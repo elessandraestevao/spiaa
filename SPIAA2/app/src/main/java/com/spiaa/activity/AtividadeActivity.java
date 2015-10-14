@@ -1,5 +1,6 @@
 package com.spiaa.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -20,7 +22,9 @@ import android.widget.Spinner;
 
 import com.melnykov.fab.ObservableScrollView;
 import com.spiaa.R;
+import com.spiaa.adapter.CriadouroListaAdapter;
 import com.spiaa.dao.BairroDAO;
+import com.spiaa.dao.CriadouroDAO;
 import com.spiaa.dao.QuarteiraoDAO;
 import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.Bairro;
@@ -31,10 +35,13 @@ import com.spiaa.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AtividadeActivity extends AppCompatActivity {
+public class AtividadeActivity extends AppCompatActivity implements View.OnClickListener {
     private Atividade atividade = null;
     private Spinner spinnerQuarteiroes;
     private EditText endereco;
+    private Dialog dialog;
+    CriadouroListaAdapter adapter = new CriadouroListaAdapter(this);
+    ListView listaCriadouros;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,23 @@ public class AtividadeActivity extends AppCompatActivity {
 
         endereco = (EditText) findViewById(R.id.endereco_atividade);
         spinnerQuarteiroes = (Spinner) findViewById(R.id.dropdown_quarteiroes);
+        Button botaoCriadouros = (Button) findViewById(R.id.botao_criadouros);
+        botaoCriadouros.setOnClickListener(this);
 
+        //Criadouros
+        dialog = new Dialog(AtividadeActivity.this);
+        dialog.setContentView(R.layout.activity_todos_criadouros);
+        ListView lv = (ListView ) dialog.findViewById(R.id.lista_criadouros);
 
+        try {
+            adapter.setLista(new CriadouroDAO(this).selectAll());
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro no SELECT ALL criadouros", e);
+        }
+        //listaCriadouros.setAdapter(adapter);
+
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+        lv.setAdapter(adapter);
 
 
     }
@@ -123,5 +145,19 @@ public class AtividadeActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_atividade, menu);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.botao_criadouros:
+                showDialogCriadouros();
+        }
+    }
+
+    private void showDialogCriadouros(){
+        dialog.setCancelable(true);
+        dialog.setTitle("Criadouros encontrados");
+        dialog.show();
     }
 }

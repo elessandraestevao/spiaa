@@ -75,6 +75,7 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
                 criadouro.setGrupo(cursor.getString(1));
                 criadouro.setRecipiente(cursor.getString(2));
                 criadouroList.add(criadouro);
+                cursor.moveToNext();
             }
             cursor.close();
         }

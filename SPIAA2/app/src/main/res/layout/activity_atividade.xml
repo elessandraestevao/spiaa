@@ -85,19 +85,13 @@
 
             </Spinner>
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/criadouros" />
-
-            <ListView
-                android:id="@+id/lista_criadouros"
+            <Button
+                android:id="@+id/botao_criadouros"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:scrollbars="none" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/criadouros"
+                android:theme="@style/AppTheme.Button.Primary" />
 
             <TextView
                 android:layout_width="wrap_content"
