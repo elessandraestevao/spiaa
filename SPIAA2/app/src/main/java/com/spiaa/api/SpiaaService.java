@@ -29,7 +29,7 @@ public interface SpiaaService {
     @POST("/api/bairroquarteirao/agente")
     void getBairrosQuarteiroes(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
 
-    @POST("/api/tipoImovel")
+    @POST("/api/tipoimovel")
     void getTiposImoveis(@Body Usuario agenteSaude, Callback<List<TipoImoveis>> callback);
 
     @POST("/api/inseticida")

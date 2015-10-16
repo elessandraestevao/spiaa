@@ -240,7 +240,8 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private SpiaaService getService() {
         //Configura RestAdapeter com dados do servidor e cria service
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://spiaa.herokuapp.com")
+                .setEndpoint("http://192.168.4.176:8084/Spiaa")
+                //.setEndpoint("http://spiaa.herokuapp.com")
                 .build();
         SpiaaService service = restAdapter.create(SpiaaService.class);
         return service;

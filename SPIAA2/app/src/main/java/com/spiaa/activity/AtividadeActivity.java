@@ -1,6 +1,7 @@
 package com.spiaa.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
@@ -23,11 +24,14 @@ import android.widget.Spinner;
 import com.melnykov.fab.ObservableScrollView;
 import com.spiaa.R;
 import com.spiaa.adapter.CriadouroListaAdapter;
+import com.spiaa.dao.AtividadeCriadouroDAO;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.CriadouroDAO;
 import com.spiaa.dao.QuarteiraoDAO;
 import com.spiaa.modelo.Atividade;
+import com.spiaa.modelo.AtividadeCriadouro;
 import com.spiaa.modelo.Bairro;
+import com.spiaa.modelo.Criadouro;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.Quarteirao;
 import com.spiaa.modelo.Usuario;
@@ -41,7 +45,9 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
     private EditText endereco;
     private Dialog dialog;
     CriadouroListaAdapter adapter = new CriadouroListaAdapter(this);
-    ListView listaCriadouros;
+    ListView lv;
+    List<Criadouro> criadouroList;
+    Long atividadecriadouro = 100L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +62,23 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         Button botaoCriadouros = (Button) findViewById(R.id.botao_criadouros);
         botaoCriadouros.setOnClickListener(this);
 
+        preencheListaDeCriadouros();
+
+    }
+
+    private void preencheListaDeCriadouros() {
         //Criadouros
         dialog = new Dialog(AtividadeActivity.this);
         dialog.setContentView(R.layout.activity_todos_criadouros);
-        ListView lv = (ListView ) dialog.findViewById(R.id.lista_criadouros);
+        lv = (ListView) dialog.findViewById(R.id.lista_criadouros);
 
         try {
-            adapter.setLista(new CriadouroDAO(this).selectAll());
+            criadouroList = new CriadouroDAO(this).selectAll();
+            adapter.setLista(criadouroList);
         } catch (Exception e) {
             Log.e("SPIAA", "Erro no SELECT ALL criadouros", e);
         }
-        //listaCriadouros.setAdapter(adapter);
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
         lv.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -80,24 +87,18 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
 
         if (recuperarAtividadeSelecionada() != null) {
             alterarTitulo();
-
-            //EditText numeroQuarteirao = (EditText) findViewById(R.id.numero_quarteirao_atividade);
-            //numeroQuarteirao.setText(dados.get("numero_quarteirao").toString());
-
-
             endereco.setText(atividade.getEndereco());
         }
 
         preencherListaDeQuarteiroes();
     }
 
-    private void alterarTitulo(){
+    private void alterarTitulo() {
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setTitle(atividade.getTitulo());
         }
     }
-
 
     private void preencherListaDeQuarteiroes() {
         //Preencher dropdown com quarteirões relacionados ao bairro
@@ -119,7 +120,7 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
 
     private Atividade recuperarAtividadeSelecionada() {
         Bundle dados = getIntent().getExtras();
-        if(dados != null){
+        if (dados != null) {
             atividade = (Atividade) dados.getSerializable("Atividade");
         }
         return atividade;
@@ -149,13 +150,37 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.botao_criadouros:
                 showDialogCriadouros();
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        Atividade atividade = new Atividade();
+                        atividade.setId(atividadecriadouro);
+                        int i = 0;
+                        for (Criadouro criadouro : criadouroList) {
+                            AtividadeCriadouro ac = new AtividadeCriadouro();
+                            ac.setCriadouro(criadouro);
+                            int number = Integer.parseInt(adapter.getItem(i).toString());
+                            ac.setQuantidadeCriadouro(number);
+                            ac.setAtividade(atividade);
+
+                            try {
+                                new AtividadeCriadouroDAO().insert(ac);
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro no INSERT AtividadeCriadouro", e);
+                            }
+                            i++;
+                        }
+                    }
+                });
+
+
         }
     }
 
-    private void showDialogCriadouros(){
+    private void showDialogCriadouros() {
         dialog.setCancelable(true);
         dialog.setTitle("Criadouros encontrados");
         dialog.show();
