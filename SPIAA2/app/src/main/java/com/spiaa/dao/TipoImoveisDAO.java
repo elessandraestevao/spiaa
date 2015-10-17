@@ -31,7 +31,10 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
         content.put(TipoImoveis.DESCRICAO, tipoImoveis.getDescricao());
         content.put(TipoImoveis.SIGLA, tipoImoveis.getSigla());
 
-        return sqlLite.insert(TipoImoveis.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(TipoImoveis.TABLE_NAME, null, content);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(TipoImoveis.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             tipoImoveis = new TipoImoveis();
             tipoImoveis.setId(cursor.getLong(0));
@@ -53,6 +56,7 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
             tipoImoveis.setDescricao(cursor.getString(2));
             cursor.close();
         }
+        sqlLite.close();
         return tipoImoveis;
     }
 
@@ -72,9 +76,11 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
                 tipoImoveis.setSigla(cursor.getString(1));
                 tipoImoveis.setDescricao(cursor.getString(2));
                 tipoImoveisList.add(tipoImoveis);
+                cursor.moveToNext();
             }
             cursor.close();
         }
+        sqlLite.close();
         return tipoImoveisList;
     }
 
@@ -85,6 +91,13 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = TipoImoveis.ID + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(TipoImoveis.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }

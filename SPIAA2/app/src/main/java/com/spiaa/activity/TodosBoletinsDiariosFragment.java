@@ -166,15 +166,24 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
             @Override
             public void success(List<TipoImoveis> tipoImovelList, Response response) {
                 if(tipoImovelList != null){
+                    TipoImoveisDAO dao = new TipoImoveisDAO(getContext());
+                    for (TipoImoveis tipoImovel : tipoImovelList) {
+                        try {
+                            if ((dao.delete(tipoImovel.getId()) == 1) || (dao.select(tipoImovel) == null)) {
+                                dao.insert(tipoImovel);
+                            }
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro ao inserir tipo de imóvel no banco local", e);
+                        }
+                    }
                     hideProgressDialog();
-                    Toast.makeText(getContext(), tipoImovelList.get(0).getSigla(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 hideProgressDialog();
-                Toast.makeText(getContext(), "ERROR!!!", Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber tipos de imóveis.", Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -240,8 +249,8 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private SpiaaService getService() {
         //Configura RestAdapeter com dados do servidor e cria service
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.4.176:8084/Spiaa")
-                //.setEndpoint("http://spiaa.herokuapp.com")
+                //.setEndpoint("http://192.168.4.176:8084/Spiaa")
+                .setEndpoint("http://spiaa.herokuapp.com")
                 .build();
         SpiaaService service = restAdapter.create(SpiaaService.class);
         return service;

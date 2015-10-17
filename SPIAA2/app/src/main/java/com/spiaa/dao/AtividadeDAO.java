@@ -9,6 +9,7 @@ import android.util.Log;
 import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Atividade;
+import com.spiaa.modelo.AtividadeCriadouro;
 import com.spiaa.modelo.Quarteirao;
 import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
@@ -42,7 +43,20 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         content.put(Atividade.TIPO_IMOVEL, atividade.getTipoImoveis().getId());
         content.put(Atividade.TRATAMENTO_ANTIVETORIAL, atividade.getBoletimDiario().getId());
 
-        return sqlLite.insert(Atividade.TABLE_NAME, null, content);
+        Long atividadeId = sqlLite.insert(Atividade.TABLE_NAME, null, content);
+
+        //Inserir lista de AtividadesCriadouros
+        if (atividadeId != -1) {
+            for(AtividadeCriadouro atividadeCriadouro: atividade.getAtividadeCriadouroList()){
+                atividadeCriadouro.setIdAtividade(atividadeId);
+            }
+            try {
+                new AtividadeCriadouroDAO(context).insert(atividade.getAtividadeCriadouroList());
+            } catch (Exception e) {
+                Log.e("SPIAA", "Erro ao Inserir lista de AtividadeCriadouro", e);
+            }
+        }
+        return atividadeId;
     }
 
     @Override

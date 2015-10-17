@@ -53,8 +53,10 @@ public class CriadouroListaAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         View viewCriadouro = inflater.inflate(R.layout.criadouro_item_list, null);
 
-        TextInputLayout qtdeCriadouro = (TextInputLayout) viewCriadouro.findViewById(R.id.mesage_qtde_criadouro);
-        qtdeCriadouro.setHint("Quantidade de " + lista.get(position).getGrupo());
+        //TextInputLayout qtdeCriadouro = (TextInputLayout) viewCriadouro.findViewById(R.id.mesage_qtde_criadouro);
+        //qtdeCriadouro.setHint("Quantidade de " + lista.get(position).getGrupo());
+
+
 
         return viewCriadouro;
     }

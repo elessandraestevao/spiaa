@@ -75,6 +75,7 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
                 inseticida.setNome(cursor.getString(1));
                 inseticida.setUnidade(cursor.getString(2));
                 inseticidaList.add(inseticida);
+                cursor.moveToNext();
             }
             cursor.close();
         }

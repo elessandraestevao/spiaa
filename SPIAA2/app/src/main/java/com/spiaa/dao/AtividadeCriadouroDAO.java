@@ -23,16 +23,36 @@ import java.util.List;
 public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
     Context context;
 
+    public AtividadeCriadouroDAO(Context context) {
+        this.context = context;
+    }
+
     @Override
     public Long insert(AtividadeCriadouro atividadeCriadouro) throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put(AtividadeCriadouro.ATIVIDADE, atividadeCriadouro.getAtividade().getId());
+        content.put(AtividadeCriadouro.ATIVIDADE, atividadeCriadouro.getIdAtividade());
         content.put(AtividadeCriadouro.CRIADOURO, atividadeCriadouro.getCriadouro().getId());
         content.put(AtividadeCriadouro.QUANTIDADE, atividadeCriadouro.getQuantidadeCriadouro());
 
         Long retorno = sqlLite.insert(AtividadeCriadouro.TABLE_NAME, null, content);
+        sqlLite.close();
+        return retorno;
+    }
+
+    public Long insert(List<AtividadeCriadouro> atividadeCriadouroList) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        ContentValues content = new ContentValues();
+        Long retorno = 0L;
+
+        for (AtividadeCriadouro atividadeCriadouro : atividadeCriadouroList) {
+            content.put(AtividadeCriadouro.ATIVIDADE, atividadeCriadouro.getIdAtividade());
+            content.put(AtividadeCriadouro.CRIADOURO, atividadeCriadouro.getCriadouro().getId());
+            content.put(AtividadeCriadouro.QUANTIDADE, atividadeCriadouro.getQuantidadeCriadouro());
+
+            retorno = sqlLite.insert(AtividadeCriadouro.TABLE_NAME, null, content);
+        }
         sqlLite.close();
         return retorno;
     }
@@ -47,7 +67,7 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
         return null;
     }
 
-    public List<AtividadeCriadouro> selectAllDaAtividade(Long id){
+    public List<AtividadeCriadouro> selectAllDaAtividade(Long id) {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + AtividadeCriadouro.TABLE_NAME + " WHERE " + AtividadeCriadouro.ATIVIDADE + " = " + id, null);
         List<AtividadeCriadouro> atividadeCriadouroList = null;
@@ -62,7 +82,6 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
                 //Atividade
                 Atividade atividade = new Atividade();
                 atividade.setId(cursor.getLong(0));
-                atividadeCriadouro.setAtividade(atividade);
 
                 //Criadouro
                 Criadouro criadouro = new Criadouro();

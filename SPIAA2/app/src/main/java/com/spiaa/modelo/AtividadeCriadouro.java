@@ -13,16 +13,16 @@ public class AtividadeCriadouro extends BaseEntity{
     public static final String QUANTIDADE = "quantidade";
 
     //Atributos
-    private Atividade atividade;
+    private Long IdAtividade;
     private Criadouro criadouro;
     private Integer quantidadeCriadouro;
 
-    public Atividade getAtividade() {
-        return atividade;
+    public Long getIdAtividade() {
+        return IdAtividade;
     }
 
-    public void setAtividade(Atividade atividade) {
-        this.atividade = atividade;
+    public void setIdAtividade(Long idAtividade) {
+        IdAtividade = idAtividade;
     }
 
     public Criadouro getCriadouro() {

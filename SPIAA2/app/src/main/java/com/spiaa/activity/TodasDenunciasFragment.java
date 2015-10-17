@@ -122,8 +122,9 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
         //Configura RestAdapeter com dados do servidor e cria service
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://spiaa.herokuapp.com")
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new GsonConverter(new GsonBuilder().setDateFormat("yyyy-MM-dd")
-                .create()))
+                        .create()))
                 .build();
         return restAdapter.create(SpiaaService.class);
     }
