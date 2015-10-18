@@ -1,5 +1,6 @@
 package com.spiaa.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.spiaa.R;
+import com.spiaa.dao.AtividadeDAO;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 
 import java.text.DateFormat;
@@ -67,7 +69,7 @@ public class BoletimListaAdapter extends BaseAdapter {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         data.setText(String.valueOf(format.format(lista.get(position).getData())));
 
-        numeroAtividades.setText(Integer.toString(lista.size()));
+        numeroAtividades.setText(Long.toString(new AtividadeDAO(context).countAtividadesDoBoletim(lista.get(position).getId())));
         statusBoletim.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todos os boletins

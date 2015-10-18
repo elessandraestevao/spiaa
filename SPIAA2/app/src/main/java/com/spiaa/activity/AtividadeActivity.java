@@ -230,16 +230,25 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         atividade.setQuarteirao(obterQuarteiraoSelecionado());
         atividade.setEndereco(endereco.getText().toString());
         atividade.setTipoImoveis(obterTipoImovelSelecionado());
-        atividade.setObservacao(obterObservacaoSelecionada());
-        TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
-        tav.setId(IdBoletimDiario);
-        atividade.setBoletimDiario(tav);
-        try {
-            new AtividadeDAO(this).insert(atividade);
-            Toast.makeText(AtividadeActivity.this, "Atividade concluída com sucesso", Toast.LENGTH_SHORT).show();
-            onBackPressed();
-        } catch (Exception e) {
-            Log.e("SPIAA", "Erro no INSERT de Atividade", e);
+
+        if (endereco.getText().toString().isEmpty() || endereco.getText().toString().trim().equals("")) {
+            Snackbar.make(findViewById(R.id.linear_atividade), "Preencha o campo Endereço completo", Snackbar.LENGTH_LONG).show();
+        } else {
+            if (obterObservacaoSelecionada().isEmpty()) {
+                Snackbar.make(findViewById(R.id.linear_atividade), "Selecione Recebido, Fechado ou Resgatado", Snackbar.LENGTH_LONG).show();
+            } else {
+                atividade.setObservacao(obterObservacaoSelecionada());
+                TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
+                tav.setId(IdBoletimDiario);
+                atividade.setBoletimDiario(tav);
+                try {
+                    new AtividadeDAO(this).insert(atividade);
+                    Toast.makeText(AtividadeActivity.this, "Atividade concluída com sucesso", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no INSERT de Atividade", e);
+                }
+            }
         }
 
     }
@@ -248,9 +257,8 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         String observacao = "";
 
         int id = radioGroupObservacoes.getCheckedRadioButtonId();
-        if (id == -1) {
-            Snackbar.make(findViewById(R.id.linear_atividade), "Selecione Recebido, Fechado ou Resgatado", Snackbar.LENGTH_LONG).show();
-        } else if (id == R.id.radio_recebido) {
+
+        if (id == R.id.radio_recebido) {
             observacao = "RECEBIDO";
         } else if (id == R.id.radio_fechado) {
             observacao = "FECHADO";
@@ -302,7 +310,9 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
             textInputLayout.setHint("Quantidade de " + inseticida.getNome());
             if (atividade.getAtividadeInseticidasList() != null) {
                 EditText qtdeInseticida = (EditText) item.findViewById(R.id.qtde_inseticida);
-                qtdeInseticida.setText(String.valueOf(atividade.getAtividadeInseticidasList().get(position).getQuantidadeInseticida()));
+                if (atividade.getAtividadeInseticidasList().get(position).getQuantidadeInseticida() != null) {
+                    qtdeInseticida.setText(String.valueOf(atividade.getAtividadeInseticidasList().get(position).getQuantidadeInseticida()));
+                }
                 position++;
             }
             linearLayoutInseticidas.addView(item);
@@ -359,7 +369,9 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
 
             if (atividade.getAtividadeCriadouroList() != null) {
                 EditText qtdeCriadouro = (EditText) item.findViewById(R.id.qtde_criadouro);
-                qtdeCriadouro.setText(String.valueOf(atividade.getAtividadeCriadouroList().get(position).getQuantidadeCriadouro()));
+                if (atividade.getAtividadeCriadouroList().get(position).getQuantidadeCriadouro() != null) {
+                    qtdeCriadouro.setText(String.valueOf(atividade.getAtividadeCriadouroList().get(position).getQuantidadeCriadouro()));
+                }
                 position++;
             }
 
@@ -372,7 +384,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(AtividadeActivity.this, "OKOK", Toast.LENGTH_SHORT).show();
                 View view;
                 List<AtividadeCriadouro> atividadeCriadouroList = new ArrayList<>();
                 int i = 0;
@@ -385,7 +396,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
                     if (!editText.getText().toString().equals("")) {
                         ac.setQuantidadeCriadouro(Integer.parseInt(editText.getText().toString()));
                     }
-
                     atividadeCriadouroList.add(ac);
                     i++;
                 }

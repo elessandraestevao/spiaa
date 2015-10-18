@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,6 +48,50 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private ListView listaBoletins;
     private com.melnykov.fab.FloatingActionButton fabCriar;
     private ProgressDialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_todos_boletins_diarios, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_sync_boletins:
+                enviarBoletinsDiarios();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void enviarBoletinsDiarios() {
+        try {
+            List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAll();
+            getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
+                @Override
+                public void success(String s, Response response) {
+                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getContext(), "Falhou BD API", Toast.LENGTH_SHORT);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Nullable
     @Override
@@ -249,8 +296,9 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private SpiaaService getService() {
         //Configura RestAdapeter com dados do servidor e cria service
         RestAdapter restAdapter = new RestAdapter.Builder()
-                //.setEndpoint("http://192.168.4.176:8084/Spiaa")
+                //.setEndpoint("http://192.168.0.19:8080/Spiaa")
                 .setEndpoint("http://spiaa.herokuapp.com")
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         SpiaaService service = restAdapter.create(SpiaaService.class);
         return service;

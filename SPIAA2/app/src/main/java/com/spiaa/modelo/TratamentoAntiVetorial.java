@@ -4,6 +4,7 @@ import com.spiaa.base.BaseEntity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -40,7 +41,7 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
     String status;
     String semana;
     String numeroAtividade;
-    //List<Atividade> atividadeList;
+    List<Atividade> atividadeList;
 
     public String getStatus() {
         return status;
@@ -106,13 +107,13 @@ public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
         this.semana = semana;
     }
 
-   /* public List<Atividade> getAtividades() {
+   public List<Atividade> getAtividades() {
         return atividadeList;
     }
 
     public void setAtividades(List<Atividade> atividades) {
         this.atividadeList = atividades;
-    }*/
+    }
 
     public String getNumeroAtividade() {
         return numeroAtividade;

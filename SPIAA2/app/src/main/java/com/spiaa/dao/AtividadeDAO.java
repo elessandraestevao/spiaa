@@ -3,6 +3,7 @@ package com.spiaa.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -187,6 +188,17 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         sqlLite.close();
 
         return atividadeList;
+    }
+
+    public Long countAtividadesDoBoletim(Long id){
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        String where = Atividade.TRATAMENTO_ANTIVETORIAL + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        Long count = DatabaseUtils.queryNumEntries(sqlLite, Atividade.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return count;
     }
 
     public List<Atividade> selectAllDoBoletim(Long id) throws Exception {

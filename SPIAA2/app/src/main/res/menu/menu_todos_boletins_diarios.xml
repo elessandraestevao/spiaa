@@ -7,7 +7,7 @@
         android:id="@+id/action_sync_boletins"
         android:icon="@drawable/ic_sync_white_24dp"
         android:orderInCategory="300"
-        android:title="Sync_Denuncias"
+        android:title="Sync_Boletins"
         app:showAsAction="ifRoom" />
 
 </menu>

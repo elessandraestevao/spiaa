@@ -237,10 +237,17 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.concluir_boletim:
                 //definir Status como Concluído
-                tratamentoAntiVetorial.setStatus("Em aberto");
+                tratamentoAntiVetorial.setStatus("Concluído");
+                try {
+                    new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).update(tratamentoAntiVetorial);
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no UPDATE de Boletim Diário", e);
+                }
+
 
                 Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso", Toast.LENGTH_LONG).show();
-                vaiParaListaDeTodosBoletins();
+                //vaiParaListaDeTodosBoletins();
+                onBackPressed();
                 break;
             case R.id.fab_criar_boletim:
                 //Criar um objeto TAV e preencher com os dados da tela
@@ -273,20 +280,18 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 tratamentoAntiVetorial.setUsuario(agente);
 
                 try {
-                    Long retorno = new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
+                    new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
                     Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário criado com sucesso", Toast.LENGTH_SHORT ).show();
                     onBackPressed();
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
                 }
-                TodosBoletinsDiariosFragment.NOVO_BOLETIM = false;
+                setNovoBoletimFalse();
                 manipulaBotoes();
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private void setNovoBoletimFalse(){
         TodosBoletinsDiariosFragment.NOVO_BOLETIM = false;
     }
 

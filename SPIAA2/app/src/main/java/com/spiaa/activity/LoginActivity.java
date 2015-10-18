@@ -116,6 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //Configura RestAdapeter com dados do servidor e cria service
         restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://spiaa.herokuapp.com")
+                //.setEndpoint("http://192.168.0.19:8080/Spiaa")
                 .build();
         service = restAdapter.create(SpiaaService.class);
         return service;

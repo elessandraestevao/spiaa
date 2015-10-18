@@ -13,16 +13,16 @@ public class AtividadeInseticida extends BaseEntity {
     public static final String QUANTIDADE = "quantidade";
 
     //Atributos
-    private Long IdAtividade;
+    private Long idAtividade;
     private Inseticida inseticida;
     private Integer quantidadeInseticida;
 
     public Long getIdAtividade() {
-        return IdAtividade;
+        return idAtividade;
     }
 
     public void setIdAtividade(Long idAtividade) {
-        IdAtividade = idAtividade;
+        this.idAtividade = idAtividade;
     }
 
     public Inseticida getInseticida() {

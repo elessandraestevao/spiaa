@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
+import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Usuario;
@@ -57,9 +58,9 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         String where = TratamentoAntiVetorial.ID + " = ?";
 
         String[] colunas = new String[]{TratamentoAntiVetorial.ID, TratamentoAntiVetorial.DATA,
-        TratamentoAntiVetorial.NUMERO, TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA,
-        TratamentoAntiVetorial.NUMERO_ATIVIDADE, TratamentoAntiVetorial.TIPO_ATIVIDADE,
-        TratamentoAntiVetorial.TURMA, TratamentoAntiVetorial.USUARIO, TratamentoAntiVetorial.BAIRRO};
+                TratamentoAntiVetorial.NUMERO, TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA,
+                TratamentoAntiVetorial.NUMERO_ATIVIDADE, TratamentoAntiVetorial.TIPO_ATIVIDADE,
+                TratamentoAntiVetorial.TURMA, TratamentoAntiVetorial.USUARIO, TratamentoAntiVetorial.BAIRRO};
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(TratamentoAntiVetorial.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
@@ -139,6 +140,14 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Bairro", e);
                 }
+
+                try {
+                    //Atividades
+                    tratamentoAntiVetorial.setAtividades(new AtividadeDAO(context).selectAllDoBoletim(cursor.getLong(0)));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Bairro", e);
+                }
+
                 tratamentoAntiVetorialList.add(tratamentoAntiVetorial);
                 cursor.moveToNext();
             }
@@ -152,14 +161,15 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put(TratamentoAntiVetorial.BAIRRO, tratamentoAntiVetorial.getBairro().getId());
-        content.put(TratamentoAntiVetorial.DATA, tratamentoAntiVetorial.getData().toString());
-        content.put(TratamentoAntiVetorial.NUMERO_ATIVIDADE, tratamentoAntiVetorial.getNumeroAtividade());
-        content.put(TratamentoAntiVetorial.NUMERO, tratamentoAntiVetorial.getNumero());
+        //content.put(TratamentoAntiVetorial.BAIRRO, tratamentoAntiVetorial.getBairro().getId());
+        //content.put(TratamentoAntiVetorial.DATA, tratamentoAntiVetorial.getData().toString());
+        //content.put(TratamentoAntiVetorial.NUMERO_ATIVIDADE, tratamentoAntiVetorial.getNumeroAtividade());
+        //content.put(TratamentoAntiVetorial.NUMERO, tratamentoAntiVetorial.getNumero());
         content.put(TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA, tratamentoAntiVetorial.getSemana());
-        content.put(TratamentoAntiVetorial.USUARIO, tratamentoAntiVetorial.getUsuario().getId());
-        content.put(TratamentoAntiVetorial.TIPO_ATIVIDADE, tratamentoAntiVetorial.getTipoAtividade());
-        content.put(TratamentoAntiVetorial.TURMA, tratamentoAntiVetorial.getTurma());
+        content.put(TratamentoAntiVetorial.STATUS, tratamentoAntiVetorial.getStatus());
+        //content.put(TratamentoAntiVetorial.USUARIO, tratamentoAntiVetorial.getUsuario().getId());
+        //content.put(TratamentoAntiVetorial.TIPO_ATIVIDADE, tratamentoAntiVetorial.getTipoAtividade());
+        //content.put(TratamentoAntiVetorial.TURMA, tratamentoAntiVetorial.getTurma());
 
         String where = TratamentoAntiVetorial.ID + " = ?";
         String argumentos[] = new String[]{tratamentoAntiVetorial.getId().toString()};
@@ -172,7 +182,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
 
         String where = TratamentoAntiVetorial.ID + " = ?";
-        String argumentos[] = new String[] { id.toString() };
+        String argumentos[] = new String[]{id.toString()};
 
         return sqlLite.delete(TratamentoAntiVetorial.TABLE_NAME, where, argumentos);
     }
