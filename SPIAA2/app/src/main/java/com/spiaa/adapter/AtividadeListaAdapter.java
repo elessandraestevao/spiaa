@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by eless on 26/09/2015.
  */
-public class AtividadeListaAdapter extends BaseAdapter{
+public class AtividadeListaAdapter extends BaseAdapter {
 
     private Context context;
     private List<Atividade> lista;
@@ -60,21 +60,21 @@ public class AtividadeListaAdapter extends BaseAdapter{
         TextView statusAtividade = (TextView) viewAtividade.findViewById(R.id.status_atividade);
 
         contagemAtividade.setText("Atividade " + (position + 1));
-       /* numeroQuarteirao.setText(lista.get(position).getNumero_quarteirao());
+        numeroQuarteirao.setText(lista.get(position).getQuarteirao().getDescricao());
         enderecoCompleto.setText(lista.get(position).getEndereco());
-        statusAtividade.setText(lista.get(position).getObservacoes());
+        statusAtividade.setText(lista.get(position).getObservacao());
 
         //Definir cor do status na listagem de todas as atividades
-        if (lista.get(position).getObservacoes().equals("FECHADO")) {
+        if (lista.get(position).getObservacao().equals("FECHADO")) {
             //cor red
             statusAtividade.setTextColor(Color.parseColor("#cc0000"));
-        } else if(lista.get(position).getObservacoes().equals("RESGATADO")) {
+        } else if (lista.get(position).getObservacao().equals("RESGATADO")) {
             //cor blue
             statusAtividade.setTextColor(Color.parseColor("#0029A3"));
-        }else{
+        } else {
             //cor green para RECEBIDO
             statusAtividade.setTextColor(Color.parseColor("#669900"));
-        }*/
+        }
 
         return viewAtividade;
     }

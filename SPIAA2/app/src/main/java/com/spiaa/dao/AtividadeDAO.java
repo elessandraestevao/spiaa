@@ -10,6 +10,7 @@ import com.spiaa.base.BaseDAO;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.AtividadeCriadouro;
+import com.spiaa.modelo.AtividadeInseticida;
 import com.spiaa.modelo.Quarteirao;
 import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
@@ -32,30 +33,46 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put(Atividade.ID, atividade.getId());
         content.put(Atividade.ENDERECO, atividade.getEndereco());
+        content.put(Atividade.NUMERO, atividade.getNumero());
+        content.put(Atividade.OBSERVACAO, atividade.getObservacao());
         content.put(Atividade.INSPECIONADO, atividade.getInspecionado());
         content.put(Atividade.LATITUDE, atividade.getLatitude());
         content.put(Atividade.LONGITUDE, atividade.getLongitude());
-        content.put(Atividade.NUMERO, atividade.getNumero());
-        content.put(Atividade.OBSERVACAO, atividade.getObservacao());
-        content.put(Atividade.QUARTEIRAO, atividade.getQuarteirao().getId());
         content.put(Atividade.TIPO_IMOVEL, atividade.getTipoImoveis().getId());
         content.put(Atividade.TRATAMENTO_ANTIVETORIAL, atividade.getBoletimDiario().getId());
+        content.put(Atividade.QUARTEIRAO, atividade.getQuarteirao().getId());
 
         Long atividadeId = sqlLite.insert(Atividade.TABLE_NAME, null, content);
 
-        //Inserir lista de AtividadesCriadouros
-        if (atividadeId != -1) {
-            for(AtividadeCriadouro atividadeCriadouro: atividade.getAtividadeCriadouroList()){
-                atividadeCriadouro.setIdAtividade(atividadeId);
+
+        if ((atividadeId != -1)) {
+            if (atividade.getAtividadeCriadouroList() != null) {
+                //Inserir lista de AtividadeCriadouros
+                for (AtividadeCriadouro atividadeCriadouro : atividade.getAtividadeCriadouroList()) {
+                    atividadeCriadouro.setIdAtividade(atividadeId);
+                }
+                try {
+                    new AtividadeCriadouroDAO(context).insert(atividade.getAtividadeCriadouroList());
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro ao Inserir lista de AtividadeCriadouro", e);
+                }
             }
-            try {
-                new AtividadeCriadouroDAO(context).insert(atividade.getAtividadeCriadouroList());
-            } catch (Exception e) {
-                Log.e("SPIAA", "Erro ao Inserir lista de AtividadeCriadouro", e);
+
+            if (atividade.getAtividadeInseticidasList() != null) {
+                //Inserir lista de AtividadeInseticidas
+                for (AtividadeInseticida atividadeInseticida : atividade.getAtividadeInseticidasList()) {
+                    atividadeInseticida.setIdAtividade(atividadeId);
+                }
+                try {
+                    new AtividadeInseticidaDAO(context).insert(atividade.getAtividadeInseticidasList());
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro ao Inserir lista de AtividadeInseticida", e);
+                }
             }
         }
+
+        sqlLite.close();
         return atividadeId;
     }
 
@@ -72,7 +89,7 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Atividade.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             atividade = new Atividade();
             atividade.setId(cursor.getLong(0));
@@ -111,6 +128,8 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
             }
             cursor.close();
         }
+        sqlLite.close();
+
         return atividade;
     }
 
@@ -120,7 +139,7 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Atividade.TABLE_NAME, null);
         List<Atividade> atividadeList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             atividadeList = new ArrayList<>();
 
@@ -161,9 +180,82 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
                     Log.e("SPIAA", "Erro no SELECT de Quarteirão", e);
                 }
                 atividadeList.add(atividade);
+                cursor.moveToNext();
             }
             cursor.close();
         }
+        sqlLite.close();
+
+        return atividadeList;
+    }
+
+    public List<Atividade> selectAllDoBoletim(Long id) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Atividade.TABLE_NAME + " WHERE "
+                + Atividade.TRATAMENTO_ANTIVETORIAL + " = " + id, null);
+        List<Atividade> atividadeList =  new ArrayList<>();
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+                Atividade atividade = new Atividade();
+                atividade.setId(cursor.getLong(0));
+                atividade.setEndereco(cursor.getString(1));
+                atividade.setNumero(cursor.getString(2));
+                atividade.setObservacao(cursor.getString(3));
+                atividade.setInspecionado(cursor.getInt(4));
+                atividade.setLatitude(cursor.getString(5));
+                atividade.setLongitude(cursor.getString(6));
+
+                try {
+                    //TipoImóveis
+                    TipoImoveis tp = new TipoImoveis();
+                    tp.setId(cursor.getLong(7));
+                    atividade.setTipoImoveis(new TipoImoveisDAO(context).select(tp));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de TipoImóvel", e);
+                }
+
+                try {
+                    //Tratamento anti vetorial
+                    TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
+                    tav.setId(cursor.getLong(8));
+                    atividade.setBoletimDiario(new TratamentoAntiVetorialDAO(context).select(tav));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT TratamentoAntiVetorial", e);
+                }
+
+                try {
+                    //Quarteirão
+                    Quarteirao q = new Quarteirao();
+                    q.setId(cursor.getLong(9));
+                    atividade.setQuarteirao(new QuarteiraoDAO(context).select(q));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Quarteirão", e);
+                }
+
+                try {
+                    //Lista de AtividadeCriadouro
+                    atividade.setAtividadeCriadouroList(new AtividadeCriadouroDAO(context).selectAllDaAtividade(cursor.getLong(0)));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de AtividadeCraidouro", e);
+                }
+
+                try {
+                    //Lista de AtividadeInseticida
+                    atividade.setAtividadeInseticidasList(new AtividadeInseticidaDAO(context).selectAllDaAtividade(cursor.getLong(0)));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de AtividadeInseticida", e);
+                }
+
+                atividadeList.add(atividade);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+
         return atividadeList;
     }
 
@@ -186,7 +278,10 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         String where = Atividade.ID + " = ?";
         String argumentos[] = new String[]{atividade.getId().toString()};
 
-        return sqlLite.update(Atividade.TABLE_NAME, content, where, argumentos);
+        int retorno = sqlLite.update(Atividade.TABLE_NAME, content, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -196,6 +291,9 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         String where = Atividade.ID + " = ?";
         String argumentos[] = new String[]{id.toString()};
 
-        return sqlLite.delete(Atividade.TABLE_NAME, where, argumentos);
+        int retorno = sqlLite.delete(Atividade.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }

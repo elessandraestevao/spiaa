@@ -72,7 +72,7 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + AtividadeCriadouro.TABLE_NAME + " WHERE " + AtividadeCriadouro.ATIVIDADE + " = " + id, null);
         List<AtividadeCriadouro> atividadeCriadouroList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             atividadeCriadouroList = new ArrayList<>();
 
@@ -80,8 +80,7 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
                 AtividadeCriadouro atividadeCriadouro = new AtividadeCriadouro();
 
                 //Atividade
-                Atividade atividade = new Atividade();
-                atividade.setId(cursor.getLong(0));
+                atividadeCriadouro.setIdAtividade(cursor.getLong(0));
 
                 //Criadouro
                 Criadouro criadouro = new Criadouro();
@@ -93,6 +92,7 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
                     Log.e("SPIAA", "Erro no Select de Criadouro", e);
                 }
                 atividadeCriadouro.setQuantidadeCriadouro(cursor.getInt(2));
+                atividadeCriadouroList.add(atividadeCriadouro);
                 cursor.moveToNext();
             }
             cursor.close();

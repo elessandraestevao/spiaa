@@ -1,7 +1,7 @@
 CREATE TABLE usuario(
 _id INTEGER NOT NULL,
   nome text NOT NULL,
-  usuario text NOT NULL,
+  usuario text UNIQUE NOT NULL,
   email text NOT NULL,
   tipo text,
   numero text,
@@ -9,7 +9,7 @@ _id INTEGER NOT NULL,
 );
 CREATE TABLE bairro
 (
- _id INTEGER UNIQUE NOT NULL,
+ _id INTEGER NOT NULL,
  nome text,
  coordenadas text
 );
@@ -73,12 +73,12 @@ CREATE TABLE atividade(
  quarteirao_fk INTEGER NOT NULL
 );
 CREATE TABLE atividade_criadouro(
-atividade_fk INTEGER PRIMARY KEY NOT NULL,
+atividade_fk INTEGER NOT NULL,
 criadouro_fk INTEGER NOT NULL,
 quantidade INTEGER
 );
 CREATE TABLE atividade_inseticida(
-atividade_fk INTEGER PRIMARY KEY NOT NULL,
+atividade_fk INTEGER NOT NULL,
 inseticida_fk INTEGER NOT NULL,
 quantidade INTEGER
 );

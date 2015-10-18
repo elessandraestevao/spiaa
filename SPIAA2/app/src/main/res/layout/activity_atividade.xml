@@ -10,6 +10,7 @@
     tools:context="com.spiaa.activity.AtividadeActivity">
 
     <LinearLayout
+        android:id="@+id/linear_atividade"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -76,21 +77,25 @@
             android:orientation="horizontal">
 
             <RadioGroup
+                android:id="@+id/radio_group_observacoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/radio_recebido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recebido" />
 
                 <RadioButton
+                    android:id="@+id/radio_fechado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fechado" />
 
                 <RadioButton
+                    android:id="@+id/radio_resgatado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/resgatado" />

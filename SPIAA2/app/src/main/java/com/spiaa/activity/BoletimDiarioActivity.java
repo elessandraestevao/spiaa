@@ -172,6 +172,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
             //Preencher dados do Boletim Diário selecionado na listagem de Boletins Diários
             if (recuperarBoletimDiarioSelecionado() != null) {
+                setIdBoletim();
                 alterarTitulo();
                 setBairroSelecionado();
                 obterIdBairroSelecionado();
@@ -185,10 +186,13 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void setIdBoletim() {
+        //Id do Boletim utilizado nas Atividades do Boletim respectivo
+        TratamentoAntiVetorial.ID_BOLETIM = tratamentoAntiVetorial.getId();
+    }
+
     private void obterIdBairroSelecionado() {
         for (Bairro bairro : bairroList) {
-            String selecionado = spinnerBairros.getSelectedItem().toString();
-            String bairroLista = bairro.getNome();
             if (spinnerBairros.getSelectedItem().toString().equals(bairro.getNome())) {
                 BAIRRO_ID = bairro.getId();
                 break;
@@ -200,10 +204,9 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     private Bairro obterBairroSelecionado() {
         Bairro b = null;
         for (Bairro bairro : bairroList) {
-            String selecionado = spinnerBairros.getSelectedItem().toString();
-            String bairroLista = bairro.getNome();
             if (spinnerBairros.getSelectedItem().toString().equals(bairro.getNome())) {
-                return bairro;
+                b = bairro;
+                break;
             }
         }
         return b;

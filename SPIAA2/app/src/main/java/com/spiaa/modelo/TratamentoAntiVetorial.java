@@ -10,6 +10,9 @@ import java.util.Date;
  * Created by eless on 22/09/2015.
  */
 public class TratamentoAntiVetorial extends BaseEntity implements Serializable {
+    //Contante ID utilizada para as atividades de cada boletim
+    public static Long ID_BOLETIM = 0L;
+
     //Constantes utilizadas para o Banco de dados
     public static final String TABLE_NAME = "tratamento_antivetorial";
     public static final String ID = "_id";

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,10 +13,13 @@ import android.widget.ListView;
 import com.spiaa.R;
 import com.spiaa.adapter.AtividadeListaAdapter;
 import com.spiaa.builder.AtividadeBuilder;
+import com.spiaa.dao.AtividadeDAO;
 import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.IsXLargeScreen;
+import com.spiaa.modelo.TratamentoAntiVetorial;
 
 public class TodasAtividadesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    private Long IdBoletimDiario = TratamentoAntiVetorial.ID_BOLETIM;
     AtividadeListaAdapter adapter = new AtividadeListaAdapter(this);
     ListView listaAtividades;
 
@@ -52,7 +56,11 @@ public class TodasAtividadesActivity extends AppCompatActivity implements Adapte
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.setLista(new AtividadeBuilder().geraAtividades(10));
+        try {
+            adapter.setLista(new AtividadeDAO(TodasAtividadesActivity.this).selectAllDoBoletim(IdBoletimDiario));
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro no SELECT ALL Atividades", e);
+        }
         listaAtividades.setAdapter(adapter);
         listaAtividades.setOnItemClickListener(this);
 
