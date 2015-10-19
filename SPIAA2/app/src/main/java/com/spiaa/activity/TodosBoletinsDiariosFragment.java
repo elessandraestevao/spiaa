@@ -43,7 +43,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class TodosBoletinsDiariosFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, com.melnykov.fab.ScrollDirectionListener {
-
+    public static boolean SYNC_REALIZADO = false;
     public static boolean NOVO_BOLETIM = false;
     private BoletimListaAdapter adapter;
     private ListView listaBoletins;
@@ -51,6 +51,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private ProgressDialog dialog;
     private List<TratamentoAntiVetorial> tratamentoAntiVetorialList;
     private TextView nenhumBoletim;
+    private boolean sincronismoOk = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,7 +126,9 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
         fabCriar.attachToListView(listaBoletins);
         fabCriar.setOnClickListener(this);
 
-        doSync();
+        if(!SYNC_REALIZADO){
+            doSync();
+        }
     }
 
     @Override
@@ -215,9 +218,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
             @Override
             public void failure(RetrofitError error) {
-                //Retirar da tela o progresso do sincronismo
-
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber bairros", Snackbar.LENGTH_LONG).show();
+                sincronismoOk = false;
             }
         });
 
@@ -241,8 +242,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
             @Override
             public void failure(RetrofitError error) {
-                hideProgressDialog();
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber tipos de imóveis", Snackbar.LENGTH_LONG).show();
+                sincronismoOk = false;
             }
         });
 
@@ -265,8 +265,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
             @Override
             public void failure(RetrofitError error) {
-                hideProgressDialog();
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber inseticidas", Snackbar.LENGTH_LONG).show();
+                sincronismoOk = false;
             }
         });
 
@@ -285,21 +284,26 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
                         }
                     }
                 }
-                hideProgressDialog();
-                /*todo sincronismo deu certo se chegou aqui*/
-                showMessageAllSyncOk();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                hideProgressDialog();
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber criadouros", Snackbar.LENGTH_LONG).show();
+                sincronismoOk = false;
             }
         });
+        hideProgressDialog();
+        /*Final do sincronismo*/
+        showMessageFinalizeSync();
+        SYNC_REALIZADO = true;
     }
 
-    private void showMessageAllSyncOk() {
-        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Dados recebidos com sucesso", Snackbar.LENGTH_LONG).show();
+    private void showMessageFinalizeSync() {
+        if(sincronismoOk){
+            Snackbar.make(getView().findViewById(R.id.frame_boletins), "Dados recebidos com sucesso", Snackbar.LENGTH_LONG).show();
+        }else{
+            Snackbar.make(getView().findViewById(R.id.frame_boletins), "Ocorreu um erro ao receber dados", Snackbar.LENGTH_LONG).show();
+        }
+
     }
 
     private void hideProgressDialog() {
