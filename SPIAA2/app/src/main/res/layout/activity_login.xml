@@ -54,7 +54,17 @@
             android:text="@string/entrar"
             android:layout_gravity="bottom"
             android:theme="@style/AppTheme.Button.Primary" />
-    </LinearLayout>
 
+        <Button
+            android:id="@+id/botao_esqueci_senha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/esqueci_senha"
+            android:background="@null"
+            android:layout_gravity="bottom"
+            android:textColor="@color/red_padrao"
+            android:theme="@style/AppTheme.Button.Primary" />
+
+    </LinearLayout>
 
 </RelativeLayout>

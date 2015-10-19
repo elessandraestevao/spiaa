@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.spiaa.R;
 import com.spiaa.adapter.BoletimListaAdapter;
+import com.spiaa.dao.AtividadeDAO;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.TratamentoAntiVetorialDAO;
 import com.spiaa.dao.UsuarioDAO;
@@ -89,6 +90,16 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     private void hideKeyboard() {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private boolean verificaSeTemAtividades() {
+        if (tratamentoAntiVetorial != null) {
+            if (new AtividadeDAO(BoletimDiarioActivity.this)
+                    .countAtividadesDoBoletim(tratamentoAntiVetorial.getId()) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void preencherListaDeBairros() {
@@ -168,8 +179,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         preencherListaDeBairros();
         if (!TodosBoletinsDiariosFragment.NOVO_BOLETIM) {
-
-
             //Preencher dados do Boletim Diário selecionado na listagem de Boletins Diários
             if (recuperarBoletimDiarioSelecionado() != null) {
                 setIdBoletim();
@@ -183,6 +192,10 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         } else {
             setDadosUsuarioLogado();
+        }
+
+        if (verificaSeTemAtividades()) {
+            spinnerBairros.setEnabled(false);
         }
     }
 
@@ -198,7 +211,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 break;
             }
         }
-        Toast.makeText(BoletimDiarioActivity.this, BAIRRO_ID.toString(), Toast.LENGTH_SHORT).show();
     }
 
     private Bairro obterBairroSelecionado() {
@@ -243,10 +255,8 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no UPDATE de Boletim Diário", e);
                 }
-
-
-                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com secesso", Toast.LENGTH_LONG).show();
-                //vaiParaListaDeTodosBoletins();
+                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com sucesso", Toast.LENGTH_LONG).show();
+                //vaiParaListaDeTodosBoletins
                 onBackPressed();
                 break;
             case R.id.fab_criar_boletim:
@@ -281,24 +291,16 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
                 try {
                     new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).insert(tratamentoAntiVetorial);
-                    Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário criado com sucesso", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário criado com sucesso", Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
                 }
                 setNovoBoletimFalse();
-                manipulaBotoes();
         }
     }
 
-    private void setNovoBoletimFalse(){
+    private void setNovoBoletimFalse() {
         TodosBoletinsDiariosFragment.NOVO_BOLETIM = false;
     }
-
-    private void vaiParaListaDeTodosBoletins() {
-        Intent intent = new Intent(BoletimDiarioActivity.this, TodosBoletinsDiariosFragment.class);
-        startActivity(intent);
-    }
-
-
 }

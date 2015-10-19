@@ -19,14 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        //definição da orientação das telas da aplicação
-        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
-            //set phones to portrait;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            //Tablets como Landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        setOrientationOfScreen();
 
         Timer timer = new Timer();
 
@@ -41,5 +34,15 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }, 3000);
+    }
+
+    private void setOrientationOfScreen() {
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 }

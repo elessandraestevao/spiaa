@@ -23,8 +23,8 @@ public interface SpiaaService {
     @POST("/api/agente/login")
     void login(@Body Usuario agenteSaude, Callback<Usuario> callback);
 
-    @POST("/api/bairro/agente")
-    void getBairros(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
+    @POST("/api/agente/alterar")
+    void alterarDadosUsuario(@Body Usuario agenteSaude, Callback<String> callback);
 
     @POST("/api/bairroquarteirao/agente")
     void getBairrosQuarteiroes(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
@@ -46,11 +46,5 @@ public interface SpiaaService {
 
     @PUT("/api/boletim/createjson")
     void setBoletim(@Body List<TratamentoAntiVetorial> tratamentoAntiVetorialList, Callback<String> callback);
-    //void setBoletim(@Body TratamentoAntiVetorial tratamentoAntiVetorialList, Callback<String> callback);
 
-    @POST("/agente/login/list")
-    void loginList(@Body List<Usuario> usuarioList, Callback<String> callback);
-
-    @GET("/agente")
-    void loginGet(Callback<Usuario> callback);
 }

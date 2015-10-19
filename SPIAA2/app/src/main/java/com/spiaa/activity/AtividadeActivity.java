@@ -47,13 +47,13 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
     private Spinner spinnerQuarteiroes;
     private Spinner spinnerTiposImoveis;
     private EditText endereco;
-    RadioGroup radioGroupObservacoes;
+    private RadioGroup radioGroupObservacoes;
     private RadioButton recebido;
     private RadioButton fechado;
     private RadioButton resgatado;
     private List<Criadouro> criadouroList;
-    List<Quarteirao> quarteiraoList;
-    List<TipoImoveis> tipoImoveisList;
+    private List<Quarteirao> quarteiraoList;
+    private List<TipoImoveis> tipoImoveisList;
     private List<Inseticida> inseticidaList;
     private LinearLayout linearLayoutCriadouros;
     private LinearLayout linearLayoutInseticidas;
@@ -87,6 +87,16 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         Button botaoConcluirAtividade = (Button) findViewById(R.id.botao_concluir_atividade);
         botaoConcluirAtividade.setOnClickListener(this);
 
+    }
+
+    private void setOrientationOfScreen() {
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
     @Override
@@ -187,16 +197,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
             atividade = (Atividade) dados.getSerializable("Atividade");
         }
         return atividade;
-    }
-
-    private void setOrientationOfScreen() {
-        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
-            //set phones to portrait
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            //Tablets como Landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
     }
 
     private void hideKeyboard() {
@@ -325,7 +325,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(AtividadeActivity.this, "OK!!!", Toast.LENGTH_SHORT).show();
                 View view;
                 List<AtividadeInseticida> atividadeInseticidaList = new ArrayList<>();
                 int i = 0;

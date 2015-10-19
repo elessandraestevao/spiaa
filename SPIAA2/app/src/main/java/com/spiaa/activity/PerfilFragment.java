@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.spiaa.R;
+import com.spiaa.modelo.Usuario;
 
 public class PerfilFragment extends Fragment {
     private FloatingActionButton fabEditar;
@@ -27,6 +28,7 @@ public class PerfilFragment extends Fragment {
     private EditText email;
     private EditText numero;
     private EditText turma;
+    private EditText senha;
 
     @Nullable
     @Override
@@ -47,6 +49,7 @@ public class PerfilFragment extends Fragment {
         turma = (EditText) view.findViewById(R.id.perfil_turma);
         tilSenha = (TextInputLayout) view.findViewById(R.id.message_senha);
         tilSenhaConfirm = (TextInputLayout) view.findViewById(R.id.message_confirmacao_senha);
+        senha = (EditText) view.findViewById(R.id.perfil_senha);
         fabEditar = (FloatingActionButton) view.findViewById(R.id.botao_editar_perfil);
         fabSalvar = (FloatingActionButton) view.findViewById(R.id.botao_salvar_perfil);
 
@@ -62,6 +65,7 @@ public class PerfilFragment extends Fragment {
         fabSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getDadosUsuario();
                 showMessageUpdateSuccess();
                 desabilitarCamposParaEdicao();
                 habilitarVisibilidadeBotaoEditar();
@@ -69,6 +73,18 @@ public class PerfilFragment extends Fragment {
 
             }
         });
+    }
+
+    private Usuario getDadosUsuario(){
+        Usuario user = new Usuario();
+        user.setEmail(email.getText().toString());
+        user.setNome(nome.getText().toString());
+        user.setSenha(senha.getText().toString());
+        user.setTurma(turma.getText().toString());
+        user.setNumero(numero.getText().toString());
+        user.setUsuario(usuario.getText().toString());
+        user.setId(dadosDoUsuarioLogado().getLong("id", 0));
+        return user;
     }
 
     @Override

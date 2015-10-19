@@ -243,6 +243,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
             sqlLite.delete(Denuncia.TABLE_NAME, where, argumentos);
             retorno = true;
         }
+        sqlLite.close();
         return retorno;
     }
 }

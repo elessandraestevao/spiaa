@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spiaa.R;
@@ -48,6 +49,8 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private ListView listaBoletins;
     private com.melnykov.fab.FloatingActionButton fabCriar;
     private ProgressDialog dialog;
+    private List<TratamentoAntiVetorial> tratamentoAntiVetorialList;
+    private TextView nenhumBoletim;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,11 +78,20 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
     private void enviarBoletinsDiarios() {
         try {
-            List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAll();
+            final List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAllConcluidos();
             getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
                 @Override
                 public void success(String s, Response response) {
                     Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
+                    TratamentoAntiVetorialDAO dao = new TratamentoAntiVetorialDAO(getContext());
+                    try {
+                        for (TratamentoAntiVetorial tav : tratamentoAntiVetorialList) {
+                            dao.delete(tav.getId());
+                        }
+                        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Boletins Diários enviados com sucesso", Snackbar.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Log.e("SPIAA", "Erro no DELETE Boletim Diário", e);
+                    }
                 }
 
                 @Override
@@ -88,7 +100,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SPIAA", "Erro ao enviar Boletins Diários para Servidor", e);
         }
 
     }
@@ -102,6 +114,8 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        nenhumBoletim = (TextView) view.findViewById(R.id.nenhum_boletim);
 
         adapter = new BoletimListaAdapter(getContext());
 
@@ -120,12 +134,21 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
         //Preencher lista com os Boletins Diários contidos no banco de dados local
         try {
-            adapter.setLista(new TratamentoAntiVetorialDAO(getContext()).selectAll());
+            tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAll();
+            adapter.setLista(tratamentoAntiVetorialList);
         } catch (Exception e) {
             Log.e("SPIAA", "Erro ao tentar SELECT ALL Tratamento anti-vetorial", e);
         }
         listaBoletins.setAdapter(adapter);
         listaBoletins.setOnItemClickListener(this);
+
+        if (tratamentoAntiVetorialList != null) {
+            if (tratamentoAntiVetorialList.isEmpty()) {
+                nenhumBoletim.setText("Nenhum Boletim Diário");
+            } else {
+                nenhumBoletim.setText("");
+            }
+        }
     }
 
     @Override
@@ -173,30 +196,19 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
             @Override
             public void success(List<Bairro> bairroList, Response response) {
                 if (bairroList != null) {
-                    boolean insercaoOk = false;
                     //Inserir bairros no Banco de dados
                     try {
                         BairroDAO dao = new BairroDAO(getContext());
                         for (Bairro bairro : bairroList) {
                             if ((dao.delete(bairro.getId()) == 1) || dao.select(bairro) == null) {
                                 dao.insert(bairro);
-                                insercaoOk = true;
+
                             }
                         }
-                        if (insercaoOk) {
-                            //Retirar da tela o progresso do sincronismo
-                            dialog.dismiss();
-                            Snackbar.make(getView().findViewById(R.id.frame_boletins), "Bairros recebidos com sucesso!", Snackbar.LENGTH_LONG).show();
-                        } else {
-                            Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro no recebimento dos Bairros", Snackbar.LENGTH_LONG).show();
-                        }
-
                     } catch (Exception e) {
                         Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
                     }
                 } else {
-                    //Retirar da tela o progresso do sincronismo
-
                     Snackbar.make(getView().findViewById(R.id.frame_boletins), "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -205,14 +217,14 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
             public void failure(RetrofitError error) {
                 //Retirar da tela o progresso do sincronismo
 
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber bairros.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber bairros", Snackbar.LENGTH_LONG).show();
             }
         });
 
-       getService().getTiposImoveis(getUsuarioLogado(), new Callback<List<TipoImoveis>>() {
+        getService().getTiposImoveis(getUsuarioLogado(), new Callback<List<TipoImoveis>>() {
             @Override
             public void success(List<TipoImoveis> tipoImovelList, Response response) {
-                if(tipoImovelList != null){
+                if (tipoImovelList != null) {
                     TipoImoveisDAO dao = new TipoImoveisDAO(getContext());
                     for (TipoImoveis tipoImovel : tipoImovelList) {
                         try {
@@ -230,7 +242,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
             @Override
             public void failure(RetrofitError error) {
                 hideProgressDialog();
-                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber tipos de imóveis.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber tipos de imóveis", Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -253,7 +265,8 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
             @Override
             public void failure(RetrofitError error) {
-
+                hideProgressDialog();
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber inseticidas", Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -272,13 +285,21 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
                         }
                     }
                 }
+                hideProgressDialog();
+                /*todo sincronismo deu certo se chegou aqui*/
+                showMessageAllSyncOk();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getContext(), "Error!!!!", Toast.LENGTH_SHORT).show();
+                hideProgressDialog();
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao receber criadouros", Snackbar.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void showMessageAllSyncOk() {
+        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Dados recebidos com sucesso", Snackbar.LENGTH_LONG).show();
     }
 
     private void hideProgressDialog() {

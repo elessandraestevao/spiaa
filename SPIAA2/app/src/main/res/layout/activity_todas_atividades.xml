@@ -7,6 +7,11 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.spiaa.activity.TodasAtividadesActivity">
 
+    <TextView
+        android:id="@+id/nenhuma_atividade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <ListView
         android:id="@+id/lista_atividades"
@@ -15,13 +20,14 @@
         android:clickable="true"
         android:scrollbars="none" />
 
+
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/botao_criar_atividade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        fab:fab_colorNormal="@color/red_padrao"
-        android:src="@drawable/ic_add_white_24dp" />
+        android:src="@drawable/ic_add_white_24dp"
+        fab:fab_colorNormal="@color/red_padrao" />
 
 </FrameLayout>

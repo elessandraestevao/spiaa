@@ -107,6 +107,7 @@ public class BairroDAO implements BaseDAO<Bairro> {
             //exclui também os quarteirões deste bairro
             new QuarteiraoDAO(context).delete(id);
         }
+        sqlLite.close();
         return retorno;
 
     }

@@ -24,11 +24,6 @@ public class BoletimListaAdapter extends BaseAdapter {
     private Context context;
     private List<TratamentoAntiVetorial> lista;
 
-    public BoletimListaAdapter(Context context, List<TratamentoAntiVetorial> lista) {
-        this.context = context;
-        this.lista = lista;
-    }
-
     public BoletimListaAdapter(Context context) {
         this.context = context;
     }
@@ -69,7 +64,7 @@ public class BoletimListaAdapter extends BaseAdapter {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         data.setText(String.valueOf(format.format(lista.get(position).getData())));
 
-        numeroAtividades.setText(Long.toString(new AtividadeDAO(context).countAtividadesDoBoletim(lista.get(position).getId())));
+        numeroAtividades.setText(" " + Long.toString(new AtividadeDAO(context).countAtividadesDoBoletim(lista.get(position).getId())));
         statusBoletim.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todos os boletins

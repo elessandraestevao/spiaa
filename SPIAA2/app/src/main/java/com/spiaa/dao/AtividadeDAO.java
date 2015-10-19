@@ -197,7 +197,6 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
 
         Long count = DatabaseUtils.queryNumEntries(sqlLite, Atividade.TABLE_NAME, where, argumentos);
         sqlLite.close();
-
         return count;
     }
 

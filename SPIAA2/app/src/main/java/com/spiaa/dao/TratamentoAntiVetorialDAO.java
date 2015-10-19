@@ -47,7 +47,10 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         content.put(TratamentoAntiVetorial.TURMA, tratamentoAntiVetorial.getTurma());
         content.put(TratamentoAntiVetorial.STATUS, tratamentoAntiVetorial.getStatus());
 
-        return sqlLite.insert(TratamentoAntiVetorial.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(TratamentoAntiVetorial.TABLE_NAME, null, content);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -97,6 +100,8 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
             }
             cursor.close();
         }
+        sqlLite.close();
+
         return tratamentoAntiVetorial;
     }
 
@@ -104,6 +109,57 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
     public List<TratamentoAntiVetorial> selectAll() throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TratamentoAntiVetorial.TABLE_NAME, null);
+        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = null;
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            tratamentoAntiVetorialList = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
+                tratamentoAntiVetorial.setId(cursor.getLong(0));
+
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                tratamentoAntiVetorial.setData(formatter.parse(cursor.getString(1)));
+                tratamentoAntiVetorial.setNumero(cursor.getString(2));
+                tratamentoAntiVetorial.setSemana(cursor.getString(3));
+                tratamentoAntiVetorial.setNumeroAtividade(cursor.getString(4));
+                tratamentoAntiVetorial.setTipoAtividade(cursor.getString(5));
+                tratamentoAntiVetorial.setTurma(cursor.getString(6));
+                tratamentoAntiVetorial.setStatus(cursor.getString(7));
+
+                try {
+                    //Usuário
+                    Usuario usuario = new Usuario();
+                    usuario.setId(cursor.getLong(8));
+                    tratamentoAntiVetorial.setUsuario(new UsuarioDAO(context).select(usuario));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Usuário", e);
+                }
+
+                try {
+                    //Bairro
+                    Bairro bairro = new Bairro();
+                    bairro.setId(cursor.getLong(9));
+                    tratamentoAntiVetorial.setBairro(new BairroDAO(context).select(bairro));
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro no SELECT de Bairro", e);
+                }
+                tratamentoAntiVetorialList.add(tratamentoAntiVetorial);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        sqlLite.close();
+        return tratamentoAntiVetorialList;
+    }
+
+    public List<TratamentoAntiVetorial> selectAllConcluidos() throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
+
+        Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TratamentoAntiVetorial.TABLE_NAME + " WHERE "
+                + TratamentoAntiVetorial.STATUS + " = 'Concluído'", null);
+
         List<TratamentoAntiVetorial> tratamentoAntiVetorialList = null;
 
         if (cursor != null) {
@@ -153,6 +209,8 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
             }
             cursor.close();
         }
+        sqlLite.close();
+
         return tratamentoAntiVetorialList;
     }
 
@@ -161,20 +219,16 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        //content.put(TratamentoAntiVetorial.BAIRRO, tratamentoAntiVetorial.getBairro().getId());
-        //content.put(TratamentoAntiVetorial.DATA, tratamentoAntiVetorial.getData().toString());
-        //content.put(TratamentoAntiVetorial.NUMERO_ATIVIDADE, tratamentoAntiVetorial.getNumeroAtividade());
-        //content.put(TratamentoAntiVetorial.NUMERO, tratamentoAntiVetorial.getNumero());
         content.put(TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA, tratamentoAntiVetorial.getSemana());
         content.put(TratamentoAntiVetorial.STATUS, tratamentoAntiVetorial.getStatus());
-        //content.put(TratamentoAntiVetorial.USUARIO, tratamentoAntiVetorial.getUsuario().getId());
-        //content.put(TratamentoAntiVetorial.TIPO_ATIVIDADE, tratamentoAntiVetorial.getTipoAtividade());
-        //content.put(TratamentoAntiVetorial.TURMA, tratamentoAntiVetorial.getTurma());
 
         String where = TratamentoAntiVetorial.ID + " = ?";
         String argumentos[] = new String[]{tratamentoAntiVetorial.getId().toString()};
 
-        return sqlLite.update(TratamentoAntiVetorial.TABLE_NAME, content, where, argumentos);
+        int retorno = sqlLite.update(TratamentoAntiVetorial.TABLE_NAME, content, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -184,6 +238,9 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         String where = TratamentoAntiVetorial.ID + " = ?";
         String argumentos[] = new String[]{id.toString()};
 
-        return sqlLite.delete(TratamentoAntiVetorial.TABLE_NAME, where, argumentos);
+        int retorno = sqlLite.delete(TratamentoAntiVetorial.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }

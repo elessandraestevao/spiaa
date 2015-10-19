@@ -40,18 +40,8 @@ public class DenunciaActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_denuncia);
 
-        //definição da orientação das telas da aplicação
-        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
-            //set phones to portrait;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            //Tablets como Landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-
-        //esconder teclado ao entrar nesta activity
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setOrientationOfScreen();
+        hideKeyboard();
 
         ab = getSupportActionBar();
         endereco = (TextView) findViewById(R.id.endereco_denuncia);
@@ -66,6 +56,21 @@ public class DenunciaActivity extends AppCompatActivity implements View.OnClickL
 
         botaoFinalizar.setOnClickListener(this);
         botaoEditar.setOnClickListener(this);
+    }
+
+    private void hideKeyboard() {
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void setOrientationOfScreen() {
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
     @Override

@@ -26,14 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //definição da orientação das telas da aplicação
-        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
-            //set phones to portrait;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            //Tablets como Landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        setOrientationOfScreen();
 
         //Criar ícone de Menu na Toolbar
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void setOrientationOfScreen() {
+        if (!new IsXLargeScreen().isXLargeScreen(getApplicationContext())) {
+            //set phones to portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            //Tablets como Landscape
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
     private void mudarTituloDaActionBar(int title) {

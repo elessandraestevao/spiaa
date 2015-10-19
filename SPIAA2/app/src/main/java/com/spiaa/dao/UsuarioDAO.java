@@ -34,7 +34,10 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
         content.put(Usuario.TURMA, usuario.getTurma());
         content.put(Usuario.USUARIO, usuario.getUsuario());
 
-        return sqlLite.insert(Usuario.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(Usuario.TABLE_NAME, null, content);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -61,6 +64,8 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
             usuario.setTurma(cursor.getString(6));
             cursor.close();
         }
+        sqlLite.close();
+
         return usuario;
     }
 
@@ -84,7 +89,10 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
         String where = Usuario.ID + " = ?";
         String argumentos[] = new String[]{usuario.getId().toString()};
 
-        return sqlLite.update(Usuario.TABLE_NAME, content, where, argumentos);
+        int retorno = sqlLite.update(Usuario.TABLE_NAME, content, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -94,6 +102,9 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
         String where = Usuario.ID + " = ?";
         String argumentos[] = new String[] { id.toString() };
 
-        return sqlLite.delete(Usuario.TABLE_NAME, where, argumentos);
+        int retorno = sqlLite.delete(Usuario.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }

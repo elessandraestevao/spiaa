@@ -33,7 +33,10 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
         content.put(Quarteirao.BAIRRO, quarteirao.getBairro().getId());
         content.put(Quarteirao.DESCRICAO, quarteirao.getDescricao());
 
-        return sqlLite.insert(Quarteirao.TABLE_NAME, null, content);
+        Long retorno = sqlLite.insert(Quarteirao.TABLE_NAME, null, content);
+        sqlLite.close();
+
+        return retorno;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
             }
             cursor.close();
         }
+        sqlLite.close();
         return quarteirao;
     }
 
@@ -136,6 +140,9 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
         String argumentos[] = new String[]{id.toString()};
 
         //Excluir todos os quarteirões com o bairro igual ao ID passado como parâmetro
-        return sqlLite.delete(Quarteirao.TABLE_NAME, where, argumentos);
+        int retorno = sqlLite.delete(Quarteirao.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }
