@@ -10,6 +10,7 @@
     tools:context="com.spiaa.activity.BoletimDiarioActivity">
 
     <LinearLayout
+        android:id="@+id/linear_boletim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -111,6 +112,15 @@
             android:text="@string/atividades"
             android:theme="@style/AppTheme.Button.Secundary"
             android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/atualizar_boletim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/atualizar_boletim"
+            android:theme="@style/AppTheme.Button.Primary"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/concluir_boletim"

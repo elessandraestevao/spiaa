@@ -217,6 +217,22 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
+        content.put(TratamentoAntiVetorial.BAIRRO, tratamentoAntiVetorial.getBairro().getId());
+        content.put(TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA, tratamentoAntiVetorial.getSemana());
+
+        String where = TratamentoAntiVetorial.ID + " = ?";
+        String argumentos[] = new String[]{tratamentoAntiVetorial.getId().toString()};
+
+        int retorno = sqlLite.update(TratamentoAntiVetorial.TABLE_NAME, content, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
+    }
+
+    public int updateStatusConcluido(TratamentoAntiVetorial tratamentoAntiVetorial) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        ContentValues content = new ContentValues();
+
         content.put(TratamentoAntiVetorial.SEMANA_EPIDEMIOLOGICA, tratamentoAntiVetorial.getSemana());
         content.put(TratamentoAntiVetorial.STATUS, tratamentoAntiVetorial.getStatus());
 
@@ -228,6 +244,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
 
         return retorno;
     }
+
 
     @Override
     public int delete(Long id) throws Exception {

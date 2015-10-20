@@ -27,7 +27,7 @@
     <string name="data">Data</string>
     <string name="semana_epidemiológica">SEMANA EPIDEMIOLÓGICA Nº:</string>
     <string name="adicionar_atividade">NOVA ATIVIDADE</string>
-    <string name="concluir_boletim">CONCLUIR BOLETIM</string>
+    <string name="concluir_boletim">CONCLUIR</string>
     <string name="todas_atividades">Todas as atividades</string>
     <string name="title_activity_atividade">Nova Atividade</string>
     <string name="atividade_de_campo">ATIVIDADE DE CAMPO</string>
@@ -51,7 +51,7 @@
     <string name="recebido">RECEBIDO</string>
     <string name="fechado">FECHADO</string>
     <string name="resgatado">RESGATADO</string>
-    <string name="concluir_atividade">SALVAR ATIVIDADE</string>
+    <string name="concluir_atividade">SALVAR</string>
     <string name="title_activity_todas_atividades">Todas Atividades</string>
     <string name="title_activity_sincronizar">Sincronizar</string>
     <string name="receber_bairros">Receber bairros</string>
@@ -79,7 +79,7 @@
     <string name="numero_agente_bd">Nº do Agente</string>
     <string name="agente_saude_bd">Agente de Saúde</string>
     <string name="turma_agente_bd">Turma</string>
-    <string name="semana_epidemiologica_bd">Semana Epidemiológica Nº</string>
+    <string name="semana_epidemiologica_bd">Semana Epidemiológica</string>
     <string name="criadouros">CRIADOUROS ENCONTRADOS</string>
     <string name="criadouro_a1">Quantidade de A1</string>
     <string name="criadouro_a2">Quantidade de A2</string>
@@ -91,11 +91,12 @@
     <string name="data_abertura">Aberta em</string>
     <string name="title_activity_todos_criadouros">TodosCriadourosActivity</string>
     <string name="esqueci_senha">Esqueci minha senha</string>
-    <string name="excluir_boletim">EXCLUIR BOLETIM</string>
+    <string name="excluir_boletim">EXCLUIR</string>
     <string name="em_aberto">EM ABERTO</string>
     <string name="concluido">CONCLUÍDO</string>
-    <string name="excluir_atividade">EXCLUIR ATIVIDADE</string>
+    <string name="excluir_atividade">EXCLUIR</string>
     <string name="rua">Rua/Avenida/Travessa</string>
     <string name="numero_endereco">Número</string>
+    <string name="atualizar_boletim">ATUALIZAR</string>
 
 </resources>

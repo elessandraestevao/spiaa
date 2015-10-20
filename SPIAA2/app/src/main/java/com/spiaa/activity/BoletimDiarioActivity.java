@@ -38,6 +38,7 @@ import java.util.List;
 public class BoletimDiarioActivity extends AppCompatActivity implements View.OnClickListener {
     FloatingActionButton criarBoletim;
     Button botaoAtividades;
+    Button botaoAtualizarBoletim;
     Button botaoConcluirBoletim;
     Button botaoExcluirBoletim;
     android.support.v7.app.ActionBar ab;
@@ -64,6 +65,9 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         botaoAtividades = (Button) findViewById(R.id.atividades);
         botaoAtividades.setOnClickListener(this);
+
+        botaoAtualizarBoletim = (Button) findViewById(R.id.atualizar_boletim);
+        botaoAtualizarBoletim.setOnClickListener(this);
 
         botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
         botaoConcluirBoletim.setOnClickListener(this);
@@ -234,8 +238,9 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         //Esconde botão de CRIAR BOLETIM
         criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         criarBoletim.setVisibility(View.GONE);
-        //Mostra botões de ATIVIDADES, CONCLUIR BOLETIM e EXCLUIR BOLTEIM
+        //Mostra botões de ATIVIDADES, ATUALIZAR, CONCLUIR BOLETIM e EXCLUIR BOLTEIM
         botaoAtividades.setVisibility(View.VISIBLE);
+        botaoAtualizarBoletim.setVisibility(View.VISIBLE);
         botaoConcluirBoletim.setVisibility(View.VISIBLE);
         botaoExcluirBoletim.setVisibility(View.VISIBLE);
     }
@@ -254,17 +259,53 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 Intent intent1 = new Intent(BoletimDiarioActivity.this, TodasAtividadesActivity.class);
                 startActivity(intent1);
                 break;
-            case R.id.concluir_boletim:
-                //definir Status como Concluído
-                tratamentoAntiVetorial.setStatus(getResources().getString(R.string.concluido));
+            case R.id.atualizar_boletim:
+                tratamentoAntiVetorial.setSemana(semanaEpidemiologica.getText().toString());
+                tratamentoAntiVetorial.setBairro(obterBairroSelecionado());
                 try {
                     new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).update(tratamentoAntiVetorial);
                 } catch (Exception e) {
-                    Log.e("SPIAA", "Erro no UPDATE de Boletim Diário", e);
+                    Log.e("SPIAA", "Erro no UPDATE do Boletim Diário", e);
                 }
-                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com sucesso", Toast.LENGTH_LONG).show();
+                Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário atualizado com sucesso", Toast.LENGTH_LONG).show();
                 //vaiParaListaDeTodosBoletins
                 onBackPressed();
+                break;
+            case R.id.concluir_boletim:
+                if (semanaEpidemiologica.getText().toString().isEmpty() || semanaEpidemiologica.getText().toString().trim().equals("")) {
+                    Snackbar.make(findViewById(R.id.linear_boletim), "Preencha o campo Semana Epidemiológica", Snackbar.LENGTH_LONG).show();
+                } else {
+                    final AlertDialog.Builder dialogConcluir = new AlertDialog.Builder(BoletimDiarioActivity.this);
+                    dialogConcluir.setMessage("O Boletim Diário será enviado ao servidor no próximo sincronismo. " +
+                            "Recomenda-se concluí-lo após levantamento de todas atividades.");
+
+                    dialogConcluir.setPositiveButton("Concluir", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //definir Status como Concluído e Semana Epidemiológica
+                            tratamentoAntiVetorial.setStatus(getResources().getString(R.string.concluido));
+                            tratamentoAntiVetorial.setSemana(semanaEpidemiologica.getText().toString());
+                            try {
+                                new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).updateStatusConcluido(tratamentoAntiVetorial);
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro no UPDATE de Status do Boletim Diário", e);
+                            }
+                            Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário concluído com sucesso", Toast.LENGTH_LONG).show();
+                            //vaiParaListaDeTodosBoletins
+                            onBackPressed();
+                        }
+                    });
+
+                    dialogConcluir.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog alertDialogConcluir = dialogConcluir.show();
+                    mudaCorTextoBotaoDialog(alertDialogConcluir);
+                }
                 break;
             case R.id.fab_criar_boletim:
                 //Criar um objeto TAV e preencher com os dados da tela
