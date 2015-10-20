@@ -303,6 +303,39 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         String argumentos[] = new String[]{id.toString()};
 
         int retorno = sqlLite.delete(Atividade.TABLE_NAME, where, argumentos);
+        if(retorno == 1){
+            //Deleta todas atividadesCriadouros desta atividade
+            new AtividadeCriadouroDAO(context).delete(id);
+            //Deleta todas atividadesInseticidas desta atividade
+            new AtividadeInseticidaDAO(context).delete(id);
+        }
+
+        sqlLite.close();
+
+        return retorno;
+    }
+
+    public int deleteAllDoBoletim(Long id) throws Exception {
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+        String where = Atividade.ID + " = ?";
+        int retorno = 0;
+
+        //Delete cascade AtividadeCriadouro e AtividadeInseticida
+        AtividadeCriadouroDAO atividadeCriadouroDAO = new AtividadeCriadouroDAO(context);
+        AtividadeInseticidaDAO atividadeInseticidaDAO = new AtividadeInseticidaDAO(context);
+        List<Atividade> aux = selectAllDoBoletim(id);
+        for (Atividade atividade: aux){
+            String argumentos[] = new String[]{atividade.getId().toString()};
+            if(sqlLite.delete(Atividade.TABLE_NAME, where, argumentos) == 1){
+                //Deleta todas atividadesCriadouros desta atividade
+                atividadeCriadouroDAO.delete(atividade.getId());
+
+                //Deleta todas atividadesInseticidas desta atividade
+                atividadeInseticidaDAO.delete(atividade.getId());
+
+                retorno ++;
+            }
+        }
         sqlLite.close();
 
         return retorno;

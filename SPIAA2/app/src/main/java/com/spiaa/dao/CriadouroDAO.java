@@ -65,7 +65,7 @@ public class CriadouroDAO implements BaseDAO<Criadouro> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Criadouro.TABLE_NAME, null);
         List<Criadouro> criadouroList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             criadouroList = new ArrayList<>();
 

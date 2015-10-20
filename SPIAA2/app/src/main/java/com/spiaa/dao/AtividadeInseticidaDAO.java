@@ -105,7 +105,16 @@ public class AtividadeInseticidaDAO implements BaseDAO<AtividadeInseticida> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        //Deleta todas as AtividadesInseticidas da atividade passada como parâmetro
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+
+        String where = AtividadeInseticida.ATIVIDADE + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(AtividadeInseticida.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 
     public int delete(AtividadeInseticida atividadeInseticida) throws Exception {

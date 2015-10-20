@@ -73,7 +73,7 @@ public class BairroDAO implements BaseDAO<Bairro> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Bairro.TABLE_NAME, null);
         List<Bairro> bairroList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             bairroList = new ArrayList<>();
 

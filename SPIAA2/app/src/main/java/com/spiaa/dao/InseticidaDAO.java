@@ -65,7 +65,7 @@ public class InseticidaDAO implements BaseDAO<Inseticida> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Inseticida.TABLE_NAME, null);
         List<Inseticida> inseticidaList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             inseticidaList = new ArrayList<>();
 

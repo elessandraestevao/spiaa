@@ -108,6 +108,15 @@ public class AtividadeCriadouroDAO implements BaseDAO<AtividadeCriadouro> {
 
     @Override
     public int delete(Long id) throws Exception {
-        return 0;
+        //Deleta todas as AtividadesCriadouro da atividade passada como parâmetro
+        SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
+
+        String where = AtividadeCriadouro.ATIVIDADE + " = ?";
+        String argumentos[] = new String[]{id.toString()};
+
+        int retorno = sqlLite.delete(AtividadeCriadouro.TABLE_NAME, where, argumentos);
+        sqlLite.close();
+
+        return retorno;
     }
 }

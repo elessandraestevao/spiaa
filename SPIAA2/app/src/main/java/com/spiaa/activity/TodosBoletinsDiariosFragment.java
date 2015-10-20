@@ -35,6 +35,7 @@ import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 import com.spiaa.modelo.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -80,30 +81,46 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     private void enviarBoletinsDiarios() {
         try {
             final List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAllConcluidos();
-            getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
-                @Override
-                public void success(String s, Response response) {
-                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
-                    TratamentoAntiVetorialDAO dao = new TratamentoAntiVetorialDAO(getContext());
-                    try {
-                        for (TratamentoAntiVetorial tav : tratamentoAntiVetorialList) {
-                            dao.delete(tav.getId());
+            if (!tratamentoAntiVetorialList.isEmpty()) {
+                getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
+                        TratamentoAntiVetorialDAO dao = new TratamentoAntiVetorialDAO(getContext());
+                        try {
+                            for (TratamentoAntiVetorial tav : tratamentoAntiVetorialList) {
+                                dao.delete(tav.getId());
+                            }
+                            atualizaListaDeBoletins();
+                            Snackbar.make(getView().findViewById(R.id.frame_boletins), "Boletins Diários enviados com sucesso", Snackbar.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro no DELETE Boletim Diário", e);
                         }
-                        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Boletins Diários enviados com sucesso", Snackbar.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Log.e("SPIAA", "Erro no DELETE Boletim Diário", e);
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Toast.makeText(getContext(), "Falhou BD API", Toast.LENGTH_SHORT);
-                }
-            });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Erro ao enviar Boletins Diários", Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }else{
+                Snackbar.make(getView().findViewById(R.id.frame_boletins), "Nenhum Boletim Diário concluído", Snackbar.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Log.e("SPIAA", "Erro ao enviar Boletins Diários para Servidor", e);
         }
+    }
 
+    private void atualizaListaDeBoletins() {
+        try {
+            tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAll();
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro ao tentar SELECT ALL Boletins", e);
+        }
+        adapter.setLista(tratamentoAntiVetorialList);
+        adapter.notifyDataSetChanged();
+
+        verificaSeTemBoletim();
     }
 
     @Nullable
@@ -122,11 +139,12 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
 
         //Vincular botão de criar novo Boletim à lista
         listaBoletins = (ListView) view.findViewById(R.id.lista_boletins);
+        listaBoletins.setOnItemClickListener(this);
         fabCriar = (com.melnykov.fab.FloatingActionButton) view.findViewById(R.id.fab_criar_boletim);
         fabCriar.attachToListView(listaBoletins);
         fabCriar.setOnClickListener(this);
 
-        if(!SYNC_REALIZADO){
+        if (!SYNC_REALIZADO) {
             doSync();
         }
     }
@@ -143,8 +161,11 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
             Log.e("SPIAA", "Erro ao tentar SELECT ALL Tratamento anti-vetorial", e);
         }
         listaBoletins.setAdapter(adapter);
-        listaBoletins.setOnItemClickListener(this);
 
+        verificaSeTemBoletim();
+    }
+
+    private void verificaSeTemBoletim(){
         if (tratamentoAntiVetorialList != null) {
             if (tratamentoAntiVetorialList.isEmpty()) {
                 nenhumBoletim.setText("Nenhum Boletim Diário");
@@ -298,9 +319,9 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
     }
 
     private void showMessageFinalizeSync() {
-        if(sincronismoOk){
+        if (sincronismoOk) {
             Snackbar.make(getView().findViewById(R.id.frame_boletins), "Dados recebidos com sucesso", Snackbar.LENGTH_LONG).show();
-        }else{
+        } else {
             Snackbar.make(getView().findViewById(R.id.frame_boletins), "Ocorreu um erro ao receber dados", Snackbar.LENGTH_LONG).show();
         }
 

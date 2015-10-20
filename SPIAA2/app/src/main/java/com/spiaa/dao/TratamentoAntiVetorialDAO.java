@@ -67,7 +67,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(TratamentoAntiVetorial.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             tratamentoAntiVetorial = new TratamentoAntiVetorial();
             tratamentoAntiVetorial.setId(cursor.getLong(0));
@@ -109,11 +109,10 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
     public List<TratamentoAntiVetorial> selectAll() throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TratamentoAntiVetorial.TABLE_NAME, null);
-        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = null;
+        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new ArrayList<>();;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            tratamentoAntiVetorialList = new ArrayList<>();
 
             while (!cursor.isAfterLast()) {
                 TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
@@ -160,11 +159,10 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TratamentoAntiVetorial.TABLE_NAME + " WHERE "
                 + TratamentoAntiVetorial.STATUS + " = 'Concluído'", null);
 
-        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = null;
+        List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new ArrayList<>();
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            tratamentoAntiVetorialList = new ArrayList<>();
 
             while (!cursor.isAfterLast()) {
                 TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
@@ -239,6 +237,11 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         String argumentos[] = new String[]{id.toString()};
 
         int retorno = sqlLite.delete(TratamentoAntiVetorial.TABLE_NAME, where, argumentos);
+        if(retorno == 1){
+            //exclui também as atividades deste boletim
+            new AtividadeDAO(context).deleteAllDoBoletim(id);
+        }
+
         sqlLite.close();
 
         return retorno;

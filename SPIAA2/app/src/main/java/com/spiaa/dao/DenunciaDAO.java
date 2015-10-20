@@ -66,7 +66,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             denuncia = new Denuncia();
             denuncia.setId(cursor.getLong(0));
@@ -105,7 +105,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Denuncia.TABLE_NAME, null);
         List<Denuncia> denunciaList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             denunciaList = new ArrayList<>();
 
@@ -159,7 +159,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String argumentos[] = new String[]{"Finalizada"};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             denunciaList = new ArrayList<>();
 

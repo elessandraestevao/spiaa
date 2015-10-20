@@ -52,7 +52,7 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Usuario.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             usuario = new Usuario();
             usuario.setId(cursor.getLong(0));

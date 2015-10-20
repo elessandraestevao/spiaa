@@ -66,7 +66,7 @@ public class TipoImoveisDAO implements BaseDAO<TipoImoveis> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TipoImoveis.TABLE_NAME, null);
         List<TipoImoveis> tipoImoveisList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             tipoImoveisList = new ArrayList<>();
 

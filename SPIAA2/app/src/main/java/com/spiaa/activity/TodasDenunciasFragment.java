@@ -200,7 +200,6 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
                 nenhumaDenunciaEncontrada.setText("");
             }
         }
-
     }
 
     private void enviarDenuncias() {

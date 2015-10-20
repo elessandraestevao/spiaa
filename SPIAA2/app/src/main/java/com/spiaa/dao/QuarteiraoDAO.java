@@ -50,7 +50,7 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Quarteirao.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             quarteirao = new Quarteirao();
             quarteirao.setId(cursor.getLong(0));
@@ -76,7 +76,7 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Quarteirao.TABLE_NAME, null);
         List<Quarteirao> quarteiraoList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             quarteiraoList = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public class QuarteiraoDAO implements BaseDAO<Quarteirao> {
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Quarteirao.TABLE_NAME + " WHERE " + Quarteirao.BAIRRO + " = " + id, null);
         List<Quarteirao> quarteiraoList = null;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             quarteiraoList = new ArrayList<>();
 
