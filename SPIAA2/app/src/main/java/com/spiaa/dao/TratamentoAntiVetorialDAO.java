@@ -157,7 +157,7 @@ public class TratamentoAntiVetorialDAO implements BaseDAO<TratamentoAntiVetorial
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
 
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + TratamentoAntiVetorial.TABLE_NAME + " WHERE "
-                + TratamentoAntiVetorial.STATUS + " = 'Concluído'", null);
+                + TratamentoAntiVetorial.STATUS + " = 'CONCLUÍDO'", null);
 
         List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new ArrayList<>();
 

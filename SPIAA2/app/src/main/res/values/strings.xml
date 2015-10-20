@@ -91,5 +91,8 @@
     <string name="data_abertura">Aberta em</string>
     <string name="title_activity_todos_criadouros">TodosCriadourosActivity</string>
     <string name="esqueci_senha">Esqueci minha senha</string>
+    <string name="excluir_boletim">EXCLUIR BOLETIM</string>
+    <string name="em_aberto">EM ABERTO</string>
+    <string name="concluido">CONCLUÍDO</string>
 
 </resources>

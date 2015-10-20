@@ -2,6 +2,7 @@ package com.spiaa.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,7 @@ public class BoletimListaAdapter extends BaseAdapter {
         statusBoletim.setText(lista.get(position).getStatus());
 
         //Definir cor do status na listagem de todos os boletins
-        if (lista.get(position).getStatus().equals("Em aberto")) {
+        if (lista.get(position).getStatus().equals("EM ABERTO")) {
             //cor red
             statusBoletim.setTextColor(Color.parseColor("#cc0000"));
         } else {

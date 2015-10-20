@@ -1,10 +1,12 @@
 package com.spiaa.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     FloatingActionButton criarBoletim;
     Button botaoAtividades;
     Button botaoConcluirBoletim;
+    Button botaoExcluirBoletim;
     android.support.v7.app.ActionBar ab;
     public static Long BAIRRO_ID;
     private List<Bairro> bairroList;
@@ -64,6 +67,9 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         botaoConcluirBoletim = (Button) findViewById(R.id.concluir_boletim);
         botaoConcluirBoletim.setOnClickListener(this);
+
+        botaoExcluirBoletim = (Button) findViewById(R.id.excluir_boletim);
+        botaoExcluirBoletim.setOnClickListener(this);
 
         //Campos referentes ao Agente de Saúde
         agente = (EditText) findViewById(R.id.agente_bd);
@@ -228,9 +234,10 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         //Esconde botão de CRIAR BOLETIM
         criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
         criarBoletim.setVisibility(View.INVISIBLE);
-        //Mostra botões de ATIVIDADES e CONCLUIR BOLETIM
+        //Mostra botões de ATIVIDADES, CONCLUIR BOLETIM e EXCLUIR BOLTEIM
         botaoAtividades.setVisibility(View.VISIBLE);
         botaoConcluirBoletim.setVisibility(View.VISIBLE);
+        botaoExcluirBoletim.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -249,7 +256,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.concluir_boletim:
                 //definir Status como Concluído
-                tratamentoAntiVetorial.setStatus("Concluído");
+                tratamentoAntiVetorial.setStatus(getResources().getString(R.string.concluido));
                 try {
                     new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).update(tratamentoAntiVetorial);
                 } catch (Exception e) {
@@ -269,7 +276,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 tratamentoAntiVetorial.setSemana(semanaEpidemiologica.getText().toString());
 
                 //definir Status como Em aberto
-                tratamentoAntiVetorial.setStatus("Em aberto");
+                tratamentoAntiVetorial.setStatus(String.valueOf(getResources().getString(R.string.em_aberto)));
 
                 //Data de criação do Boletim
                 tratamentoAntiVetorial.setData(new Date());
@@ -297,7 +304,50 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                     Log.e("SPIAA", "Erro ao tentar salvar novo Tratamento anti-vetorial no banco local", e);
                 }
                 setNovoBoletimFalse();
+                break;
+            case R.id.excluir_boletim:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BoletimDiarioActivity.this);
+                dialog.setMessage("Tem certeza de que deseja excluir " + this.tratamentoAntiVetorial.getTitulo() + "?");
+
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            new TratamentoAntiVetorialDAO(BoletimDiarioActivity.this).delete(TratamentoAntiVetorial.ID_BOLETIM);
+                            Toast.makeText(BoletimDiarioActivity.this, "Boletim Diário excluído", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro ao deletar Boletim Diário", e);
+                            Toast.makeText(BoletimDiarioActivity.this, "Erro ao tentar excluir Boletim Diário", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+                    }
+                });
+                dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = dialog.show();
+                mudaCorTextoBotaoDialog(alertDialog);
+                break;
+
         }
+    }
+
+    private void mudaCorTextoBotaoDialog(AlertDialog alertDialog) {
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        positiveButton.setTextColor(getResources().getColor(R.color.red_padrao));
+        negativeButton.setTextColor(getResources().getColor(R.color.red_padrao));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setNovoBoletimFalse();
     }
 
     private void setNovoBoletimFalse() {

@@ -121,6 +121,15 @@
             android:theme="@style/AppTheme.Button.Primary"
             android:visibility="invisible" />
 
+        <Button
+            android:id="@+id/excluir_boletim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/excluir_boletim"
+            android:theme="@style/AppTheme.Button.Primary"
+            android:visibility="gone" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_criar_boletim"
             android:layout_width="wrap_content"
