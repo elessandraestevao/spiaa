@@ -115,7 +115,7 @@ public class DenunciaActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.botao_finalizar:
-                if (!observacoes.getText().toString().isEmpty()) {
+                if (!observacoes.getText().toString().isEmpty() && !observacoes.getText().toString().trim().equals("")) {
                     denuncia.setDataFinalizacao(new Date());
                     denuncia.setObservacao(observacoes.getText().toString());
                     denuncia.setStatus("Finalizada");

@@ -103,11 +103,10 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
     public List<Denuncia> selectAll() throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Denuncia.TABLE_NAME, null);
-        List<Denuncia> denunciaList = null;
+        List<Denuncia> denunciaList = new ArrayList<>();
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            denunciaList = new ArrayList<>();
 
             while (!cursor.isAfterLast()) {
                 Denuncia denuncia = new Denuncia();

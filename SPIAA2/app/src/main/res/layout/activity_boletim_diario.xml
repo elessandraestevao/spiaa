@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -140,14 +140,14 @@
             android:theme="@style/AppTheme.Button.Primary"
             android:visibility="gone" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_criar_boletim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_done_white_24dp"
-            app:backgroundTint="#E5194C" />
-
     </LinearLayout>
-</ScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_criar_boletim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_done_white_24dp"
+        app:backgroundTint="#E5194C" />
+
+</FrameLayout>

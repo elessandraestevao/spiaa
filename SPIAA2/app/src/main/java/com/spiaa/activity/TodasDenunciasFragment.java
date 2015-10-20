@@ -23,7 +23,9 @@ import com.google.gson.GsonBuilder;
 import com.spiaa.R;
 import com.spiaa.adapter.DenunciaListaAdapter;
 import com.spiaa.api.SpiaaService;
+import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.DenunciaDAO;
+import com.spiaa.modelo.Bairro;
 import com.spiaa.modelo.Denuncia;
 import com.spiaa.modelo.Usuario;
 
@@ -210,31 +212,29 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
             Log.e("SPIAA", "Erro no SELECT de Denúncias Finalizadas", e);
         }
         if (denunciasFinalizadas != null) {
-            if (!denunciasFinalizadas.isEmpty()) {
-                getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
-                    @Override
-                    public void success(String resposta, Response response) {
-                        try {
-                            //Excluir finalizadas do banco local que foram enviadas pro servidor
-                            boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
-                            if (retorno) {
-                                atualizaListaDeDenuncias();
-                            } else {
-                                Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
+                @Override
+                public void success(String resposta, Response response) {
+                    try {
+                        //Excluir finalizadas do banco local que foram enviadas pro servidor
+                        boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
+                        if (retorno) {
+                            atualizaListaDeDenuncias();
+                        } else {
+                            Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        showMessageErrorSyncSend();
-                    }
-                });
-            } else {
-                atualizaListaDeDenuncias();
-            }
+                @Override
+                public void failure(RetrofitError error) {
+                    showMessageErrorSyncSend();
+                }
+            });
+        } else {
+            atualizaListaDeDenuncias();
         }
     }
 
