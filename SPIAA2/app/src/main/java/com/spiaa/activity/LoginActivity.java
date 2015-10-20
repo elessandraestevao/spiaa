@@ -1,16 +1,23 @@
 package com.spiaa.activity;
 
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +41,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SpiaaService service;
     private Usuario agenteSaude;
     private TextView usuarioLogin;
-    TextView senha;
+    private Button login;
+    private ProgressDialog dialog;
+    private TextView senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         usuarioLogin = (TextView) findViewById(R.id.usuario_login);
         senha = (TextView) findViewById(R.id.senha_login);
 
-        Button login = (Button) findViewById(R.id.botao_login);
+        login = (Button) findViewById(R.id.botao_login);
         login.setOnClickListener(this);
 
         Button esqueciSenha = (Button) findViewById(R.id.botao_esqueci_senha);
@@ -81,7 +90,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.botao_login:
+                escondeTeclado();
+
                 //Fazer LOGIN
+                showProgress();
                 getService().login(getDadosUsuario(), new Callback<Usuario>() {
                     @Override
                     public void success(Usuario agente, Response response) {
@@ -99,14 +111,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
                             }
                             salvarDadosDoUsuarioLogadoEmArquivoLocal(agente);
+                            dialog.dismiss();
                             vaiParaPaginaInicial();
                         } else {
+                            dialog.dismiss();
                             Snackbar.make(v, "Falha no login. Verifique os dados de acesso.", Snackbar.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+                        dialog.dismiss();
                         Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
                         vaiParaPaginaInicial();
                     }
@@ -120,6 +135,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
 
+    }
+
+    private void showProgress() {
+        dialog = new ProgressDialog(LoginActivity.this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setIndeterminate(true);
+        dialog.show();
+    }
+
+    private void escondeTeclado() {
+        ((InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                login.getWindowToken(), 0);
     }
 
     private SpiaaService getService() {

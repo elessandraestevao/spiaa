@@ -278,7 +278,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                     final AlertDialog.Builder dialogConcluir = new AlertDialog.Builder(BoletimDiarioActivity.this);
                     dialogConcluir.setMessage("O Boletim Diário será enviado ao servidor no próximo sincronismo. " +
                             "Recomenda-se concluí-lo após levantamento de todas atividades.");
-
                     dialogConcluir.setPositiveButton("Concluir", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -347,7 +346,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 setNovoBoletimFalse();
                 break;
             case R.id.excluir_boletim:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(BoletimDiarioActivity.this);
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(BoletimDiarioActivity.this);
                 dialog.setMessage("Tem certeza de que deseja excluir " + this.tratamentoAntiVetorial.getTitulo() + "?");
 
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

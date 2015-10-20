@@ -78,7 +78,7 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
         }
     }
 
-    private void carregarDenunciasLocais(){
+    private void carregarDenunciasLocais() {
         /* Recuperar denúncias da base de dados local*/
         denunciaList = null;
         try {
@@ -209,30 +209,32 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
         } catch (Exception e) {
             Log.e("SPIAA", "Erro no SELECT de Denúncias Finalizadas", e);
         }
-        if (!denunciasFinalizadas.isEmpty()) {
-            getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
-                @Override
-                public void success(String resposta, Response response) {
-                    try {
-                        //Excluir finalizadas do banco local que foram enviadas pro servidor
-                        boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
-                        if (retorno) {
-                            atualizaListaDeDenuncias();
-                        } else {
-                            Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
+        if (denunciasFinalizadas != null) {
+            if (!denunciasFinalizadas.isEmpty()) {
+                getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
+                    @Override
+                    public void success(String resposta, Response response) {
+                        try {
+                            //Excluir finalizadas do banco local que foram enviadas pro servidor
+                            boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
+                            if (retorno) {
+                                atualizaListaDeDenuncias();
+                            } else {
+                                Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    showMessageErrorSyncSend();
-                }
-            });
-        } else {
-            atualizaListaDeDenuncias();
+                    @Override
+                    public void failure(RetrofitError error) {
+                        showMessageErrorSyncSend();
+                    }
+                });
+            } else {
+                atualizaListaDeDenuncias();
+            }
         }
     }
 
