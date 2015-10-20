@@ -61,7 +61,7 @@ public class AtividadeListaAdapter extends BaseAdapter {
 
         contagemAtividade.setText("Atividade " + (position + 1));
         numeroQuarteirao.setText(lista.get(position).getQuarteirao().getDescricao());
-        enderecoCompleto.setText(lista.get(position).getEndereco());
+        enderecoCompleto.setText(lista.get(position).getEndereco() + ", " + lista.get(position).getNumero());
         statusAtividade.setText(lista.get(position).getObservacao());
 
         //Definir cor do status na listagem de todas as atividades

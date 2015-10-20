@@ -27,7 +27,6 @@ import com.spiaa.dao.CriadouroDAO;
 import com.spiaa.dao.InseticidaDAO;
 import com.spiaa.dao.QuarteiraoDAO;
 import com.spiaa.dao.TipoImoveisDAO;
-import com.spiaa.dao.TratamentoAntiVetorialDAO;
 import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.AtividadeCriadouro;
 import com.spiaa.modelo.AtividadeInseticida;
@@ -47,6 +46,7 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
     private Spinner spinnerQuarteiroes;
     private Spinner spinnerTiposImoveis;
     private EditText endereco;
+    private EditText numeroEndereco;
     private RadioGroup radioGroupObservacoes;
     private RadioButton recebido;
     private RadioButton fechado;
@@ -68,6 +68,7 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         hideKeyboard();
 
         endereco = (EditText) findViewById(R.id.endereco_atividade);
+        numeroEndereco = (EditText) findViewById(R.id.numero_endereco_atividade);
 
         radioGroupObservacoes = (RadioGroup) findViewById(R.id.radio_group_observacoes);
         recebido = (RadioButton) findViewById(R.id.radio_recebido);
@@ -84,8 +85,11 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         Button botaoInseticidas = (Button) findViewById(R.id.botao_inseticidas);
         botaoInseticidas.setOnClickListener(this);
 
-        Button botaoConcluirAtividade = (Button) findViewById(R.id.botao_concluir_atividade);
+        Button botaoConcluirAtividade = (Button) findViewById(R.id.botao_salvar_atividade);
         botaoConcluirAtividade.setOnClickListener(this);
+
+        Button botaoExcluirAtividade = (Button) findViewById(R.id.botao_excluir_atividade);
+        botaoExcluirAtividade.setOnClickListener(this);
 
     }
 
@@ -109,6 +113,7 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         if (recuperarAtividadeSelecionada() != null && atividade.getId() != null) {
             alterarTitulo();
             endereco.setText(atividade.getEndereco());
+            numeroEndereco.setText(atividade.getNumero());
             setQuarteiraoSelecionado();
             setObservacaoSelecionada();
             setTipoImovelSelecionado();
@@ -220,37 +225,90 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
             case R.id.botao_inseticidas:
                 preencheListaDeInseticidas();
                 break;
-            case R.id.botao_concluir_atividade:
-                concluirAtividade();
+            case R.id.botao_salvar_atividade:
+                salvarAtividade();
+                break;
+            case R.id.botao_excluir_atividade:
+                excluirAtividade();
                 break;
         }
     }
 
-    private void concluirAtividade() {
-        atividade.setQuarteirao(obterQuarteiraoSelecionado());
-        atividade.setEndereco(endereco.getText().toString());
-        atividade.setTipoImoveis(obterTipoImovelSelecionado());
+    private void excluirAtividade() {
+        if (atividade.getTitulo() != null) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(AtividadeActivity.this);
+            dialog.setMessage("Tem certeza de que deseja excluir a " + this.atividade.getTitulo() + "?");
 
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        new AtividadeDAO(AtividadeActivity.this).delete(atividade.getId());
+                        Toast.makeText(AtividadeActivity.this, "Atividade excluída", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    } catch (Exception e) {
+                        Log.e("SPIAA", "Erro ao deletar Atividade", e);
+                        Toast.makeText(AtividadeActivity.this, "Erro ao tentar excluir Atividade", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = dialog.show();
+            mudaCorTextoBotaoDialog(alertDialog);
+        }
+    }
+
+    private void salvarAtividade() {
         if (endereco.getText().toString().isEmpty() || endereco.getText().toString().trim().equals("")) {
-            Snackbar.make(findViewById(R.id.linear_atividade), "Preencha o campo Endereço completo", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.linear_atividade), "Preencha o campo Rua/Avenida/Travessa", Snackbar.LENGTH_LONG).show();
         } else {
-            if (obterObservacaoSelecionada().isEmpty()) {
-                Snackbar.make(findViewById(R.id.linear_atividade), "Selecione Recebido, Fechado ou Resgatado", Snackbar.LENGTH_LONG).show();
+            if (numeroEndereco.getText().toString().isEmpty() || numeroEndereco.getText().toString().trim().equals("")) {
+                Snackbar.make(findViewById(R.id.linear_atividade), "Preencha o campo Número", Snackbar.LENGTH_LONG).show();
             } else {
-                atividade.setObservacao(obterObservacaoSelecionada());
-                TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
-                tav.setId(IdBoletimDiario);
-                atividade.setBoletimDiario(tav);
-                try {
-                    new AtividadeDAO(this).insert(atividade);
-                    Toast.makeText(AtividadeActivity.this, "Atividade concluída com sucesso", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                } catch (Exception e) {
-                    Log.e("SPIAA", "Erro no INSERT de Atividade", e);
+                if (obterObservacaoSelecionada().isEmpty()) {
+                    Snackbar.make(findViewById(R.id.linear_atividade), "Selecione Recebido, Fechado ou Resgatado", Snackbar.LENGTH_LONG).show();
+                } else {
+                    atividade.setQuarteirao(obterQuarteiraoSelecionado());
+                    atividade.setTipoImoveis(obterTipoImovelSelecionado());
+                    atividade.setEndereco(endereco.getText().toString());
+                    atividade.setNumero(numeroEndereco.getText().toString());
+                    atividade.setObservacao(obterObservacaoSelecionada());
+                    TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
+                    tav.setId(IdBoletimDiario);
+                    atividade.setBoletimDiario(tav);
+
+                    if (atividade.getId() == null) {
+                        //Nova atividade
+                        try {
+                            new AtividadeDAO(this).insert(atividade);
+                            Toast.makeText(AtividadeActivity.this, "Atividade salva com sucesso", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro no INSERT de Atividade", e);
+                        }
+                    }else{
+                        //Update da atividade
+                        try {
+                            new AtividadeDAO(this).update(atividade);
+                            Toast.makeText(AtividadeActivity.this, "Atividade atualizada com sucesso", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro no UPDATE de Atividade", e);
+                        }
+                    }
+
+
                 }
             }
         }
-
     }
 
     private String obterObservacaoSelecionada() {
@@ -409,5 +467,8 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
     private void mudaCorTextoBotaoDialog(AlertDialog alertDialog) {
         Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         positiveButton.setTextColor(getResources().getColor(R.color.red_padrao));
+
+        Button negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(getResources().getColor(R.color.red_padrao));
     }
 }

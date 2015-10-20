@@ -233,7 +233,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     private void manipulaBotoes() {
         //Esconde botão de CRIAR BOLETIM
         criarBoletim = (FloatingActionButton) findViewById(R.id.fab_criar_boletim);
-        criarBoletim.setVisibility(View.INVISIBLE);
+        criarBoletim.setVisibility(View.GONE);
         //Mostra botões de ATIVIDADES, CONCLUIR BOLETIM e EXCLUIR BOLTEIM
         botaoAtividades.setVisibility(View.VISIBLE);
         botaoConcluirBoletim.setVisibility(View.VISIBLE);

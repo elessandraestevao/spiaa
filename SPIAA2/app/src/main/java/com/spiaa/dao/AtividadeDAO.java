@@ -275,7 +275,6 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put(Atividade.ID, atividade.getId());
         content.put(Atividade.ENDERECO, atividade.getEndereco());
         content.put(Atividade.INSPECIONADO, atividade.getInspecionado());
         content.put(Atividade.LATITUDE, atividade.getLatitude());

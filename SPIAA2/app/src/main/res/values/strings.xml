@@ -51,7 +51,7 @@
     <string name="recebido">RECEBIDO</string>
     <string name="fechado">FECHADO</string>
     <string name="resgatado">RESGATADO</string>
-    <string name="concluir_atividade">CONCLUIR ATIVIDADE</string>
+    <string name="concluir_atividade">SALVAR ATIVIDADE</string>
     <string name="title_activity_todas_atividades">Todas Atividades</string>
     <string name="title_activity_sincronizar">Sincronizar</string>
     <string name="receber_bairros">Receber bairros</string>
@@ -94,5 +94,8 @@
     <string name="excluir_boletim">EXCLUIR BOLETIM</string>
     <string name="em_aberto">EM ABERTO</string>
     <string name="concluido">CONCLUÍDO</string>
+    <string name="excluir_atividade">EXCLUIR ATIVIDADE</string>
+    <string name="rua">Rua/Avenida/Travessa</string>
+    <string name="numero_endereco">Número</string>
 
 </resources>

@@ -51,8 +51,21 @@
                 android:id="@+id/endereco_atividade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/endereco_completo"
+                android:hint="@string/rua"
                 android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/message_numero_endereco_atividade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/numero_endereco_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/numero_endereco"
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -107,20 +120,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/criadouros"
-            android:theme="@style/AppTheme.Button.Primary" />
+            android:theme="@style/AppTheme.Button.Secundary" />
 
         <Button
             android:id="@+id/botao_inseticidas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/consumo_de_inseticida"
-            android:theme="@style/AppTheme.Button.Primary" />
+            android:theme="@style/AppTheme.Button.Secundary" />
 
         <Button
-            android:id="@+id/botao_concluir_atividade"
+            android:id="@+id/botao_salvar_atividade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/concluir_atividade"
+            android:theme="@style/AppTheme.Button.Primary" />
+
+        <Button
+            android:id="@+id/botao_excluir_atividade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/excluir_atividade"
             android:theme="@style/AppTheme.Button.Primary" />
 
     </LinearLayout>
