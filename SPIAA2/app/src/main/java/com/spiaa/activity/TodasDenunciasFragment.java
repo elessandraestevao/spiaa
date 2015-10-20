@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.spiaa.R;
 import com.spiaa.adapter.DenunciaListaAdapter;
+import com.spiaa.api.APIManagerDenuncia;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.DenunciaDAO;
@@ -120,17 +121,6 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
         return agenteSaude;
     }
 
-    private SpiaaService getService() {
-        //Configura RestAdapeter com dados do servidor e cria service
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://spiaa.herokuapp.com")
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setConverter(new GsonConverter(new GsonBuilder().setDateFormat("yyyy-MM-dd")
-                        .create()))
-                .build();
-        return restAdapter.create(SpiaaService.class);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_denuncias, menu);
@@ -148,9 +138,6 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
                 //enviar denúncias finalizadas e atualizar listagem
                 enviarDenuncias();
 
-                //receber denúncias e atualizar listagem
-                receberDenuncias();
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -158,31 +145,35 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
     }
 
     private void receberDenuncias() {
-        getService().getDenuncias(obterUsuarioLogado(), new Callback<List<Denuncia>>() {
-            @Override
-            public void success(List<Denuncia> denunciaList, Response response) {
-                if (denunciaList != null) {
-                    try {
-                        /*Inserir denúncias recebidas do servidor no Banco de dados local*/
-                        DenunciaDAO dao = new DenunciaDAO(getContext());
-                        for (Denuncia denuncia : denunciaList) {
-                            dao.insert(denuncia);
+        try {
+            APIManagerDenuncia.getInstance().getService().getDenuncias(obterUsuarioLogado(), new Callback<List<Denuncia>>() {
+                @Override
+                public void success(List<Denuncia> denunciaList, Response response) {
+                    if (denunciaList != null) {
+                        try {
+                            /*Inserir denúncias recebidas do servidor no Banco de dados local*/
+                            DenunciaDAO dao = new DenunciaDAO(getContext());
+                            for (Denuncia denuncia : denunciaList) {
+                                dao.insert(denuncia);
+                            }
+                        } catch (Exception e) {
+                            Log.e("SPIAA", "Erro ao inserir denúncia no banco de dados", e);
                         }
-                    } catch (Exception e) {
-                        Log.e("SPIAA", "Erro ao inserir denúncia no banco de dados", e);
                     }
+                    atualizaListaDeDenuncias();
+                    hideProgressDialog();
+                    showMessageSuccessSync();
                 }
-                atualizaListaDeDenuncias();
-                hideProgressDialog();
-                showMessageSuccessSync();
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                hideProgressDialog();
-                showMessageErrorSyncReceive();
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    hideProgressDialog();
+                    showMessageErrorSyncReceive();
+                }
+            });
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro na obtenção do Service API", e);
+        }
     }
 
     private void atualizaListaDeDenuncias() {
@@ -211,29 +202,35 @@ public class TodasDenunciasFragment extends Fragment implements AdapterView.OnIt
         } catch (Exception e) {
             Log.e("SPIAA", "Erro no SELECT de Denúncias Finalizadas", e);
         }
-        if (denunciasFinalizadas != null) {
-            getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
-                @Override
-                public void success(String resposta, Response response) {
-                    try {
-                        //Excluir finalizadas do banco local que foram enviadas pro servidor
-                        boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
-                        if (retorno) {
-                            atualizaListaDeDenuncias();
-                        } else {
-                            Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
+        if (!denunciasFinalizadas.isEmpty()) {
+            try {
+                APIManagerDenuncia.getInstance().getService().setDenuncias(denunciasFinalizadas, new Callback<String>() {
+                    @Override
+                    public void success(String resposta, Response response) {
+                        try {
+                            receberDenuncias();
+                            //Excluir finalizadas do banco local que foram enviadas pro servidor
+                            boolean retorno = new DenunciaDAO(getContext()).deleteFinalizadas(denunciasFinalizadas);
+                            if (retorno) {
+                                atualizaListaDeDenuncias();
+                            } else {
+                                Log.e("SPIAA", "Erro ao tentar deletar denúncias no banco local");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    showMessageErrorSyncSend();
-                }
-            });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        showMessageErrorSyncSend();
+                    }
+                });
+            } catch (Exception e) {
+                Log.e("SPIAA", "Erro na obtenção do Service API", e);
+            }
         } else {
+            receberDenuncias();
             atualizaListaDeDenuncias();
         }
     }

@@ -103,10 +103,11 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
     public List<Denuncia> selectAll() throws Exception {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getReadableDatabase();
         Cursor cursor = sqlLite.rawQuery("SELECT * FROM " + Denuncia.TABLE_NAME, null);
-        List<Denuncia> denunciaList = new ArrayList<>();
+        List<Denuncia> denunciaList = null;
 
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor != null) {
             cursor.moveToFirst();
+            denunciaList = new ArrayList<>();
 
             while (!cursor.isAfterLast()) {
                 Denuncia denuncia = new Denuncia();
@@ -158,7 +159,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String argumentos[] = new String[]{"Finalizada"};
         cursor = sqlLite.query(Denuncia.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor != null) {
             cursor.moveToFirst();
             denunciaList = new ArrayList<>();
 
@@ -239,7 +240,7 @@ public class DenunciaDAO implements BaseDAO<Denuncia> {
         String where = Denuncia.ID + " = ?";
         for (Denuncia denuncia : denunciaList) {
             String argumentos[] = new String[]{denuncia.getId().toString()};
-            sqlLite.delete(Denuncia.TABLE_NAME, where, argumentos);
+            int aux = sqlLite.delete(Denuncia.TABLE_NAME, where, argumentos);
             retorno = true;
         }
         sqlLite.close();

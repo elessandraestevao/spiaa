@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.spiaa.R;
 import com.spiaa.adapter.BoletimListaAdapter;
+import com.spiaa.api.APIManager;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dao.BairroDAO;
 import com.spiaa.dao.CriadouroDAO;
@@ -82,7 +83,7 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
         try {
             final List<TratamentoAntiVetorial> tratamentoAntiVetorialList = new TratamentoAntiVetorialDAO(getContext()).selectAllConcluidos();
             if (!tratamentoAntiVetorialList.isEmpty()) {
-                getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
+                APIManager.getInstance().getService().setBoletim(tratamentoAntiVetorialList, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
                         Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
@@ -216,102 +217,118 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
         /*Fazer sincronização dos dados ao logar, automaticamente*/
         showProgressDialog();
 
-        getService().getBairrosQuarteiroes(getUsuarioLogado(), new Callback<List<Bairro>>() {
-            @Override
-            public void success(List<Bairro> bairroList, Response response) {
-                if (bairroList != null) {
-                    //Inserir bairros no Banco de dados
-                    try {
-                        BairroDAO dao = new BairroDAO(getContext());
-                        for (Bairro bairro : bairroList) {
-                            if ((dao.delete(bairro.getId()) == 1) || dao.select(bairro) == null) {
-                                dao.insert(bairro);
-
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
-                    }
-                } else {
-                    Snackbar.make(getView().findViewById(R.id.frame_boletins), "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                sincronismoOk = false;
-            }
-        });
-
-        getService().getTiposImoveis(getUsuarioLogado(), new Callback<List<TipoImoveis>>() {
-            @Override
-            public void success(List<TipoImoveis> tipoImovelList, Response response) {
-                if (tipoImovelList != null) {
-                    TipoImoveisDAO dao = new TipoImoveisDAO(getContext());
-                    for (TipoImoveis tipoImovel : tipoImovelList) {
+        try {
+            APIManager.getInstance().getService().getBairrosQuarteiroes(getUsuarioLogado(), new Callback<List<Bairro>>() {
+                @Override
+                public void success(List<Bairro> bairroList, Response response) {
+                    if (bairroList != null) {
+                        //Inserir bairros no Banco de dados
                         try {
-                            if ((dao.delete(tipoImovel.getId()) == 1) || (dao.select(tipoImovel) == null)) {
-                                dao.insert(tipoImovel);
+                            BairroDAO dao = new BairroDAO(getContext());
+                            for (Bairro bairro : bairroList) {
+                                if ((dao.delete(bairro.getId()) == 1) || dao.select(bairro) == null) {
+                                    dao.insert(bairro);
+
+                                }
                             }
                         } catch (Exception e) {
-                            Log.e("SPIAA", "Erro ao inserir tipo de imóvel no banco local", e);
+                            Log.e("SPIAA", "Erro ao inserir bairro no banco de dados", e);
                         }
+                    } else {
+                        Snackbar.make(getView().findViewById(R.id.frame_boletins), "Nenhum bairro encontrado.", Snackbar.LENGTH_LONG).show();
                     }
-                    hideProgressDialog();
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                sincronismoOk = false;
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    sincronismoOk = false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro na obtenção do Service API", e);
+        }
 
-        getService().getInseticidas(getUsuarioLogado(), new Callback<List<Inseticida>>() {
-            @Override
-            public void success(List<Inseticida> inseticidaList, Response response) {
-                InseticidaDAO dao = new InseticidaDAO(getContext());
-                if (inseticidaList != null) {
-                    for (Inseticida inseticida : inseticidaList) {
-                        try {
-                            if ((dao.delete(inseticida.getId()) == 1) || (dao.select(inseticida) == null)) {
-                                dao.insert(inseticida);
+        try {
+            APIManager.getInstance().getService().getTiposImoveis(getUsuarioLogado(), new Callback<List<TipoImoveis>>() {
+                @Override
+                public void success(List<TipoImoveis> tipoImovelList, Response response) {
+                    if (tipoImovelList != null) {
+                        TipoImoveisDAO dao = new TipoImoveisDAO(getContext());
+                        for (TipoImoveis tipoImovel : tipoImovelList) {
+                            try {
+                                if ((dao.delete(tipoImovel.getId()) == 1) || (dao.select(tipoImovel) == null)) {
+                                    dao.insert(tipoImovel);
+                                }
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro ao inserir tipo de imóvel no banco local", e);
                             }
-                        } catch (Exception e) {
-                            Log.e("SPIAA", "Erro ao inserir inseticida no banco local", e);
                         }
+                        hideProgressDialog();
                     }
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                sincronismoOk = false;
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    sincronismoOk = false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro na obtenção do Service API", e);
+        }
 
-        getService().getCriadouros(getUsuarioLogado(), new Callback<List<Criadouro>>() {
-            @Override
-            public void success(List<Criadouro> criadouroList, Response response) {
-                if (criadouroList != null) {
-                    CriadouroDAO dao = new CriadouroDAO(getContext());
-                    for (Criadouro criadouro : criadouroList) {
-                        try {
-                            if ((dao.delete(criadouro.getId()) == 1) || (dao.select(criadouro) == null)) {
-                                dao.insert(criadouro);
+        try {
+            APIManager.getInstance().getService().getInseticidas(getUsuarioLogado(), new Callback<List<Inseticida>>() {
+                @Override
+                public void success(List<Inseticida> inseticidaList, Response response) {
+                    InseticidaDAO dao = new InseticidaDAO(getContext());
+                    if (inseticidaList != null) {
+                        for (Inseticida inseticida : inseticidaList) {
+                            try {
+                                if ((dao.delete(inseticida.getId()) == 1) || (dao.select(inseticida) == null)) {
+                                    dao.insert(inseticida);
+                                }
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro ao inserir inseticida no banco local", e);
                             }
-                        } catch (Exception e) {
-                            Log.e("SPIAA", "Erro ao inserir criadouro no banco local", e);
                         }
                     }
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                sincronismoOk = false;
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    sincronismoOk = false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro na obtenção do Service API", e);
+        }
+
+        try {
+            APIManager.getInstance().getService().getCriadouros(getUsuarioLogado(), new Callback<List<Criadouro>>() {
+                @Override
+                public void success(List<Criadouro> criadouroList, Response response) {
+                    if (criadouroList != null) {
+                        CriadouroDAO dao = new CriadouroDAO(getContext());
+                        for (Criadouro criadouro : criadouroList) {
+                            try {
+                                if ((dao.delete(criadouro.getId()) == 1) || (dao.select(criadouro) == null)) {
+                                    dao.insert(criadouro);
+                                }
+                            } catch (Exception e) {
+                                Log.e("SPIAA", "Erro ao inserir criadouro no banco local", e);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    sincronismoOk = false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e("SPIAA", "Erro na obtenção do Service API", e);
+        }
         hideProgressDialog();
         /*Final do sincronismo*/
         showMessageFinalizeSync();
@@ -337,17 +354,6 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
         dialog.show();
-    }
-
-    private SpiaaService getService() {
-        //Configura RestAdapeter com dados do servidor e cria service
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                //.setEndpoint("http://192.168.0.19:8080/Spiaa")
-                .setEndpoint("http://spiaa.herokuapp.com")
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build();
-        SpiaaService service = restAdapter.create(SpiaaService.class);
-        return service;
     }
 
     private Usuario getUsuarioLogado() {

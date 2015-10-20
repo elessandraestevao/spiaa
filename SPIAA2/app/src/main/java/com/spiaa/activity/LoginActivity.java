@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spiaa.R;
+import com.spiaa.api.APIManager;
 import com.spiaa.api.SpiaaService;
 import com.spiaa.dados.DatabaseHelper;
 import com.spiaa.dao.UsuarioDAO;
@@ -94,38 +95,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 //Fazer LOGIN
                 showProgress();
-                getService().login(getDadosUsuario(), new Callback<Usuario>() {
-                    @Override
-                    public void success(Usuario agente, Response response) {
-                        if (agente != null) {
-                            try {
-                                //Cria banco de dados da aplicação ao fazer o login pela primeira vez
-                                DatabaseHelper dh = new DatabaseHelper(LoginActivity.this);
-                            } catch (Exception e) {
-                                Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
+                try {
+                    APIManager.getInstance().getService().login(getDadosUsuario(), new Callback<Usuario>() {
+                        @Override
+                        public void success(Usuario agente, Response response) {
+                            if (agente != null) {
+                                try {
+                                    //Cria banco de dados da aplicação ao fazer o login pela primeira vez
+                                    DatabaseHelper dh = new DatabaseHelper(LoginActivity.this);
+                                } catch (Exception e) {
+                                    Log.e("SPIAA", "Erro ao tentar criar banco de dados", e);
+                                }
+                                try {
+                                    //Guarda usuário no banco de dados
+                                    new UsuarioDAO(LoginActivity.this).insert(agente);
+                                } catch (Exception e) {
+                                    Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
+                                }
+                                salvarDadosDoUsuarioLogadoEmArquivoLocal(agente);
+                                dialog.dismiss();
+                                vaiParaPaginaInicial();
+                            } else {
+                                dialog.dismiss();
+                                Snackbar.make(v, "Falha no login. Verifique os dados de acesso.", Snackbar.LENGTH_LONG).show();
                             }
-                            try {
-                                //Guarda usuário no banco de dados
-                                new UsuarioDAO(LoginActivity.this).insert(agente);
-                            } catch (Exception e) {
-                                Log.e("SPIAA", "Erro no INSERT de Usuário logado", e);
-                            }
-                            salvarDadosDoUsuarioLogadoEmArquivoLocal(agente);
-                            dialog.dismiss();
-                            vaiParaPaginaInicial();
-                        } else {
-                            dialog.dismiss();
-                            Snackbar.make(v, "Falha no login. Verifique os dados de acesso.", Snackbar.LENGTH_LONG).show();
                         }
-                    }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        dialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
-                        vaiParaPaginaInicial();
-                    }
-                });
+                        @Override
+                        public void failure(RetrofitError error) {
+                            dialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
+                            vaiParaPaginaInicial();
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("SPIAA", "Erro na obtenção do Service API", e);
+                }
                 break;
             case R.id.botao_esqueci_senha:
                 //Redireciona para web para recuperar a senha
@@ -147,16 +152,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void escondeTeclado() {
         ((InputMethodManager) LoginActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                 login.getWindowToken(), 0);
-    }
-
-    private SpiaaService getService() {
-        //Configura RestAdapeter com dados do servidor e cria service
-        restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://spiaa.herokuapp.com")
-                        //.setEndpoint("http://192.168.0.19:8080/Spiaa")
-                .build();
-        service = restAdapter.create(SpiaaService.class);
-        return service;
     }
 
     private Usuario getDadosUsuario() {
