@@ -50,7 +50,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
     private ArrayAdapter<String> adapter;
     private EditText agente;
     private EditText numeroAgente;
-    private EditText turmaAgente;
     private EditText semanaEpidemiologica;
 
     @Override
@@ -78,7 +77,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
         //Campos referentes ao Agente de Saúde
         agente = (EditText) findViewById(R.id.agente_bd);
         numeroAgente = (EditText) findViewById(R.id.numero_agente_bd);
-        turmaAgente = (EditText) findViewById(R.id.turma_agente_bd);
 
         //Semana epidemiológica
         semanaEpidemiologica = (EditText) findViewById(R.id.semana_epidemiologica_bd);
@@ -166,9 +164,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         numeroAgente.setText(tratamentoAntiVetorial.getNumero());
         setFieldOnlyVisualization(numeroAgente);
-
-        turmaAgente.setText(tratamentoAntiVetorial.getTurma());
-        setFieldOnlyVisualization(turmaAgente);
     }
 
     private void setDadosUsuarioLogado() {
@@ -178,9 +173,6 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
 
         numeroAgente.setText(dadosUsuario.getString("numero", ""));
         setFieldOnlyVisualization(numeroAgente);
-
-        turmaAgente.setText(dadosUsuario.getString("turma", ""));
-        setFieldOnlyVisualization(turmaAgente);
     }
 
     @Override
@@ -310,7 +302,7 @@ public class BoletimDiarioActivity extends AppCompatActivity implements View.OnC
                 //Criar um objeto TAV e preencher com os dados da tela
                 TratamentoAntiVetorial tratamentoAntiVetorial = new TratamentoAntiVetorial();
 
-                tratamentoAntiVetorial.setTurma(turmaAgente.getText().toString());
+                tratamentoAntiVetorial.setTurma(dadosUsuario.getString("turma", ""));
                 tratamentoAntiVetorial.setTipoAtividade("Tratamento");
                 tratamentoAntiVetorial.setNumero(numeroAgente.getText().toString());
                 tratamentoAntiVetorial.setSemana(semanaEpidemiologica.getText().toString());

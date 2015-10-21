@@ -10,17 +10,17 @@ _id INTEGER NOT NULL,
 CREATE TABLE bairro
 (
  _id INTEGER NOT NULL,
- nome text,
+ nome text NOT NULL,
  coordenadas text
 );
 CREATE TABLE denuncia
 (
   _id INTEGER UNIQUE NOT NULL,
-  endereco text,
-  numero text,
-  irregularidade text,
+  endereco text NOT NULL,
+  numero text NOT NULL,
+  irregularidade text NOT NULL,
   observacao text,
-  status text,
+  status text NOT NULL,
   data_abertura text,
   data_finalizacao text,
   bairro_fk INTEGER NOT NULL,
@@ -29,20 +29,20 @@ CREATE TABLE denuncia
 CREATE TABLE quarteirao
 (
   _id INTEGER NOT NULL,
-  descricao text,
+  descricao text NOT NULL,
   bairro_fk INTEGER NOT NULL
 
 );
 CREATE TABLE criadouro(
 _id INTEGER NOT NULL,
-grupo text,
-recipiente TEXT
+grupo text NOT NULL,
+recipiente text
 );
 CREATE TABLE tratamento_antivetorial(
 _id INTEGER PRIMARY KEY NOT NULL,
 data_boletim text NOT NULL,
 numero text,
-semana_epidemiologica text,
+semana_epidemiologica text NOT NULL,
 numero_atividade text,
 tipo_atividade text,
 turma text,
@@ -53,18 +53,18 @@ bairro_fk INTEGER NOT NULL
 CREATE TABLE tipo_imovel(
 _id INTEGER NOT NULL,
 sigla text,
-descricao text
+descricao text NOT NULL
 );
 CREATE TABLE inseticida(
  _id INTEGER NOT NULL,
- nome text,
+ nome text NOT NULL,
  unidade text
 );
 CREATE TABLE atividade(
  _id INTEGER PRIMARY KEY NOT NULL,
- endereco text,
- numero text,
- observacao text,
+ endereco text NOT NULL,
+ numero text NOT NULL,
+ observacao text NOT NULL,
  inspecionado INTEGER,
  latitude text,
  longitude text,

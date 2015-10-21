@@ -9,145 +9,129 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.spiaa.activity.BoletimDiarioActivity">
 
-    <LinearLayout
-        android:id="@+id/linear_boletim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <LinearLayout
+            android:id="@+id/linear_boletim"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/tratamento_anti_vetorial"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/tratamento_anti_vetorial"
-                android:textStyle="bold" />
+                android:layout_marginTop="10dp"
+                android:text="@string/localidade" />
+
+            <Spinner
+                android:id="@+id/dropdown_bairros"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown">
+
+            </Spinner>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_agente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/agente_bd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/agente_saude_bd"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_numero_agente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/numero_agente_bd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numero_agente_bd"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/message_semana_epidemiologica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/semana_epidemiologica_bd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/semana_epidemiologica_bd"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/atividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/atividades"
+                android:theme="@style/AppTheme.Button.Secundary"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/atualizar_boletim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/atualizar_boletim"
+                android:theme="@style/AppTheme.Button.Primary"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/concluir_boletim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/concluir_boletim"
+                android:theme="@style/AppTheme.Button.Primary"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/excluir_boletim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/excluir_boletim"
+                android:theme="@style/AppTheme.Button.Primary"
+                android:visibility="gone" />
+
         </LinearLayout>
 
-        <TextView
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_criar_boletim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/localidade" />
-
-        <Spinner
-            android:id="@+id/dropdown_bairros"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dropdown">
-
-        </Spinner>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/message_agente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/agente_bd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/agente_saude_bd"
-                android:inputType="text"
-                android:maxLines="1" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/message_numero_agente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/numero_agente_bd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/numero_agente_bd"
-                android:inputType="text"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/message_turma"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/turma_agente_bd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/turma_agente_bd"
-                android:inputType="text"
-                android:maxLines="1"
-                android:nextFocusDown="@+id/semana_epidemiologica" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/message_semana_epidemiologica"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/semana_epidemiologica_bd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/semana_epidemiologica_bd"
-                android:inputType="text"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <Button
-            android:id="@+id/atividades"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/atividades"
-            android:theme="@style/AppTheme.Button.Secundary"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/atualizar_boletim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/atualizar_boletim"
-            android:theme="@style/AppTheme.Button.Primary"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/concluir_boletim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/concluir_boletim"
-            android:theme="@style/AppTheme.Button.Primary"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/excluir_boletim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/excluir_boletim"
-            android:theme="@style/AppTheme.Button.Primary"
-            android:visibility="gone" />
-
-    </LinearLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_criar_boletim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:src="@drawable/ic_done_white_24dp"
-        app:backgroundTint="#E5194C" />
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_done_white_24dp"
+            app:backgroundTint="#E5194C" />
 
 </FrameLayout>

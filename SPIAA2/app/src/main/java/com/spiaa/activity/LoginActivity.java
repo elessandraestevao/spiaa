@@ -144,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showProgress() {
         dialog = new ProgressDialog(LoginActivity.this);
+        dialog.setMessage("Verificando...");
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setIndeterminate(true);
         dialog.show();
