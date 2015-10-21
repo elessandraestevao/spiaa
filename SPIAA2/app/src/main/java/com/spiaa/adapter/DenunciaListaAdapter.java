@@ -84,6 +84,8 @@ public class DenunciaListaAdapter extends BaseAdapter {
             //cor green
             statusDenuncia.setTextColor(Color.parseColor("#669900"));
         }
+        //Uppercase no status
+        statusDenuncia.setAllCaps(true);
         return viewDenuncia;
     }
 }

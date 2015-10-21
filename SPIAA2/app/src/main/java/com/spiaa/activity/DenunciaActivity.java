@@ -108,6 +108,8 @@ public class DenunciaActivity extends AppCompatActivity implements View.OnClickL
                 status.setTextColor(Color.parseColor("#669900"));
                 habilitaBotaoEditar();
             }
+            //Uppercase no status
+            status.setAllCaps(true);
         }
     }
 

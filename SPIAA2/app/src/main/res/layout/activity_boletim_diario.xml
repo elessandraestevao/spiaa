@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:text="@string/atividades"
-                android:theme="@style/AppTheme.Button.Secundary"
+                android:theme="@style/AppTheme.Button.Primary"
                 android:visibility="invisible" />
 
             <Button
