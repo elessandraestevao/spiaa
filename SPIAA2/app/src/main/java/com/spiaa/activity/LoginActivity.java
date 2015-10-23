@@ -168,7 +168,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dadosUsuario.putString("email", agente.getEmail());
         dadosUsuario.putString("numero", agente.getNumero());
         dadosUsuario.putString("nome", agente.getNome());
-        dadosUsuario.putString("senha", agente.getSenha());
         dadosUsuario.putString("tipo", agente.getTipo());
         dadosUsuario.putString("turma", agente.getTurma());
         dadosUsuario.putString("usuario", agente.getUsuario());

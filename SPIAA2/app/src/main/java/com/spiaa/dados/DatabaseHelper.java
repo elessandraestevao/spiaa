@@ -48,6 +48,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void deleteDatabase(){
+        context.deleteDatabase(DATABASE_NAME);
+    }
+
     private void createTables(SQLiteDatabase db) throws IOException {
         AssetManager manager = context.getAssets();
 

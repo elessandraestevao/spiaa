@@ -79,12 +79,8 @@ public class UsuarioDAO implements BaseDAO<Usuario> {
         SQLiteDatabase sqlLite = new DatabaseHelper(context).getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put(Usuario.ID, usuario.getId());
         content.put(Usuario.EMAIL, usuario.getEmail());
         content.put(Usuario.NOME, usuario.getNome());
-        content.put(Usuario.NUMERO, usuario.getNumero());
-        content.put(Usuario.TURMA, usuario.getTurma());
-        content.put(Usuario.USUARIO, usuario.getUsuario());
 
         String where = Usuario.ID + " = ?";
         String argumentos[] = new String[]{usuario.getId().toString()};

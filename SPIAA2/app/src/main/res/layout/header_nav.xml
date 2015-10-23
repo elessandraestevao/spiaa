@@ -12,10 +12,10 @@
         android:src="@drawable/spiaa_centralizada" />
 
     <TextView
+        android:id="@+id/nome_usuario_logado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="Elessandra Estevão"
         android:textColor="@color/common_signin_btn_text_dark" />
 
 

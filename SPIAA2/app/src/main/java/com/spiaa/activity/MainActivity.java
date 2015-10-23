@@ -2,6 +2,7 @@ package com.spiaa.activity;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.spiaa.R;
 import com.spiaa.modelo.IsXLargeScreen;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView navigationView;
+    TextView nomeUsuarioLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
         });
+
+        nomeUsuarioLogado = (TextView) findViewById(R.id.nome_usuario_logado);
+        setNomeUsuarioLogado();
 
         //Fragment Inicial
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_main, new TodosBoletinsDiariosFragment()).commit();
@@ -67,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void setNomeUsuarioLogado(){
+        SharedPreferences dadosUsuario = getSharedPreferences("UsuarioLogado", MODE_PRIVATE);
+        nomeUsuarioLogado.setText(dadosUsuario.getString("nome", ""));
     }
 
     private void setOrientationOfScreen() {

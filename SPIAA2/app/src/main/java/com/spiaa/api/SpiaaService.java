@@ -24,7 +24,7 @@ public interface SpiaaService {
     void login(@Body Usuario agenteSaude, Callback<Usuario> callback);
 
     @POST("/api/agente/alterar")
-    void alterarDadosUsuario(@Body Usuario agenteSaude, Callback<String> callback);
+    void alterarDadosUsuario(@Body Usuario usuario, Callback<String> callback);
 
     @POST("/api/bairroquarteirao/agente")
     void getBairrosQuarteiroes(@Body Usuario agenteSaude, Callback<List<Bairro>> callback);
