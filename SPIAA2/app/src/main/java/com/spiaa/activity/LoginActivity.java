@@ -124,7 +124,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void failure(RetrofitError error) {
                             dialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
+                            vaiParaPaginaInicial();
+                            //Toast.makeText(LoginActivity.this, "Erro no login!", Toast.LENGTH_LONG).show();
                         }
                     });
                 } catch (Exception e) {

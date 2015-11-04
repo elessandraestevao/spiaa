@@ -19,6 +19,7 @@ import com.spiaa.modelo.Atividade;
 import com.spiaa.modelo.IsXLargeScreen;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 
+import java.util.Date;
 import java.util.List;
 
 public class TodasAtividadesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -47,6 +48,7 @@ public class TodasAtividadesActivity extends AppCompatActivity implements Adapte
             public void onClick(View v) {
                 Intent intent = new Intent(TodasAtividadesActivity.this, AtividadeActivity.class);
                 startActivity(intent);
+                AtividadeActivity.DATA_INICIAL = new Date();
             }
         });
     }

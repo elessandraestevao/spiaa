@@ -3,6 +3,7 @@ package com.spiaa.activity;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +22,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.spiaa.R;
 import com.spiaa.dao.AtividadeDAO;
 import com.spiaa.dao.CriadouroDAO;
@@ -38,10 +42,12 @@ import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AtividadeActivity extends AppCompatActivity implements View.OnClickListener {
     private Long IdBoletimDiario = TratamentoAntiVetorial.ID_BOLETIM;
+    public static Date DATA_INICIAL;
     private Atividade atividade = new Atividade();
     private Spinner spinnerQuarteiroes;
     private Spinner spinnerTiposImoveis;
@@ -57,7 +63,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
     private List<Inseticida> inseticidaList;
     private LinearLayout linearLayoutCriadouros;
     private LinearLayout linearLayoutInseticidas;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -284,6 +289,8 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
                     TratamentoAntiVetorial tav = new TratamentoAntiVetorial();
                     tav.setId(IdBoletimDiario);
                     atividade.setBoletimDiario(tav);
+                    atividade.setDataInicial(DATA_INICIAL);
+                    atividade.setDataFinal(new Date());
 
                     if (atividade.getId() == null) {
                         //Nova atividade
@@ -304,8 +311,6 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
                             Log.e("SPIAA", "Erro no UPDATE de Atividade", e);
                         }
                     }
-
-
                 }
             }
         }
@@ -471,4 +476,5 @@ public class AtividadeActivity extends AppCompatActivity implements View.OnClick
         Button negativeButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
         negativeButton.setTextColor(getResources().getColor(R.color.red_padrao));
     }
+
 }

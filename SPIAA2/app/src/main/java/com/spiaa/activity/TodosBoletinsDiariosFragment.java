@@ -90,7 +90,9 @@ public class TodosBoletinsDiariosFragment extends Fragment implements View.OnCli
                         TratamentoAntiVetorialDAO dao = new TratamentoAntiVetorialDAO(getContext());
                         try {
                             for (TratamentoAntiVetorial tav : tratamentoAntiVetorialList) {
-                                dao.delete(tav.getId());
+                                //Após testes do agente concluídos, deletar do banco os dados, descomentar linha abaixo
+                                //dao.delete(tav.getId());
+                                dao.updateStatusEnviado(tav);
                             }
                             atualizaListaDeBoletins();
                             Snackbar.make(getView().findViewById(R.id.frame_boletins), "Boletins Diários enviados com sucesso", Snackbar.LENGTH_LONG).show();

@@ -16,6 +16,8 @@ import com.spiaa.modelo.Quarteirao;
 import com.spiaa.modelo.TipoImoveis;
 import com.spiaa.modelo.TratamentoAntiVetorial;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         content.put(Atividade.TIPO_IMOVEL, atividade.getTipoImoveis().getId());
         content.put(Atividade.TRATAMENTO_ANTIVETORIAL, atividade.getBoletimDiario().getId());
         content.put(Atividade.QUARTEIRAO, atividade.getQuarteirao().getId());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        content.put(Atividade.DATA_INICIAL, format.format(atividade.getDataInicial()));
+        content.put(Atividade.DATA_FINAL, format.format(atividade.getDataFinal()));
 
         Long atividadeId = sqlLite.insert(Atividade.TABLE_NAME, null, content);
 
@@ -86,7 +91,8 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
 
         String[] colunas = new String[]{Atividade.ID, Atividade.ENDERECO, Atividade.NUMERO,
                 Atividade.OBSERVACAO, Atividade.INSPECIONADO, Atividade.LATITUDE, Atividade.LONGITUDE,
-                Atividade.TIPO_IMOVEL, Atividade.TRATAMENTO_ANTIVETORIAL, Atividade.QUARTEIRAO};
+                Atividade.TIPO_IMOVEL, Atividade.TRATAMENTO_ANTIVETORIAL, Atividade.QUARTEIRAO,
+                Atividade.DATA_INICIAL, Atividade.DATA_FINAL};
         String argumentos[] = new String[]{entity.getId().toString()};
         cursor = sqlLite.query(Atividade.TABLE_NAME, colunas, where, argumentos, null, null, null);
 
@@ -127,6 +133,9 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
             } catch (Exception e) {
                 Log.e("SPIAA", "Erro no SELECT de Quarteirão", e);
             }
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            atividade.setDataInicial(formatter.parse(cursor.getString(10)));
+            atividade.setDataFinal(formatter.parse(cursor.getString(11)));
             cursor.close();
         }
         sqlLite.close();
@@ -143,6 +152,7 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             atividadeList = new ArrayList<>();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             while (!cursor.isAfterLast()) {
                 Atividade atividade = new Atividade();
@@ -180,6 +190,8 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de Quarteirão", e);
                 }
+                atividade.setDataInicial(formatter.parse(cursor.getString(10)));
+                atividade.setDataFinal(formatter.parse(cursor.getString(11)));
                 atividadeList.add(atividade);
                 cursor.moveToNext();
             }
@@ -208,6 +220,7 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             while (!cursor.isAfterLast()) {
                 Atividade atividade = new Atividade();
@@ -259,6 +272,8 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
                 } catch (Exception e) {
                     Log.e("SPIAA", "Erro no SELECT de AtividadeInseticida", e);
                 }
+                atividade.setDataInicial(formatter.parse(cursor.getString(10)));
+                atividade.setDataFinal(formatter.parse(cursor.getString(11)));
 
                 atividadeList.add(atividade);
                 cursor.moveToNext();
@@ -284,6 +299,9 @@ public class AtividadeDAO implements BaseDAO<Atividade> {
         content.put(Atividade.QUARTEIRAO, atividade.getQuarteirao().getId());
         content.put(Atividade.TIPO_IMOVEL, atividade.getTipoImoveis().getId());
         content.put(Atividade.TRATAMENTO_ANTIVETORIAL, atividade.getBoletimDiario().getId());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        content.put(Atividade.DATA_INICIAL, format.format(atividade.getDataInicial()));
+        content.put(Atividade.DATA_FINAL, format.format(atividade.getDataFinal()));
 
         String where = Atividade.ID + " = ?";
         String argumentos[] = new String[]{atividade.getId().toString()};

@@ -3,6 +3,7 @@ package com.spiaa.modelo;
 import com.spiaa.base.BaseEntity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public class Atividade extends BaseEntity implements Serializable{
     public static final String TIPO_IMOVEL = "tipo_imovel_fk";
     public static final String TRATAMENTO_ANTIVETORIAL = "tratamento_antivetorial_fk";
     public static final String QUARTEIRAO = "quarteirao_fk";
+    public static final String DATA_INICIAL = "data_inicial";
+    public static final String DATA_FINAL = "data_final";
 
     //Atributos
     String endereco;
@@ -35,6 +38,8 @@ public class Atividade extends BaseEntity implements Serializable{
     String latitude;
     String longitude;
     String titulo;
+    Date dataInicial;
+    Date dataFinal;
 
     public String getEndereco() {
         return endereco;
@@ -130,5 +135,21 @@ public class Atividade extends BaseEntity implements Serializable{
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public Date getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(Date dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public Date getDataInicial() {
+        return dataInicial;
+    }
+
+    public void setDataInicial(Date dataInicial) {
+        this.dataInicial = dataInicial;
     }
 }

@@ -70,7 +70,9 @@ CREATE TABLE atividade(
  longitude text,
  tipo_imovel_fk INTEGER NOT NULL,
  tratamento_antivetorial_fk INTEGER NOT NULL,
- quarteirao_fk INTEGER NOT NULL
+ quarteirao_fk INTEGER NOT NULL,
+ data_inicial text NOT NULL,
+ data_final text NOT NULL
 );
 CREATE TABLE atividade_criadouro(
 atividade_fk INTEGER NOT NULL,

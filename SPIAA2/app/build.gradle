@@ -16,31 +16,39 @@ repositories {
 
 
 android {
+    signingConfigs {
+        realease {
+            keyAlias 'Spiaa-Android'
+            keyPassword '123454321'
+            storeFile file('C:/Users/eless/Dropbox/Android/key_Spiaa.jks')
+            storePassword '123454321'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "com.spiaa"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.realease
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.melnykov:floatingactionbutton:1.3.0'
-    compile 'com.google.android.gms:play-services:7.8.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.crashlytics.android:crashlytics:1.+'
+    compile 'com.google.android.gms:play-services:8.1.0'
 }
